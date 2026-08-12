@@ -2,9 +2,6 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <!-- ==========================================
-       META TAGS PWA E MOBILE-FIRST
-       ========================================== -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12,21 +9,17 @@
   <meta name="apple-mobile-web-app-title" content="RSP Studio">
   <meta name="theme-color" content="#1c1917">
   
-  <!-- MANIFESTO PWA (Ícone SVG Dinâmico Embutido) -->
   <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22RSP%20Calendar%20Studio%22%2C%22short_name%22%3A%22RSP%20Studio%22%2C%22display%22%3A%22standalone%22%2C%22start_url%22%3A%22.%22%2C%22background_color%22%3A%22%23e7e5e4%22%2C%22theme_color%22%3A%22%231c1917%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20512%20512%27%253E%253Crect%20width%3D%27512%27%20height%3D%27512%27%20rx%3D%27100%27%20fill%3D%27%25231c1917%27%2F%253E%253Ctext%20x%3D%2750%2525%27%20y%3D%2750%2525%27%20text-anchor%3D%27middle%27%20dominant-baseline%3D%27middle%27%20font-family%3D%27sans-serif%27%20font-size%3D%27180%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%253ERSP%253C%2Ftext%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D">
 
   <title>RSP Calendar Album Studio</title>
   
-  <!-- CDNs Gráficas e Frameworks -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-  <!-- Google Fonts Premium -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Russo+One&family=Montserrat:wght@400;700&family=Special+Elite&family=Bangers&family=Cinzel:wght@700&display=swap" rel="stylesheet">
 
   <style>
-    /* Tipografia Customizada */
     .font-playfair { font-family: 'Playfair Display', serif; }
     .font-typewriter { font-family: 'Special Elite', monospace; }
     .font-sport { font-family: 'Russo One', sans-serif; }
@@ -34,7 +27,6 @@
     .font-cinema { font-family: 'Cinzel', serif; }
     .font-clean { font-family: 'Montserrat', sans-serif; }
 
-    /* Efeitos Globais e Papéis */
     .paper-texture {
       background-color: #f5efdc;
       background-image: radial-gradient(rgba(0,0,0,0.02) 1px, transparent 0);
@@ -46,7 +38,6 @@
       height: 1px; width: 100%;
     }
 
-    /* Furações e Encadernação */
     .preview-ilhos-esquerda {
       position: absolute; left: 12px; top: 0; bottom: 0; width: 20px;
       display: flex; flex-direction: column; justify-content: space-around; align-items: center;
@@ -62,7 +53,6 @@
       border-radius: 50%; box-shadow: inset 0 0 3px rgba(0,0,0,0.5), 0 1px 2px rgba(0,0,0,0.3);
     }
 
-    /* Estilos de Molduras */
     .moldura-classica { background: #ffffff; border: 1px solid #e5e7eb; padding: 10px 10px 32px 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
     .moldura-larga { background: #ffffff; border: 8px solid #ffffff; padding: 4px 4px 28px 4px; box-shadow: 0 6px 12px rgba(0,0,0,0.06); }
     .moldura-quadrada { background: #ffffff; padding: 8px 8px 24px 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
@@ -72,7 +62,6 @@
     .moldura-noir { background: #171717; border: 1px solid #000000; padding: 10px 10px 28px 10px; color: #ffffff; }
     .moldura-instantanea { background: #fffffb; padding: 10px 10px 40px 10px; border: 1px solid #e2e2da; }
 
-    /* Animações e Utilidades */
     @keyframes presentPop {
       0% { transform: scale(0.8) translateY(20px); opacity: 0; }
       100% { transform: scale(1) translateY(0); opacity: 1; }
@@ -85,9 +74,7 @@
 </head>
 <body class="bg-stone-200 text-stone-800 font-sans h-screen w-full flex flex-col md:flex-row overflow-hidden select-none">
 
-  <!-- ==========================================
-       HEADER MOBILE
-       ========================================== -->
+  <!-- HEADER MOBILE -->
   <header class="md:hidden bg-stone-900 text-white p-3 flex justify-between items-center shrink-0 z-30 shadow-md w-full">
     <span class="font-clean text-xs font-bold uppercase tracking-widest">RSP Studio</span>
     <div class="flex gap-2">
@@ -98,9 +85,7 @@
 
   <div id="mobile-overlay" onclick="toggleMobileMenu()" class="fixed inset-0 bg-black/60 z-40 hidden md:hidden transition-opacity"></div>
 
-  <!-- ==========================================
-       BARRA LATERAL (CONTROLES E EDIÇÃO)
-       ========================================== -->
+  <!-- BARRA LATERAL CONTROLES -->
   <aside id="sidebar-menu" class="absolute md:relative left-0 top-0 w-80 bg-white border-r border-stone-200 shadow-xl flex flex-col h-full overflow-y-auto p-4 space-y-4 shrink-0 z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300">
     
     <div class="border-b pb-2 border-stone-100 flex justify-between items-center relative">
@@ -112,7 +97,7 @@
       <button onclick="toggleMobileMenu()" class="md:hidden absolute -right-2 -top-2 text-stone-400 hover:text-stone-700 font-bold text-2xl px-2">&times;</button>
     </div>
 
-    <!-- Navegação de Páginas -->
+    <!-- SELETOR DE PÁGINAS -->
     <div>
       <label class="font-mono text-[10px] text-stone-500 block mb-1">Selecione a Folha Ativa</label>
       <div class="grid grid-cols-4 gap-1">
@@ -133,7 +118,7 @@
       </div>
     </div>
 
-    <!-- Estrutura Geral -->
+    <!-- CONFIGURAÇÕES -->
     <div class="space-y-3 pt-2 border-t border-stone-200">
       <div>
         <label class="font-mono text-[10px] text-amber-800 font-bold block mb-1">📅 Ano do Calendário</label>
@@ -176,7 +161,7 @@
         </select>
       </div>
 
-      <!-- Módulo QR Code Phygital -->
+      <!-- PRESENTE DIGITAL & QR CODE -->
       <div class="p-2 border border-blue-200 bg-blue-50/50 rounded space-y-2">
         <span class="font-mono text-[10px] font-bold text-blue-900 block flex items-center justify-between">
           <span>🎁 PRESENTE & QR CODE</span>
@@ -204,7 +189,7 @@
         </button>
       </div>
 
-      <!-- Cores e Tipografia -->
+      <!-- CORES E TEMAS -->
       <div class="p-2 border border-amber-200 bg-amber-50/50 rounded space-y-2">
         <span class="font-mono text-[10px] font-bold text-amber-900 block">🎨 CORES E TIPOGRAFIA DE TÍTULOS</span>
         <div>
@@ -240,7 +225,6 @@
         </div>
       </div>
 
-      <!-- Moldura e Tema Global -->
       <div>
         <label class="font-mono text-[10px] text-stone-500 block mb-1">Estilo de Moldura da Foto</label>
         <select id="select-frame" onchange="changeFrameStyle(this.value)" class="w-full px-2 py-1 rounded border border-stone-300 bg-white text-xs font-mono outline-none">
@@ -308,7 +292,7 @@
         </div>
       </div>
 
-      <!-- Biblioteca de Adesivos -->
+      <!-- ADESIVOS RÁPIDOS -->
       <div class="p-2 border border-stone-200 rounded bg-stone-50">
         <label class="font-mono text-[10px] font-bold text-stone-700 block mb-1">📋 BIBLIOTECA DE ADESIVOS</label>
         <div class="h-32 overflow-y-auto adesivos-scroll bg-white border border-stone-200 rounded p-1 space-y-2">
@@ -335,7 +319,7 @@
             </div>
           </div>
           <div class="border-t border-stone-100 pt-1">
-            <div class="text-[8px] text-stone-400 font-bold uppercase text-left ml-1 mb-1">Amor, Namorados & Bodas</div>
+            <div class="text-[8px] text-stone-400 font-bold uppercase text-left ml-1 mb-1">Amor & Bodas</div>
             <div class="grid grid-cols-6 gap-1 text-center text-lg">
               <button onclick="addSticker('❤️')" class="hover:bg-stone-100 rounded pb-1">❤️</button>
               <button onclick="addSticker('💍')" class="hover:bg-stone-100 rounded pb-1">💍</button>
@@ -356,26 +340,14 @@
               <button onclick="addSticker('🎅')" class="hover:bg-stone-100 rounded pb-1">🎅</button>
             </div>
           </div>
-          <div class="border-t border-stone-100 pt-1">
-            <div class="text-[8px] text-stone-400 font-bold uppercase text-left ml-1 mb-1">Estilo de Vida & Outros</div>
-            <div class="grid grid-cols-6 gap-1 text-center text-lg">
-              <button onclick="addSticker('🕊️')" class="hover:bg-stone-100 rounded pb-1">🕊️</button>
-              <button onclick="addSticker('✝️')" class="hover:bg-stone-100 rounded pb-1">✝️</button>
-              <button onclick="addSticker('🎬')" class="hover:bg-stone-100 rounded pb-1">🎬</button>
-              <button onclick="addSticker('🍿')" class="hover:bg-stone-100 rounded pb-1">🍿</button>
-              <button onclick="addSticker('⚽')" class="hover:bg-stone-100 rounded pb-1">⚽</button>
-              <button onclick="addSticker('✨')" class="hover:bg-stone-100 rounded pb-1">✨</button>
-            </div>
-          </div>
         </div>
-        
         <div class="mt-2 pt-2 border-t border-stone-200 text-[10px]">
           <span class="font-bold block text-stone-600 mb-0.5">Subir Logo/Escudo Customizado:</span>
           <input type="file" accept="image/*" onchange="uploadCustomSticker(this)" class="w-full text-[10px]">
         </div>
       </div>
 
-      <!-- Container do Editor Ativo -->
+      <!-- EDITOR ATIVO -->
       <div id="editor-panel" class="pt-1"></div>
 
     </div>
@@ -393,20 +365,14 @@
     </div>
   </aside>
 
-  <!-- ==========================================
-       ÁREA PRINCIPAL DE VISUALIZAÇÃO
-       ========================================== -->
+  <!-- ÁREA DE VISUALIZAÇÃO DO CANVAS -->
   <main id="main-area" class="flex-grow flex flex-col items-start md:items-center justify-start p-2 md:p-8 overflow-y-auto overflow-x-hidden relative bg-stone-200 h-full w-full">
     <div id="canvas-wrapper" class="origin-top flex justify-center w-full transition-transform duration-200">
       <div id="render-canvas" class="relative shadow-2xl border border-stone-300 box-border select-none overflow-hidden shrink-0 mx-auto"></div>
     </div>
   </main>
 
-  <!-- ==========================================
-       MODAIS E OVERLAYS
-       ========================================== -->
-
-  <!-- OVERLAY DO PRESENTE DIGITAL (ANIMAÇÃO) -->
+  <!-- OVERLAY DO PRESENTE DIGITAL -->
   <div id="gift-overlay" class="fixed inset-0 bg-stone-900/95 z-[99999] hidden flex-col items-center justify-center transition-opacity duration-1000 opacity-0">
      <div id="gift-box" class="cursor-pointer text-[150px] animate-bounce hover:scale-110 transition-transform duration-300" onclick="openGift()">
         🎁
@@ -460,35 +426,34 @@
     </div>
   </div>
 
-  <!-- MODAL DE GABARITO DA BASE DE MESA -->
+  <!-- MODAL DE GABARITO DA BASE -->
   <div id="gabarito-modal" class="fixed inset-0 bg-black/60 z-[60] hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-xl max-w-lg w-full p-6 shadow-2xl space-y-4 font-sans border border-amber-300">
       <div class="flex justify-between items-center border-b pb-2">
-        <h3 class="font-mono text-sm font-bold text-amber-900">📐 GABARITO TÉCNICO DA BASE DE MESA</h3>
+        <h3 class="font-mono text-sm font-bold text-amber-900">📐 GABARITO TÉCNICO DA BASE</h3>
         <button onclick="toggleGabaritoModal()" class="text-stone-400 hover:text-stone-700 font-bold text-lg">&times;</button>
       </div>
       <div class="space-y-3 text-xs text-stone-600 leading-relaxed font-mono">
         <p class="p-2 bg-amber-50 rounded border border-amber-200">Este gabarito é um guia técnico de montagem e <strong>não é impresso no PDF final</strong> do cliente.</p>
         <div class="border p-3 rounded space-y-2">
           <div class="linha-corte-horizontal"></div>
-          <span class="text-red-600 font-bold block text-[10px]">▲ LINHA DE CORTE SUPERIOR (FOLHA DE BASE)</span>
+          <span class="text-red-600 font-bold block text-[10px]">▲ LINHA DE CORTE SUPERIOR</span>
           <div class="py-2 text-center bg-stone-100 border border-dashed rounded">PAINEL FRONTAL DA BASE</div>
           <div class="linha-corte-horizontal"></div>
-          <span class="text-amber-700 font-bold block text-[10px]">▲ VINCO 1: CRISTA SUPERIOR (ONDE VAI O WIRE-O)</span>
+          <span class="text-amber-700 font-bold block text-[10px]">▲ VINCO 1: CRISTA SUPERIOR</span>
           <div class="py-2 text-center bg-stone-100 border border-dashed rounded">PAINEL TRASEIRO DA BASE</div>
           <div class="linha-corte-horizontal"></div>
-          <span class="text-amber-700 font-bold block text-[10px]">▲ VINCO 2: BASE DE APOIO (V-FOLD DOBRA PARA DENTRO)</span>
+          <span class="text-amber-700 font-bold block text-[10px]">▲ VINCO 2: BASE DE APOIO</span>
         </div>
       </div>
       <button onclick="toggleGabaritoModal()" class="w-full bg-stone-800 text-white font-bold py-2 rounded text-xs">FECHAR GABARITO</button>
     </div>
   </div>
 
-  <!-- ==========================================
-       SCRIPTS (LÓGICA PRINCIPAL)
-       ========================================== -->
   <script>
-    // Registro do Service Worker Nulo (Apenas para habilitar PWA Install)
+    // ==========================================
+    // INSTALADOR PWA
+    // ==========================================
     let deferredPrompt;
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
@@ -519,7 +484,9 @@
       });
     }
 
-    // Configuração de Temas e Papéis de Parede
+    // ==========================================
+    // CONFIGURAÇÕES E ESTADOS GLOBAIS
+    // ==========================================
     const THEMES = {
       'tema-mesversario': { bgPage: "background-color: #fdf4ff; background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Ctext x=%2210%22 y=%2240%22 font-size=%2225%22 opacity=%220.2%22%3E🍼%3C/text%3E%3Ctext x=%2260%22 y=%2290%22 font-size=%2225%22 opacity=%220.2%22%3E🧸%3C/text%3E%3C/svg%3E'); background-size: 100px 100px; background-repeat: repeat;", cardBg: 'background-color: #ffffff; border: 2px dashed #f472b6; color: #db2777;', calendarHeader: 'color: #ffffff; background-color: #f472b6;', dayBg: 'background-color: #ffffff; color: #db2777;', defaultMonthColor: '#db2777', defaultBackcoverColor: '#db2777', defaultCoverTitleColor: '#db2777', defaultCoverSubtitleColor: '#f472b6' },
       'tema-pets': { bgPage: "background-color: #fff7ed; background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Ctext x=%2210%22 y=%2240%22 font-size=%2225%22 opacity=%220.15%22%3E🐾%3C/text%3E%3Ctext x=%2260%22 y=%2290%22 font-size=%2225%22 opacity=%220.15%22%3E🐶%3C/text%3E%3C/svg%3E'); background-size: 100px 100px; background-repeat: repeat;", cardBg: 'background-color: #ffffff; border: 2px solid #ea580c; color: #c2410c;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #9a3412;', defaultMonthColor: '#ea580c', defaultBackcoverColor: '#ea580c', defaultCoverTitleColor: '#c2410c', defaultCoverSubtitleColor: '#ea580c' },
@@ -613,23 +580,28 @@
     }
 
     function adjustCanvasScale() {
-      if(window.isDigitalViewer) return;
       const mainEl = document.getElementById('main-area');
       const wrapper = document.getElementById('canvas-wrapper');
       const canvasEl = document.getElementById('render-canvas');
       if(!mainEl || !wrapper || !canvasEl) return;
       
       const fConfig = FORMATS[state.format];
-      const availableWidth = mainEl.clientWidth - 32;
-      
-      if (availableWidth < fConfig.w) {
-        const scale = availableWidth / fConfig.w;
-        wrapper.style.transform = `scale(${scale})`;
-        wrapper.style.height = `${fConfig.h * scale}px`;
-      } else {
-        wrapper.style.transform = `scale(1)`;
-        wrapper.style.height = `${fConfig.h}px`;
+      let availableWidth = mainEl.clientWidth - 32;
+      let scale = 1;
+
+      // Se for Web App Digital (Tela Cheia), escala verticalmente também
+      if (window.isDigitalViewer) {
+          availableWidth = window.innerWidth;
+          const availableHeight = window.innerHeight - 80;
+          const scaleW = availableWidth / fConfig.w;
+          const scaleH = availableHeight / fConfig.h;
+          scale = Math.min(scaleW, scaleH) * 0.95;
+      } else if (availableWidth < fConfig.w) {
+          scale = availableWidth / fConfig.w;
       }
+      
+      wrapper.style.transform = `scale(${scale})`;
+      wrapper.style.height = `${fConfig.h * scale}px`;
     }
 
     window.addEventListener('resize', adjustCanvasScale);
@@ -1018,9 +990,10 @@
 
       if (tab === 'cover') {
         let isPhotoLandscape = state.cover.layoutMode === 'landscape';
-        let imageHtml = `<div class="w-full h-full bg-stone-100/50 border border-dashed border-stone-300 flex items-center justify-center text-[11px] text-stone-400">Sem Foto da Capa</div>`;
+        let imageHtml = `<div style="position: absolute; inset: 0; background-color: rgba(245,245,244,0.5); border: 1px dashed #d6d3d1; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #a8a29e;">Sem Foto da Capa</div>`;
         if (state.cover.photo) {
-          imageHtml = `<div style="width: 100%; height: 100%; background-image: url('${state.cover.photo}'); background-size: cover; background-position: center; background-repeat: no-repeat;"></div>`;
+          // BACKGROUND-SIZE: CONTAIN -> Garante que a foto NUNCA seja cortada nas bordas
+          imageHtml = `<div style="position: absolute; inset: 0; background-image: url('${state.cover.photo}'); background-size: contain; background-position: center; background-repeat: no-repeat; background-color: rgba(0,0,0,0.03);"></div>`;
         }
 
         let stickerHtml = "";
@@ -1043,7 +1016,7 @@
               <div class="inline-block bg-stone-900 text-white font-mono font-bold text-xs px-4 py-0.5 rounded mt-2 shadow">${state.yearText}</div>
             </div>
             <div style="width: 100%; display: flex; align-items: center; justify-content: center; flex-grow: 1; padding: 10px 0;">
-              <div class="${state.cover.frameStyle}" style="width: ${isPhotoLandscape ? '460px' : '320px'}; height: ${isPhotoLandscape ? '300px' : '420px'}; max-width: 96%; max-height: 96%; position: relative; box-sizing: border-box; display: flex; flex-direction: column; overflow: hidden;">
+              <div class="${state.cover.frameStyle}" style="width: ${isPhotoLandscape ? '460px' : '320px'}; height: ${isPhotoLandscape ? '300px' : '420px'}; max-width: 96%; max-height: 96%; position: relative; box-sizing: border-box; display: flex; flex-direction: column; overflow: hidden; margin: 0 auto;">
                  ${stickerHtml}
                  <div style="width: 100%; flex-grow: 1; overflow: hidden; border: 1px solid rgba(120,120,120,0.15); position: relative;">
                     ${imageHtml}
@@ -1062,9 +1035,10 @@
         const daysOfWeek = ["D", "S", "T", "Q", "Q", "S", "S"];
         const cells = getMonthGridArray(parseInt(state.yearText) || 2027, tab);
 
-        let imageHtml = `<div class="w-full h-full bg-stone-100/50 border border-dashed border-stone-300 flex items-center justify-center text-[10px] text-stone-400">Sem Foto</div>`;
+        let imageHtml = `<div style="position: absolute; inset: 0; background-color: rgba(245,245,244,0.5); border: 1px dashed #d6d3d1; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #a8a29e;">Sem Foto</div>`;
         if (m.photo) {
-          imageHtml = `<div style="width: 100%; height: 100%; background-image: url('${m.photo}'); background-size: cover; background-position: center; background-repeat: no-repeat;"></div>`;
+          // BACKGROUND-SIZE: CONTAIN -> Garante que a foto NUNCA seja cortada
+          imageHtml = `<div style="position: absolute; inset: 0; background-image: url('${m.photo}'); background-size: contain; background-position: center; background-repeat: no-repeat; background-color: rgba(0,0,0,0.03);"></div>`;
         }
 
         let stickerHtml = "";
@@ -1132,7 +1106,7 @@
               </div>
             </div>
 
-            <div class="h-[12px] mt-3 text-[8px] font-clean font-bold opacity-50 text-center border-t border-stone-200/30 flex items-center justify-center uppercase tracking-wider" style="color: ${currentMonthColor}; text-shadow: 0px 1px 2px rgba(255,255,255,0.5);">
+            <div class="h-[12px] mt-3 text-[8px] font-clean font-bold opacity-50 text-center border-t border-stone-200/30 flex items-center justify-center uppercase tracking-wider">
               ${state.footerText} - ${state.yearText}
             </div>
           </div>
@@ -1143,9 +1117,10 @@
       const daysOfWeek = ["D", "S", "T", "Q", "Q", "S", "S"];
       const cells = getMonthGridArray(parseInt(state.yearText) || 2027, tab);
 
-      let imageHtml = `<div class="w-full h-full bg-stone-100/50 border border-dashed border-stone-300 flex items-center justify-center text-[10px] text-stone-400">Sem Foto</div>`;
+      let imageHtml = `<div style="position: absolute; inset: 0; background-color: rgba(245,245,244,0.5); border: 1px dashed #d6d3d1; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #a8a29e;">Sem Foto</div>`;
       if (m.photo) {
-        imageHtml = `<div style="width: 100%; height: 100%; background-image: url('${m.photo}'); background-size: cover; background-position: center; background-repeat: no-repeat;"></div>`;
+        // BACKGROUND-SIZE: CONTAIN -> Garante que a foto NUNCA seja cortada nas bordas
+        imageHtml = `<div style="position: absolute; inset: 0; background-image: url('${m.photo}'); background-size: contain; background-position: center; background-repeat: no-repeat; background-color: rgba(0,0,0,0.03);"></div>`;
       }
 
       let stickerHtml = "";
@@ -1165,7 +1140,7 @@
           <table style="width: 100%; height: 100%; table-layout: fixed; border-collapse: collapse;">
             <tr>
               <td style="width: 48%; vertical-align: middle; text-align: center; padding-right: 12px; height: 100%;">
-                <div class="inline-block ${m.frameStyle}" style="width: ${isPhotoLandscape ? '380px' : '250px'}; height: ${isPhotoLandscape ? '240px' : '280px'}; max-width: 96%; max-height: 96%; box-sizing: border-box; position: relative; display: flex; flex-direction: column; overflow: hidden;">
+                <div class="inline-block ${m.frameStyle}" style="width: ${isPhotoLandscape ? '380px' : '250px'}; height: ${isPhotoLandscape ? '240px' : '280px'}; max-width: 96%; max-height: 96%; box-sizing: border-box; position: relative; display: flex; flex-direction: column; overflow: hidden; margin: 0 auto;">
                   ${stickerHtml}
                   <div style="width: 100%; flex-grow: 1; overflow: hidden; border: 1px solid rgba(120,120,120,0.15); position: relative;">
                     ${imageHtml}
@@ -1192,7 +1167,7 @@
         albumInnerContentHtml = `
           <div style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
             <div style="height: 70%; width: 100%; display: flex; align-items: center; justify-content: center;">
-              <div class="${m.frameStyle}" style="width: ${isPhotoLandscape ? '440px' : '290px'}; height: ${isPhotoLandscape ? '290px' : '380px'}; max-width: 96%; max-height: 96%; position: relative; box-sizing: border-box; display: flex; flex-direction: column; overflow: hidden;">
+              <div class="${m.frameStyle}" style="width: ${isPhotoLandscape ? '440px' : '290px'}; height: ${isPhotoLandscape ? '290px' : '380px'}; max-width: 96%; max-height: 96%; position: relative; box-sizing: border-box; display: flex; flex-direction: column; overflow: hidden; margin: 0 auto;">
                  ${stickerHtml}
                  <div style="width: 100%; flex-grow: 1; overflow: hidden; border: 1px solid rgba(120,120,120,0.15); position: relative;">
                     ${imageHtml}
@@ -1295,6 +1270,9 @@
       adjustCanvasScale();
     }
 
+    // ==========================================
+    // EXPORTAÇÃO 1: FÍSICA (PDF DE ALTA DEFINIÇÃO)
+    // ==========================================
     async function safeSecureExport() {
       const { jsPDF } = window.jspdf;
       const fConfig = FORMATS[state.format];
@@ -1336,30 +1314,33 @@
       }
     }
 
+    // ==========================================
+    // EXPORTAÇÃO 2: DIGITAL (WEB APP HTML INDEPENDENTE)
+    // ==========================================
     function exportDigitalApp() {
-        let htmlStr = document.documentElement.outerHTML;
+        // Usa o método de "DOM Clone" para impedir vazamento de código
+        const clonedDoc = document.documentElement.cloneNode(true);
+        const scriptEl = document.createElement('script');
         
-        let scriptInject = `
-        <script>
+        scriptEl.innerHTML = `
             window.isDigitalViewer = true;
-            // Estado salvo no momento do clique
-            var state = ${JSON.stringify(state)};
-            // Recriar THEMES no escopo do novo HTML
-            const APP_THEMES = ${JSON.stringify(THEMES)};
-            // Recriar FORMATS no escopo do novo HTML
-            const APP_FORMATS = ${JSON.stringify(FORMATS)};
+            state = ${JSON.stringify(state).replace(/</g, '\\u003c')};
             
-            window.onload = () => {
-                document.getElementById('sidebar-menu').style.display = 'none';
-                if(document.querySelector('header')) document.querySelector('header').style.display = 'none';
+            window.addEventListener('load', () => {
+                const sidebar = document.getElementById('sidebar-menu');
+                if(sidebar) sidebar.style.display = 'none';
+                const header = document.querySelector('header');
+                if(header) header.style.display = 'none';
                 
                 const mainArea = document.getElementById('main-area');
-                mainArea.style.padding = '0';
-                mainArea.style.justifyContent = 'center';
-                mainArea.style.alignItems = 'center';
+                if(mainArea) {
+                    mainArea.style.padding = '0';
+                    mainArea.style.justifyContent = 'center';
+                    mainArea.style.alignItems = 'center';
+                }
                 
                 const style = document.createElement('style');
-                style.innerHTML = '.linha-corte-horizontal { display: none !important; } body { overflow: hidden; }';
+                style.innerHTML = '.linha-corte-horizontal { display: none !important; } body { overflow: hidden; background-color: #1c1917; }';
                 document.head.appendChild(style);
 
                 let currentIndex = 0;
@@ -1367,10 +1348,7 @@
                 
                 const nav = document.createElement('div');
                 nav.className = 'fixed bottom-4 left-0 right-0 flex justify-center gap-4 z-[99999]';
-                nav.innerHTML = \`
-                    <button onclick="navDigital(-1)" class="px-5 py-2 bg-stone-900 text-white rounded-full font-bold shadow-2xl opacity-90 border-2 border-stone-600">◀ Voltar</button>
-                    <button onclick="navDigital(1)" class="px-5 py-2 bg-stone-900 text-white rounded-full font-bold shadow-2xl opacity-90 border-2 border-stone-600">Avançar ▶</button>
-                \`;
+                nav.innerHTML = '<button onclick="navDigital(-1)" class="px-5 py-2 bg-stone-800 text-white rounded-full font-bold shadow-2xl border-2 border-stone-600">◀ Voltar</button><button onclick="navDigital(1)" class="px-5 py-2 bg-stone-800 text-white rounded-full font-bold shadow-2xl border-2 border-stone-600">Avançar ▶</button>';
                 document.body.appendChild(nav);
                 
                 window.navDigital = (dir) => {
@@ -1379,45 +1357,24 @@
                     if(currentIndex > pages.length - 1) currentIndex = pages.length - 1;
                     
                     state.activeTab = pages[currentIndex];
-                    const container = document.getElementById("render-canvas");
-                    const fConfig = APP_FORMATS[state.format];
-                    
-                    let themeCss = "";
-                    if (state.globalTheme === 'custom-image') {
-                      const bgImg = state.customBackground ? \`url('\${state.customBackground}')\` : 'none';
-                      themeCss = \`background-color: #ffffff; background-image: \${bgImg}; background-size: cover; background-position: center;\`;
-                    } else {
-                      themeCss = APP_THEMES[state.globalTheme].bgPage;
-                    }
-                    
-                    container.style.cssText = \`width: \${fConfig.w}px; height: \${fConfig.h}px; \${themeCss}\`;
-                    container.innerHTML = window.generatePageHtml ? window.generatePageHtml(state.activeTab, fConfig) : generatePageHtml(state.activeTab, fConfig);
-                    
-                    const wrapper = document.getElementById('canvas-wrapper');
-                    const availableWidth = window.innerWidth;
-                    const availableHeight = window.innerHeight;
-                    const scaleW = availableWidth / fConfig.w;
-                    const scaleH = availableHeight / fConfig.h;
-                    const finalScale = Math.min(scaleW, scaleH) * 0.95;
-                    
-                    wrapper.style.transform = \`scale(\${finalScale})\`;
-                    wrapper.style.height = \`\${fConfig.h * finalScale}px\`;
+                    renderCanvas();
                 };
 
                 navDigital(0);
                 setTimeout(playGiftAnimation, 500);
-            };
-        </scr`+`ipt>
+            });
         `;
         
-        let finalHtml = "<!DOCTYPE html>\n" + htmlStr.replace('</body>', scriptInject + '</body>');
+        clonedDoc.querySelector('body').appendChild(scriptEl);
+        
+        let finalHtml = "<!DOCTYPE html>\\n" + clonedDoc.outerHTML;
         let blob = new Blob([finalHtml], {type: 'text/html'});
         let a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
         a.download = `Album_Digital_RSP_${state.yearText}.html`;
         a.click();
         
-        alert("Versão Digital (HTML) gerada com sucesso!\nHospede online para linkar no seu QR Code.");
+        alert("Versão Digital (HTML) gerada com sucesso!\\nHospede o arquivo online para usar o link no QR Code da impressão.");
     }
   </script>
 </body>
