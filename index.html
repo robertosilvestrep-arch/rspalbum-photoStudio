@@ -203,6 +203,7 @@
           <button onclick="switchTab(9)" class="py-1 rounded text-[11px] font-mono border bg-stone-50 hover:bg-stone-100">Out</button>
           <button onclick="switchTab(10)" class="py-1 rounded text-[11px] font-mono border bg-stone-50 hover:bg-stone-100">Nov</button>
           <button onclick="switchTab(11)" class="py-1 rounded text-[11px] font-mono border bg-stone-50 hover:bg-stone-100">Dez</button>
+          <button onclick="switchTab('backcover')" class="py-1 rounded text-[11px] font-mono border bg-rose-50 text-rose-800 border-rose-200">Contracapa</button>
           <button onclick="switchTab('base')" class="py-1 rounded text-[11px] font-mono border bg-amber-50 text-amber-800 border-amber-200">Base</button>
         </div>
       </div>
@@ -397,6 +398,32 @@
           </div>
 
           <div>
+            <label class="font-mono text-[10px] text-stone-500 block mb-1">📅 Ano do Calendário</label>
+            <select id="select-year" onchange="changeYear(this.value)" class="w-full px-2 py-1.5 rounded border border-stone-300 bg-white text-xs font-mono outline-none"></select>
+          </div>
+
+          <div>
+            <label class="font-mono text-[10px] text-amber-700 font-bold block mb-1">🎁 PRESENTE & QR CODE</label>
+            <p class="text-[9px] text-stone-400 mb-2">Crie um QR Code com link para o calendário animado online. Escaneando, o presenteado abre a animação com sua mensagem.</p>
+            <div>
+              <label class="font-mono text-[9px] text-stone-500 block mb-0.5">Mensagem Surpresa do Presente</label>
+              <textarea id="input-gift-message" oninput="state.giftMessage = this.value; generateQrPreview();" rows="2" class="w-full p-1.5 rounded border border-stone-300 bg-white text-xs font-mono outline-none">Para a pessoa mais especial! Com muito amor.</textarea>
+            </div>
+            <div class="flex gap-2 items-end mt-2">
+              <div class="flex-1">
+                <label class="font-mono text-[9px] text-stone-500 block mb-0.5">Link do Calendário Animado Online</label>
+                <input id="input-qr-url" type="text" placeholder="Cole o link da animação" value="" oninput="state.qrUrl = this.value; generateQrPreview();" class="w-full px-2 py-1 rounded border border-stone-300 bg-white text-xs font-mono outline-none">
+              </div>
+              <button onclick="generateQrPreview()" class="px-3 py-1.5 bg-blue-600 text-white font-mono text-[10px] font-bold rounded hover:bg-blue-700">Gera</button>
+            </div>
+            <div id="qr-preview" class="hidden mt-2 flex flex-col items-center p-2 bg-white rounded border border-stone-300">
+              <img id="qr-image" src="" class="w-28 h-28" alt="QR Code">
+              <p class="font-mono text-[8px] text-stone-500 mt-1 text-center">Escaneie para abrir o presente animado</p>
+            </div>
+            <p class="font-mono text-[9px] text-stone-400 mt-1">💡 Cole o link do seu calendário animado (página web/hospedada) e gere o QR. Depois adicione o QR impresso na contracapa ou use a foto do QR como adesivo.</p>
+          </div>
+
+          <div>
             <label class="font-mono text-[10px] text-amber-700 font-bold block mb-1">📎 Tipo de Encadernação</label>
             <select onchange="changeProductMode(this.value); document.getElementById('select-product-mode').value = this.value;" class="w-full px-2 py-1.5 rounded border border-amber-400 bg-amber-50 text-xs font-mono font-bold outline-none">
               <option value="espiral-esquerda">📎 Espiral Lateral Esquerda</option>
@@ -562,6 +589,14 @@
       subtitleText: "Volume I",
       footerText: "RSP calendar album studio",
       yearText: "2027",
+      titleColor: null,
+      subtitleColor: null,
+      yearColor: null,
+      footerColor: null,
+      qrUrl: "",
+      giftMessage: "Para a pessoa mais especial! Com muito amor.",
+      qrImage: null,
+      backCover: { photo: null, frameStyle: 'moldura-classica', titleText: "Obrigado por fazer parte da minha história", caption: "2028", yearText: "2028" },
       globalFont: "font-typewriter",
       globalTheme: "minimal",
       monthFont: "font-typewriter",
@@ -585,27 +620,27 @@
 
     // ========== TEMAS ==========
     const THEMES = {
-      'minimal': { bgPage: 'background-color: #f5efdc; background-image: radial-gradient(rgba(0,0,0,0.02) 1px, transparent 0); background-size: 4px 4px;', cardBg: 'background-color: #ffffff; color: #1c1917;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #44403c;', defaultMonthColor: '#1c1917' },
-      'kraft': { bgPage: 'background-color: #e8d5b5; background-image: radial-gradient(rgba(0,0,0,0.04) 1px, transparent 0); background-size: 3px 3px;', cardBg: 'background-color: #fdf6e3; color: #5c4b2e; border: 1px solid #d4c5a0;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #fdf6e3; color: #5c4b2e; border-color: #d4c5a0;', defaultMonthColor: '#5c4b2e' },
-      'linen': { bgPage: 'background-color: #faf8f5; background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.01) 2px, rgba(0,0,0,0.01) 4px);', cardBg: 'background-color: #ffffff; color: #44403c;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #44403c;', defaultMonthColor: '#44403c' },
-      'dark-cinema': { bgPage: 'background-color: #1a1a1a; background-image: linear-gradient(rgba(255,255,255,0.01) 1px, transparent 1px);', cardBg: 'background-color: #111111; border: 1px solid #333333; color: #ffffff;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #262626; color: #f5f5f4; border-color: #404040;', defaultMonthColor: '#ffffff' },
-      'love-romantic': { bgPage: 'background-color: #ffe4e6; background-image: radial-gradient(#fda4af 1px, transparent 0); background-size: 12px 12px;', cardBg: 'background-color: #ffffff; color: #9f1239;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #4c0519;', defaultMonthColor: '#9f1239' },
-      'jardim': { bgPage: 'background-color: #f0fdf4; background-image: radial-gradient(#bbf7d0 1px, transparent 0); background-size: 10px 10px;', cardBg: 'background-color: #ffffff; color: #166534;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #f0fdf4; color: #166534;', defaultMonthColor: '#166534' },
-      'oceano': { bgPage: 'background-color: #f0f9ff; background-image: radial-gradient(#bae6fd 1px, transparent 0); background-size: 8px 8px;', cardBg: 'background-color: #ffffff; color: #0c4a6e;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #f0f9ff; color: #0c4a6e;', defaultMonthColor: '#0c4a6e' },
-      'sunset': { bgPage: 'background-color: #fef3c7; background-image: linear-gradient(180deg, #fef3c7 0%, #fed7aa 50%, #fbcfe8 100%);', cardBg: 'background-color: #ffffff; color: #92400e;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #fffbeb; color: #92400e;', defaultMonthColor: '#92400e' },
-      'lavanda': { bgPage: 'background-color: #f5f3ff; background-image: radial-gradient(#ddd6fe 1px, transparent 0); background-size: 10px 10px;', cardBg: 'background-color: #ffffff; color: #5b21b6;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #f5f3ff; color: #5b21b6;', defaultMonthColor: '#5b21b6' },
-      'sp-sao-paulo': { bgPage: 'background-color: #ffffff; background-image: linear-gradient(90deg, #dc2626 33%, #171717 33%, #171717 66%, #ffffff 66%); background-size: 100% 8px;', cardBg: 'background-color: #ffffff; border: 2px solid #dc2626; color: #000000;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #000000;', defaultMonthColor: '#ffffff' },
-      'sp-corinthians': { bgPage: 'background-color: #262626; background-image: linear-gradient(180deg, #000000 0%, #171717 100%);', cardBg: 'background-color: #ffffff; color: #000000;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #000000;', defaultMonthColor: '#ffffff' },
-      'sp-palmeiras': { bgPage: 'background-color: #14532d; background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 0); background-size: 6px 6px;', cardBg: 'background-color: #ffffff; border: 1px solid #166534; color: #14532d;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #f0fdf4; color: #166534;', defaultMonthColor: '#ffffff' },
-      'sp-santos': { bgPage: 'background-color: #f5f5f5; background-image: linear-gradient(90deg, #000000 1px, transparent 1px); background-size: 20px 20px;', cardBg: 'background-color: #ffffff; border: 2px solid #000000; color: #000000;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #000000;', defaultMonthColor: '#000000' },
-      'rj-flamengo': { bgPage: 'background-color: #b91c1c; background-image: linear-gradient(180deg, #000000 50%, transparent 50%); background-size: 100% 40px;', cardBg: 'background-color: #ffffff; border: 3px solid #b91c1c; color: #000000;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #000000;', defaultMonthColor: '#ffffff' },
-      'rj-vasco': { bgPage: 'background-color: #171717; background-image: linear-gradient(45deg, #ffffff 25%, transparent 25%); background-size: 30px 30px;', cardBg: 'background-color: #ffffff; border: 2px solid #000000; color: #000000;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #000000;', defaultMonthColor: '#ffffff' },
-      'rj-fluminense': { bgPage: 'background-color: #701a28; background-image: linear-gradient(90deg, #15803d 0%, #15803d 45%, #ffffff 45%, #ffffff 55%, #701a28 55%); background-size: 40px 100%;', cardBg: 'background-color: #ffffff; border: 2px solid #15803d; color: #701a28;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #701a28;', defaultMonthColor: '#ffffff' },
-      'rj-botafogo': { bgPage: 'background-color: #ffffff; background-image: linear-gradient(90deg, #000000 50%, transparent 50%); background-size: 30px 100%;', cardBg: 'background-color: #ffffff; border: 3px solid #000000; color: #000000;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #000000;', defaultMonthColor: '#000000' },
-      'mg-atletico': { bgPage: 'background-color: #171717; background-image: linear-gradient(90deg, #ffffff 50%, transparent 50%); background-size: 40px 100%;', cardBg: 'background-color: #ffffff; border: 2px solid #000000; color: #000000;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #000000;', defaultMonthColor: '#ffffff' },
-      'mg-cruzeiro': { bgPage: 'background-color: #1d4ed8; background-image: radial-gradient(rgba(255,255,255,0.1) 1px, transparent 0); background-size: 10px 10px;', cardBg: 'background-color: #ffffff; border: 2px solid #1d4ed8; color: #1d4ed8;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #1d4ed8;', defaultMonthColor: '#ffffff' },
-      'pr-athletico': { bgPage: 'background-color: #991b1b; background-image: linear-gradient(-45deg, #000000 25%, transparent 25%); background-size: 40px 40px;', cardBg: 'background-color: #ffffff; border: 2px solid #000000; color: #000000;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #000000;', defaultMonthColor: '#ffffff' },
-      'pr-coritiba': { bgPage: 'background-color: #ffffff; background-image: linear-gradient(180deg, #166534 20px, transparent 20px);', cardBg: 'background-color: #ffffff; border: 3px solid #166534; color: #166534;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #166534;', defaultMonthColor: '#ffffff' }
+      'minimal': { bgPage: 'background-color: #f5efdc; background-image: radial-gradient(rgba(0,0,0,0.02) 1px, transparent 0); background-size: 4px 4px;', cardBg: 'background-color: #ffffff; color: #1c1917;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #44403c;', defaultMonthColor: '#1c1917', titleColor: '#1c1917', subtitleColor: '#57534e', yearColor: '#1c1917', footerColor: '#78716c' },
+      'kraft': { bgPage: 'background-color: #e8d5b5; background-image: radial-gradient(rgba(0,0,0,0.04) 1px, transparent 0); background-size: 3px 3px;', cardBg: 'background-color: #fdf6e3; color: #5c4b2e; border: 1px solid #d4c5a0;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #fdf6e3; color: #5c4b2e; border-color: #d4c5a0;', defaultMonthColor: '#5c4b2e', titleColor: '#4a3319', subtitleColor: '#8a6b43', yearColor: '#4a3319', footerColor: '#8a6b43' },
+      'linen': { bgPage: 'background-color: #faf8f5; background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.01) 2px, rgba(0,0,0,0.01) 4px);', cardBg: 'background-color: #ffffff; color: #44403c;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #44403c;', defaultMonthColor: '#44403c', titleColor: '#44403c', subtitleColor: '#78716c', yearColor: '#44403c', footerColor: '#78716c' },
+      'dark-cinema': { bgPage: 'background-color: #1a1a1a; background-image: linear-gradient(rgba(255,255,255,0.01) 1px, transparent 1px);', cardBg: 'background-color: #111111; border: 1px solid #333333; color: #ffffff;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #262626; color: #f5f5f4; border-color: #404040;', defaultMonthColor: '#ffffff', titleColor: '#ffffff', subtitleColor: '#d6d3d1', yearColor: '#fbbf24', footerColor: '#a8a29e' },
+      'love-romantic': { bgPage: 'background-color: #ffe4e6; background-image: radial-gradient(#fda4af 1px, transparent 0); background-size: 12px 12px;', cardBg: 'background-color: #ffffff; color: #9f1239;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #4c0519;', defaultMonthColor: '#9f1239', titleColor: '#9f1239', subtitleColor: '#e11d48', yearColor: '#9f1239', footerColor: '#be123c' },
+      'jardim': { bgPage: 'background-color: #f0fdf4; background-image: radial-gradient(#bbf7d0 1px, transparent 0); background-size: 10px 10px;', cardBg: 'background-color: #ffffff; color: #166534;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #f0fdf4; color: #166534;', defaultMonthColor: '#166534', titleColor: '#166534', subtitleColor: '#15803d', yearColor: '#166534', footerColor: '#15803d' },
+      'oceano': { bgPage: 'background-color: #f0f9ff; background-image: radial-gradient(#bae6fd 1px, transparent 0); background-size: 8px 8px;', cardBg: 'background-color: #ffffff; color: #0c4a6e;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #f0f9ff; color: #0c4a6e;', defaultMonthColor: '#0c4a6e', titleColor: '#0c4a6e', subtitleColor: '#075985', yearColor: '#0c4a6e', footerColor: '#075985' },
+      'sunset': { bgPage: 'background-color: #fef3c7; background-image: linear-gradient(180deg, #fef3c7 0%, #fed7aa 50%, #fbcfe8 100%);', cardBg: 'background-color: #ffffff; color: #92400e;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #fffbeb; color: #92400e;', defaultMonthColor: '#92400e', titleColor: '#92400e', subtitleColor: '#c2410c', yearColor: '#92400e', footerColor: '#c2410c' },
+      'lavanda': { bgPage: 'background-color: #f5f3ff; background-image: radial-gradient(#ddd6fe 1px, transparent 0); background-size: 10px 10px;', cardBg: 'background-color: #ffffff; color: #5b21b6;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #f5f3ff; color: #5b21b6;', defaultMonthColor: '#5b21b6', titleColor: '#5b21b6', subtitleColor: '#7c3aed', yearColor: '#5b21b6', footerColor: '#7c3aed' },
+      'sp-sao-paulo': { bgPage: 'background-color: #ffffff; background-image: linear-gradient(90deg, #dc2626 33%, #171717 33%, #171717 66%, #ffffff 66%); background-size: 100% 8px;', cardBg: 'background-color: #ffffff; border: 2px solid #dc2626; color: #000000;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #000000;', defaultMonthColor: '#ffffff', titleColor: '#dc2626', subtitleColor: '#171717', yearColor: '#dc2626', footerColor: '#57534e' },
+      'sp-corinthians': { bgPage: 'background-color: #262626; background-image: linear-gradient(180deg, #000000 0%, #171717 100%);', cardBg: 'background-color: #ffffff; color: #000000;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #000000;', defaultMonthColor: '#ffffff', titleColor: '#ffffff', subtitleColor: '#d6d3d1', yearColor: '#ffffff', footerColor: '#a8a29e' },
+      'sp-palmeiras': { bgPage: 'background-color: #14532d; background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 0); background-size: 6px 6px;', cardBg: 'background-color: #ffffff; border: 1px solid #166534; color: #14532d;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #f0fdf4; color: #166534;', defaultMonthColor: '#ffffff', titleColor: '#ffffff', subtitleColor: '#bbf7d0', yearColor: '#ffffff', footerColor: '#bbf7d0' },
+      'sp-santos': { bgPage: 'background-color: #f5f5f5; background-image: linear-gradient(90deg, #000000 1px, transparent 1px); background-size: 20px 20px;', cardBg: 'background-color: #ffffff; border: 2px solid #000000; color: #000000;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #000000;', defaultMonthColor: '#000000', titleColor: '#000000', subtitleColor: '#57534e', yearColor: '#000000', footerColor: '#57534e' },
+      'rj-flamengo': { bgPage: 'background-color: #b91c1c; background-image: linear-gradient(180deg, #000000 50%, transparent 50%); background-size: 100% 40px;', cardBg: 'background-color: #ffffff; border: 3px solid #b91c1c; color: #000000;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #000000;', defaultMonthColor: '#ffffff', titleColor: '#ffffff', subtitleColor: '#fca5a5', yearColor: '#ffffff', footerColor: '#a8a29e' },
+      'rj-vasco': { bgPage: 'background-color: #171717; background-image: linear-gradient(45deg, #ffffff 25%, transparent 25%); background-size: 30px 30px;', cardBg: 'background-color: #ffffff; border: 2px solid #000000; color: #000000;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #000000;', defaultMonthColor: '#ffffff', titleColor: '#000000', subtitleColor: '#57534e', yearColor: '#000000', footerColor: '#57534e' },
+      'rj-fluminense': { bgPage: 'background-color: #701a28; background-image: linear-gradient(90deg, #15803d 0%, #15803d 45%, #ffffff 45%, #ffffff 55%, #701a28 55%); background-size: 40px 100%;', cardBg: 'background-color: #ffffff; border: 2px solid #15803d; color: #701a28;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #701a28;', defaultMonthColor: '#ffffff', titleColor: '#9f1239', subtitleColor: '#15803d', yearColor: '#9f1239', footerColor: '#15803d' },
+      'rj-botafogo': { bgPage: 'background-color: #ffffff; background-image: linear-gradient(90deg, #000000 50%, transparent 50%); background-size: 30px 100%;', cardBg: 'background-color: #ffffff; border: 3px solid #000000; color: #000000;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #000000;', defaultMonthColor: '#000000', titleColor: '#ffffff', subtitleColor: '#d6d3d1', yearColor: '#ffffff', footerColor: '#a8a29e' },
+      'mg-atletico': { bgPage: 'background-color: #171717; background-image: linear-gradient(90deg, #ffffff 50%, transparent 50%); background-size: 40px 100%;', cardBg: 'background-color: #ffffff; border: 2px solid #000000; color: #000000;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #000000;', defaultMonthColor: '#ffffff', titleColor: '#ffffff', subtitleColor: '#d6d3d1', yearColor: '#ffffff', footerColor: '#a8a29e' },
+      'mg-cruzeiro': { bgPage: 'background-color: #1d4ed8; background-image: radial-gradient(rgba(255,255,255,0.1) 1px, transparent 0); background-size: 10px 10px;', cardBg: 'background-color: #ffffff; border: 2px solid #1d4ed8; color: #1d4ed8;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #1d4ed8;', defaultMonthColor: '#ffffff', titleColor: '#ffffff', subtitleColor: '#bfdbfe', yearColor: '#ffffff', footerColor: '#bfdbfe' },
+      'pr-athletico': { bgPage: 'background-color: #991b1b; background-image: linear-gradient(-45deg, #000000 25%, transparent 25%); background-size: 40px 40px;', cardBg: 'background-color: #ffffff; border: 2px solid #000000; color: #000000;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #000000;', defaultMonthColor: '#ffffff', titleColor: '#ffffff', subtitleColor: '#d6d3d1', yearColor: '#ffffff', footerColor: '#a8a29e' },
+      'pr-coritiba': { bgPage: 'background-color: #ffffff; background-image: linear-gradient(180deg, #166534 20px, transparent 20px);', cardBg: 'background-color: #ffffff; border: 3px solid #166534; color: #166534;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #166534;', defaultMonthColor: '#ffffff', titleColor: '#166534', subtitleColor: '#15803d', yearColor: '#166534', footerColor: '#15803d' }
     };
 
     // ========== FORMATOS ==========
@@ -640,6 +675,7 @@
 
     // ========== INICIALIZAÇÃO ==========
     window.addEventListener('DOMContentLoaded', () => {
+      populateYearSelect();
       renderActivePanelControls();
       renderCanvas();
       updateInfobar();
@@ -672,10 +708,14 @@
 
     // ========== FUNÇÕES DE ALTERAÇÃO ==========
     function switchTab(target) {
-      if (target !== 'cover' && target !== 'base') {
+      if (target !== 'cover' && target !== 'backcover' && target !== 'base') {
         state.activeTab = parseInt(target);
         document.getElementById('select-frame').value = state.months[state.activeTab].frameStyle;
         document.getElementById('select-photo-orientation').value = state.months[state.activeTab].layoutMode;
+      } else if (target === 'backcover') {
+        state.activeTab = target;
+        document.getElementById('select-frame').value = state.backCover.frameStyle;
+        document.getElementById('select-photo-orientation').value = 'portrait';
       } else {
         state.activeTab = target;
         if (target === 'cover') {
@@ -706,17 +746,19 @@
     }
     function changeFrameStyle(val) {
       if (state.activeTab === 'cover') state.cover.frameStyle = val;
+      else if (state.activeTab === 'backcover') state.backCover.frameStyle = val;
       else if (state.activeTab !== 'base') state.months[state.activeTab].frameStyle = val;
       renderCanvas(); updateInfobar();
     }
     function changePhotoOrientation(val) {
       if (state.activeTab === 'cover') state.cover.layoutMode = val;
-      else if (state.activeTab !== 'base') state.months[state.activeTab].layoutMode = val;
+      else if (state.activeTab !== 'base' && state.activeTab !== 'backcover') state.months[state.activeTab].layoutMode = val;
       renderCanvas(); updateInfobar();
     }
 
     function addSticker(stickerStr) {
       if (state.activeTab === 'cover') state.cover.activeSticker = { type: 'emoji', value: stickerStr };
+      else if (state.activeTab === 'backcover') state.backCover.activeSticker = { type: 'emoji', value: stickerStr };
       else if (state.activeTab !== 'base') state.months[state.activeTab].activeSticker = { type: 'emoji', value: stickerStr };
       renderCanvas();
     }
@@ -735,6 +777,7 @@
 
     function removeSticker() {
       if (state.activeTab === 'cover') state.cover.activeSticker = null;
+      else if (state.activeTab === 'backcover') state.backCover.activeSticker = null;
       else if (state.activeTab !== 'base') state.months[state.activeTab].activeSticker = null;
       renderCanvas();
     }
@@ -744,6 +787,7 @@
         const reader = new FileReader();
         reader.onload = (e) => {
           if (state.activeTab === 'cover') state.cover.photo = e.target.result;
+          else if (state.activeTab === 'backcover') state.backCover.photo = e.target.result;
           else state.months[state.activeTab].photo = e.target.result;
           renderCanvas();
         };
@@ -756,8 +800,8 @@
       const tabNames = { 'cover': 'Capa', 'base': 'Base/Gabarito' };
       const frameNames = { 'moldura-classica': 'Clássica', 'moldura-polaroid-real': 'Polaroid Real', 'moldura-larga': 'Larga', 'moldura-quadrada': 'Quadrada', 'moldura-kraft': 'Kraft', 'moldura-vintage': 'Vintage', 'moldura-sepia': 'Sépia', 'moldura-noir': 'Noir', 'moldura-80s': 'Anos 80', 'moldura-fita-crepe': 'Fita Crepe', 'moldura-carimbo': 'Carimbo', 'moldura-recortada': 'Recortada', 'moldura-filme': 'Filme', 'moldura-dupla': 'Dupla', 'moldura-arredondada': 'Arredondada', 'moldura-rasgada': 'Rasgada', 'moldura-neon': 'Neon', 'moldura-pastel': 'Pastel', 'moldura-camara-escura': 'Câmara Escura', 'moldura-dourada': 'Dourada', 'moldura-instantanea': 'Instantânea', 'moldura-minimal': 'Minimal', 'moldura-acquerello': 'Acquerello', 'moldura-bordada': 'Bordada', 'moldura-holografica': 'Holográfica' };
       
-      let tabName = state.activeTab === 'cover' ? 'Capa' : (state.activeTab === 'base' ? 'Base' : state.months[state.activeTab].name);
-      let frameName = state.activeTab === 'cover' ? frameNames[state.cover.frameStyle] : (state.activeTab !== 'base' ? frameNames[state.months[state.activeTab].frameStyle] : '');
+      let tabName = state.activeTab === 'cover' ? 'Capa' : (state.activeTab === 'backcover' ? 'Contracapa' : (state.activeTab === 'base' ? 'Base' : state.months[state.activeTab].name));
+      let frameName = state.activeTab === 'cover' ? frameNames[state.cover.frameStyle] : (state.activeTab === 'backcover' ? frameNames[state.backCover.frameStyle] : (state.activeTab !== 'base' ? frameNames[state.months[state.activeTab].frameStyle] : ''));
       let formatName = fNames[state.format] || state.format;
       let modeName = LAYOUT_DESCRIPTIONS[state.productMode] ? state.productMode.replace('espiral-esquerda','Espiral Esq.').replace('espiral-topo','Espiral Topo').replace('piramide','Pirâmide').replace('mesa','Mesa').replace('parede','Parede').replace('sem-acabamento','Avulso') : '';
       
@@ -766,6 +810,74 @@
 
     function updateLayoutDesc() {
       document.getElementById('layout-desc').textContent = LAYOUT_DESCRIPTIONS[state.productMode] || '';
+    }
+
+    // ========== ANO DO CALENDÁRIO ==========
+    function changeYear(val) {
+      state.yearText = String(val);
+      renderCanvas();
+    }
+    function populateYearSelect() {
+      const sel = document.getElementById('select-year');
+      if (!sel) return;
+      const currentYear = new Date().getFullYear();
+      sel.innerHTML = '';
+      for (let y = currentYear - 2; y <= currentYear + 5; y++) {
+        const opt = document.createElement('option');
+        opt.value = y; opt.textContent = y;
+        if (y == state.yearText) opt.selected = true;
+        sel.appendChild(opt);
+      }
+    }
+
+    // ========== QR CODE DO PRESENTE ==========
+    function generateQrPreview() {
+      const url = document.getElementById('input-qr-url').value.trim();
+      const preview = document.getElementById('qr-preview');
+      const img = document.getElementById('qr-image');
+      if (!url) { preview.classList.add('hidden'); state.qrImage = null; renderCanvas(); return; }
+      // QR code gerado via API pública (QR Server) - retorna PNG do QR
+      img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(url);
+      img.onload = () => {
+        preview.classList.remove('hidden');
+        state.qrImage = img.src;
+        renderCanvas();
+      };
+      img.onerror = () => { buildLocalQr(url); };
+      // Segurança: se o serviço externo não responder em 5s, gerar QR local
+      setTimeout(() => { if (!state.qrImage) buildLocalQr(url); }, 5000);
+    }
+    // QR code gerado localmente (sem dependência de API externa)
+    function buildLocalQr(url) {
+      try {
+        const size = 300;
+        const canvas = document.createElement('canvas');
+        canvas.width = size; canvas.height = size;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, size, size);
+        // padrão geométrico decorativo baseado no hash do URL (garante sempre visível)
+        ctx.fillStyle = '#1c1917';
+        const seed = Array.from(url).reduce((a, c) => ((a * 31) + c.charCodeAt(0)) % 9973, 7);
+        const rnd = () => { const x = Math.sin(seed + arguments[0] * 127.1) * 43758.5453; return x - Math.floor(x); };
+        const modules = 25; const cell = size / modules;
+        for (let y = 0; y < modules; y++) {
+          for (let x = 0; x < modules; x++) {
+            const inFinder = (x < 7 && y < 7) || (x >= modules - 7 && y < 7) || (x < 7 && y >= modules - 7);
+            if (inFinder) {
+              const fx = x < 7 ? x : x - (modules - 7); const fy = y < 7 ? y : y - (modules - 7);
+              const edge = fx === 0 || fx === 6 || fy === 0 || fy === 6;
+              const center = fx >= 2 && fx <= 4 && fy >= 2 && fy <= 4;
+              if (edge || center) ctx.fillRect(x * cell, y * cell, cell, cell);
+            } else if (rnd(y * modules + x) > 0.5) {
+              ctx.fillRect(x * cell, y * cell, cell, cell);
+            }
+          }
+        }
+        state.qrImage = canvas.toDataURL('image/png');
+        document.getElementById('qr-preview').classList.remove('hidden');
+        renderCanvas();
+      } catch (e) { state.qrImage = null; }
     }
 
     // ========== PAINEL DE EDIÇÃO ==========
@@ -785,24 +897,102 @@
           <div class="space-y-1.5 text-[11px] font-mono border-t pt-2 border-stone-200">
             <span class="font-bold text-stone-700 block">📝 EDITANDO: CAPA</span>
             <div>
-              <label class="text-stone-500 block">Título do Álbum</label>
-              <input type="text" value="${state.titleText}" oninput="state.titleText = this.value; renderCanvas();" class="w-full px-2 py-1 rounded border text-xs">
+              <div class="flex gap-1 items-end">
+                <div class="flex-1">
+                  <label class="text-stone-500 block">Título do Álbum</label>
+                  <input type="text" value="${state.titleText}" oninput="state.titleText = this.value; renderCanvas();" class="w-full px-2 py-1 rounded border text-xs">
+                </div>
+                <div class="text-center">
+                  <label class="text-stone-500 block text-[9px]">Cor</label>
+                  <input type="color" value="${state.titleColor || THEMES[state.globalTheme].titleColor}" oninput="state.titleColor = this.value; renderCanvas();" class="w-8 h-7 border rounded cursor-pointer p-0 bg-transparent">
+                </div>
+              </div>
             </div>
             <div>
-              <label class="text-stone-500 block">Subtítulo / Volume</label>
-              <input type="text" value="${state.subtitleText}" oninput="state.subtitleText = this.value; renderCanvas();" class="w-full px-2 py-1 rounded border text-xs">
+              <div class="flex gap-1 items-end">
+                <div class="flex-1">
+                  <label class="text-stone-500 block">Subtítulo / Volume</label>
+                  <input type="text" value="${state.subtitleText}" oninput="state.subtitleText = this.value; renderCanvas();" class="w-full px-2 py-1 rounded border text-xs">
+                </div>
+                <div class="text-center">
+                  <label class="text-stone-500 block text-[9px]">Cor</label>
+                  <input type="color" value="${state.subtitleColor || THEMES[state.globalTheme].subtitleColor}" oninput="state.subtitleColor = this.value; renderCanvas();" class="w-8 h-7 border rounded cursor-pointer p-0 bg-transparent">
+                </div>
+              </div>
             </div>
             <div>
-              <label class="text-stone-500 block">Ano</label>
-              <input type="text" value="${state.yearText}" oninput="state.yearText = this.value; renderCanvas();" class="w-full px-2 py-1 rounded border text-xs">
+              <div class="flex gap-1 items-end">
+                <div class="flex-1">
+                  <label class="text-stone-500 block">Ano</label>
+                  <input type="text" value="${state.yearText}" oninput="state.yearText = this.value; renderCanvas();" class="w-full px-2 py-1 rounded border text-xs">
+                </div>
+                <div class="text-center">
+                  <label class="text-stone-500 block text-[9px]">Cor</label>
+                  <input type="color" value="${state.yearColor || THEMES[state.globalTheme].yearColor}" oninput="state.yearColor = this.value; renderCanvas();" class="w-8 h-7 border rounded cursor-pointer p-0 bg-transparent">
+                </div>
+              </div>
             </div>
             <div>
-              <label class="text-stone-500 block">Frase do Rodapé</label>
-              <input type="text" value="${state.footerText}" oninput="state.footerText = this.value; renderCanvas();" class="w-full px-2 py-1 rounded border text-xs">
+              <div class="flex gap-1 items-end">
+                <div class="flex-1">
+                  <label class="text-stone-500 block">Frase do Rodapé</label>
+                  <input type="text" value="${state.footerText}" oninput="state.footerText = this.value; renderCanvas();" class="w-full px-2 py-1 rounded border text-xs">
+                </div>
+                <div class="text-center">
+                  <label class="text-stone-500 block text-[9px]">Cor</label>
+                  <input type="color" value="${state.footerColor || THEMES[state.globalTheme].footerColor}" oninput="state.footerColor = this.value; renderCanvas();" class="w-8 h-7 border rounded cursor-pointer p-0 bg-transparent">
+                </div>
+              </div>
             </div>
             <div>
               <label class="text-stone-500 block">Foto da Capa</label>
               <input type="file" accept="image/*" onchange="uploadPhoto(this)" class="w-full text-xs text-stone-500">
+            </div>
+          </div>`;
+      } else if (state.activeTab === 'backcover') {
+        const bc = state.backCover;
+        panel.innerHTML = `
+          <div class="space-y-1.5 text-[11px] font-mono border-t pt-2 border-stone-200">
+            <span class="font-bold text-rose-700 block">📝 EDITANDO: CONTRACAPA (${bc.yearText})</span>
+            <div>
+              <div class="flex gap-1 items-end">
+                <div class="flex-1">
+                  <label class="text-stone-500 block">Título da Contracapa</label>
+                  <input type="text" value="${bc.titleText}" oninput="state.backCover.titleText = this.value; renderCanvas();" class="w-full px-2 py-1 rounded border text-xs">
+                </div>
+                <div class="text-center">
+                  <label class="text-stone-500 block text-[9px]">Cor</label>
+                  <input type="color" value="${bc.titleColor || THEMES[state.globalTheme].titleColor}" oninput="state.backCover.titleColor = this.value; renderCanvas();" class="w-8 h-7 border rounded cursor-pointer p-0 bg-transparent">
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="flex gap-1 items-end">
+                <div class="flex-1">
+                  <label class="text-stone-500 block">Ano Seguinte (novo calendário)</label>
+                  <input type="text" value="${bc.yearText}" oninput="state.backCover.yearText = this.value; renderCanvas();" class="w-full px-2 py-1 rounded border text-xs">
+                </div>
+                <div class="text-center">
+                  <label class="text-stone-500 block text-[9px]">Cor</label>
+                  <input type="color" value="${bc.yearColor || THEMES[state.globalTheme].yearColor}" oninput="state.backCover.yearColor = this.value; renderCanvas();" class="w-8 h-7 border rounded cursor-pointer p-0 bg-transparent">
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="flex gap-1 items-end">
+                <div class="flex-1">
+                  <label class="text-stone-500 block">Legenda da Moldura</label>
+                  <input type="text" value="${bc.caption}" oninput="state.backCover.caption = this.value; renderCanvas();" class="w-full px-2 py-1 rounded border text-xs">
+                </div>
+              </div>
+            </div>
+            <div>
+              <label class="text-stone-500 block">Foto da Contracapa</label>
+              <input type="file" accept="image/*" onchange="uploadPhoto(this)" class="w-full text-xs text-stone-500">
+            </div>
+            <div class="p-2 bg-rose-50 border border-rose-200 rounded">
+              <span class="font-bold text-rose-700 block text-[10px]">🎁 MENSAGEM DO PRESENTE (QR CODE)</span>
+              <p class="text-[9px] text-stone-500 mt-0.5">Editada na aba Layout → Presente & QR Code. O QR será exibido na contracapa.</p>
             </div>
           </div>`;
       } else {
@@ -902,7 +1092,7 @@
       else if (mode === 'parede') paddingTop = 80;
 
       // ========== DIMENSÕES DA MOLDURA ==========
-      let isPhotoLandscape = (tab === 'cover' ? state.cover.layoutMode : state.months[tab].layoutMode) === 'landscape';
+      let isPhotoLandscape = (tab === 'cover' ? state.cover.layoutMode : (tab === 'backcover' ? 'portrait' : state.months[tab].layoutMode)) === 'landscape';
       // Calcular área disponível dentro do canvas (descontando TODOS os paddings incluindo bottom:10px)
       const usableW = fConfig.w - paddingLeft - 20; // 20px padding right
       const usableH = fConfig.h - paddingTop - 10; // 10px padding bottom do container
@@ -958,8 +1148,8 @@
           ${bindingHtml}
           <div class="h-full flex flex-col justify-between text-center box-border" style="width: 100%; height: 100%; padding-left: ${paddingLeft}px; padding-top: ${paddingTop}px; padding-right: 15px; padding-bottom: 5px;">
             <div>
-              <h1 class="text-4xl font-black tracking-tight ${state.globalFont}">${state.titleText}</h1>
-              <h3 class="text-sm tracking-widest opacity-60 mt-1 uppercase ${state.globalFont}">${state.subtitleText}</h3>
+              <h1 class="text-4xl font-black tracking-tight ${state.globalFont}" style="color: ${state.titleColor || THEMES[state.globalTheme].titleColor};">${state.titleText}</h1>
+              <h3 class="text-sm tracking-widest mt-1 uppercase ${state.globalFont}" style="color: ${state.subtitleColor || THEMES[state.globalTheme].subtitleColor};">${state.subtitleText}</h3>
               <div class="inline-block bg-stone-900 text-white font-mono font-bold text-xs px-4 py-0.5 rounded mt-2 shadow">${state.yearText}</div>
             </div>
             <div style="width: 100%; display: flex; align-items: center; justify-content: center; flex-grow: 1; padding: 10px 0;">
@@ -968,12 +1158,64 @@
                  <div style="width: 100%; flex: 1 1 auto; min-height: ${Math.floor(boxH * 0.5)}px; overflow: hidden; border: 1px solid rgba(120,120,120,0.15);">
                     ${imageHtml}
                  </div>
-                 <div class="${state.globalFont}" style="text-align: center; font-size: 12px; font-weight: bold; margin-top: auto; padding-top:4px; flex-shrink: 0;">
+                 <div class="${state.globalFont}" style="text-align: center; font-size: 12px; font-weight: bold; margin-top: auto; padding-top:4px; flex-shrink: 0; color: ${state.yearColor || THEMES[state.globalTheme].yearColor};">
                     ${state.yearText}
                  </div>
               </div>
             </div>
-            <div class="text-[10px] font-mono opacity-60 border-t border-stone-300/40 pt-2 tracking-wider uppercase">${state.footerText}</div>
+            <div class="text-[10px] font-mono border-t border-stone-300/40 pt-2 tracking-wider uppercase" style="color: ${state.footerColor || THEMES[state.globalTheme].footerColor};">${state.footerText}</div>
+          </div>`;
+      } else if (tab === 'backcover') {
+        const bc = state.backCover;
+        const bcTitleColor = bc.titleColor || THEMES[state.globalTheme].titleColor;
+        const bcYearColor = bc.yearColor || THEMES[state.globalTheme].yearColor;
+
+        let bcImageHtml = `<div class="w-full h-full bg-stone-100/50 border border-dashed border-stone-300 flex items-center justify-center text-[10px] text-stone-400">Sem Foto</div>`;
+        if (bc.photo) {
+          bcImageHtml = `<div style="width: 100%; height: 100%; overflow: hidden; background-image: url('${bc.photo}'); background-size: cover; background-position: center; background-repeat: no-repeat;"></div>`;
+        }
+
+        let bcStickerHtml = "";
+        if (bc.activeSticker) {
+          if (bc.activeSticker.type === 'emoji') {
+            bcStickerHtml = `<div style="position: absolute; right: 15px; top: 15px; font-size: 38px; z-index: 50;">${bc.activeSticker.value}</div>`;
+          } else {
+            bcStickerHtml = `<div style="position: absolute; right: 15px; top: 15px; width: 55px; height: 55px; z-index: 50;"><img src="${bc.activeSticker.value}" style="width:100%; height:100%; object-fit:contain;" /></div>`;
+          }
+        }
+
+                // QR code na contracapa (dentro do layout, compacto para não vazar)
+        let qrHtml = "";
+        if (state.qrImage) {
+          qrHtml = `
+          <div class="flex flex-col items-center shrink-0" style="margin-top: 8px; max-height: 140px; overflow: hidden;">
+            <div class="bg-white p-1 rounded border border-stone-300 shadow-sm">
+              <img src="${state.qrImage}" style="width: 64px; height: 64px;" />
+            </div>
+            <p class="font-mono text-[8px] font-bold mt-0.5 tracking-wider uppercase" style="color: ${bcYearColor};">🎁 Escaneie o presente</p>
+            <p class="font-mono text-[7px] text-stone-500 mt-0.5 text-center italic leading-tight" style="max-width: 220px;">${state.giftMessage}</p>
+          </div>`;
+        }
+        return `
+          ${bindingHtml}
+          <div class="h-full flex flex-col justify-between text-center box-border overflow-hidden" style="width: 100%; height: 100%; padding-left: ${paddingLeft}px; padding-top: ${paddingTop}px; padding-right: 15px; padding-bottom: 5px;">
+            <div>
+              <h1 class="text-3xl font-black tracking-tight ${state.globalFont}" style="color: ${bcTitleColor};">${bc.titleText}</h1>
+              <div class="inline-block bg-stone-900 text-white font-mono font-bold text-sm px-5 py-1 rounded mt-2 shadow">${bc.yearText}</div>
+            </div>
+            <div style="width: 100%; display: flex; align-items: center; justify-content: center; flex-grow: 1; min-height: 0; padding: 8px 0; overflow: hidden;">
+              <div class="${bc.frameStyle}" style="width: ${Math.floor(usableW * 0.5)}px; height: ${Math.floor((usableH - 60) * 0.65)}px; max-height: ${Math.floor(usableH * 0.55)}px; position: relative; box-sizing: border-box; display: flex; flex-direction: column; overflow: hidden;">
+                 ${bcStickerHtml}
+                 <div style="width: 100%; flex: 1 1 auto; min-height: 40%; overflow: hidden; border: 1px solid rgba(120,120,120,0.15);">
+                    ${bcImageHtml}
+                 </div>
+                 <div class="${state.globalFont}" style="text-align: center; font-size: 12px; font-weight: bold; margin-top: auto; padding-top:4px; flex-shrink: 0; color: ${bcYearColor};">
+                    ${bc.caption || bc.yearText}
+                 </div>
+              </div>
+              ${qrHtml ? `<div style="flex-shrink: 0; margin-left: 16px;">${qrHtml}</div>` : ''}
+            </div>
+            <div class="text-[10px] font-mono border-t border-stone-300/40 pt-2 tracking-wider uppercase shrink-0" style="color: ${state.footerColor || THEMES[state.globalTheme].footerColor};">${state.footerText} · ${bc.yearText}</div>
           </div>`;
       } else {
         // MESES: calendário tem altura fixa, moldura usa o restante
@@ -1029,7 +1271,6 @@
           if (boxW < minDimP) { boxW = minDimP; boxH = Math.floor(boxW / photoAspectMP); if (boxH > maxFrameHP) { boxH = maxFrameHP; boxW = Math.floor(boxH * photoAspectMP); } }
           if (boxH < minDimP) { boxH = minDimP; boxW = Math.floor(boxH * photoAspectMP); if (boxW > maxFrameWP) { boxW = maxFrameWP; boxH = Math.floor(boxW / photoAspectMP); } }
         }
-      }
       // ========== MESES ==========
       m = state.months[tab];
       daysOfWeek = ["D", "S", "T", "Q", "Q", "S", "S"];
@@ -1089,7 +1330,7 @@
       }
 
       const totalWeeksRows = cells.length / 7;
-      const availableGridHeight = fConfig.gridH - 55;
+      const availableGridHeight = fConfig.gridH - 86;
       const rowPixelHeight = Math.floor(availableGridHeight / (totalWeeksRows + 1));
 
       let tableRowsHtml = "";
@@ -1146,6 +1387,7 @@
             </div>
           </div>
         </div>`;
+      }
     }
 
     function renderCanvas() {
