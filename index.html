@@ -2,24 +2,21 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="application-name" content="RSP Studio">
-  <meta name="apple-mobile-web-app-title" content="RSP Studio">
-  <meta name="theme-color" content="#1c1917">
-  
-  <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22RSP%20Calendar%20Studio%22%2C%22short_name%22%3A%22RSP%20Studio%22%2C%22display%22%3A%22standalone%22%2C%22start_url%22%3A%22.%22%2C%22background_color%22%3A%22%23e7e5e4%22%2C%22theme_color%22%3A%22%231c1917%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20512%20512%27%253E%253Crect%20width%3D%27512%27%20height%3D%27512%27%20rx%3D%27100%27%20fill%3D%27%25231c1917%27%2F%253E%253Ctext%20x%3D%2750%2525%27%20y%3D%2750%2525%27%20text-anchor%3D%27middle%27%20dominant-baseline%3D%27middle%27%20font-family%3D%27sans-serif%27%20font-size%3D%27180%27%20font-weight%3D%27bold%27%20fill%3D%27white%27%253ERSP%253C%2Ftext%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="RSP Calendar Album Studio - Crie calendários Polaroid únicos que se transformam em álbuns personalizados">
+  <meta name="application-name" content="RSP Calendar Album Studio">
   <title>RSP Calendar Album Studio</title>
   
+  <!-- CDNs Gráficas -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
+  <!-- Fontes Premium -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Russo+One&family=Montserrat:wght@400;700&family=Special+Elite&family=Bangers&family=Cinzel:wght@700&display=swap" rel="stylesheet">
 
   <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     .font-playfair { font-family: 'Playfair Display', serif; }
     .font-typewriter { font-family: 'Special Elite', monospace; }
     .font-sport { font-family: 'Russo One', sans-serif; }
@@ -27,174 +24,225 @@
     .font-cinema { font-family: 'Cinzel', serif; }
     .font-clean { font-family: 'Montserrat', sans-serif; }
 
+    /* TEXTURAS DE PAPEL */
     .paper-texture {
       background-color: #f5efdc;
       background-image: radial-gradient(rgba(0,0,0,0.02) 1px, transparent 0);
       background-size: 4px 4px;
     }
+    .paper-kraft {
+      background-color: #e8d5b5;
+      background-image: radial-gradient(rgba(0,0,0,0.04) 1px, transparent 0);
+      background-size: 3px 3px;
+    }
+    .paper-linen {
+      background-color: #faf8f5;
+      background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.01) 2px, rgba(0,0,0,0.01) 4px);
+    }
+
+    /* LINHAS TÉCNICAS */
+    .linha-vinco-laranja {
+      background-image: linear-gradient(to right, #ea580c 50%, transparent 50%);
+      background-size: 8px 2px;
+      height: 2px;
+      width: 100%;
+    }
     .linha-corte-horizontal {
       background-image: linear-gradient(to right, #dc2626 50%, transparent 50%);
       background-size: 6px 1px;
-      height: 1px; width: 100%;
+      height: 1px;
+      width: 100%;
     }
 
+    /* MARGEM ESPIRAL LATERAL ESQUERDA */
     .preview-ilhos-esquerda {
-      position: absolute; left: 12px; top: 0; bottom: 0; width: 20px;
-      display: flex; flex-direction: column; justify-content: space-around; align-items: center;
-      pointer-events: none; z-index: 20;
-    }
-    .preview-ilhos-topo {
-      position: absolute; top: 10px; left: 35px; right: 35px; height: 18px;
-      display: flex; flex-direction: row; justify-content: space-around; align-items: center;
-      pointer-events: none; z-index: 20;
+      position: absolute;
+      left: 14px;
+      top: 0;
+      bottom: 0;
+      width: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+      pointer-events: none;
+      z-index: 50;
     }
     .ilhos-metal {
-      width: 12px; height: 12px; border: 2px solid #a16207; background-color: #f5efdc;
-      border-radius: 50%; box-shadow: inset 0 0 3px rgba(0,0,0,0.5), 0 1px 2px rgba(0,0,0,0.3);
+      width: 12px;
+      height: 12px;
+      border: 2px solid #a16207;
+      background-color: #f5efdc;
+      border-radius: 50%;
     }
 
-    .moldura-classica { background: #ffffff; border: 1px solid #e5e7eb; padding: 10px 10px 32px 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-    .moldura-larga { background: #ffffff; border: 8px solid #ffffff; padding: 4px 4px 28px 4px; box-shadow: 0 6px 12px rgba(0,0,0,0.06); }
+    /* MARGEM ESPIRAL SUPERIOR */
+    .preview-ilhos-topo {
+      position: absolute;
+      top: 14px;
+      left: 0;
+      right: 0;
+      height: 20px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+      pointer-events: none;
+      z-index: 50;
+    }
+    .ilhos-topo-metal {
+      width: 12px;
+      height: 12px;
+      border: 2px solid #a16207;
+      background-color: #f5efdc;
+      border-radius: 50%;
+    }
+
+    /* MODELO PIRÂMIDE (TOPO) */
+    .preview-piramide-topo {
+      position: absolute;
+      top: 8px;
+      left: 0;
+      right: 0;
+      height: 28px;
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      pointer-events: none;
+      z-index: 50;
+    }
+    .piramide-furo {
+      width: 14px;
+      height: 14px;
+      border: 2px solid #b45309;
+      background: linear-gradient(135deg, #f5efdc 0%, #e8d5b5 100%);
+      border-radius: 50%;
+      box-shadow: inset 1px 1px 2px rgba(0,0,0,0.2);
+    }
+
+    /* MOLDURAS PREMIUM */
+    .moldura-classica { background: #ffffff; border: 1px solid #e5e7eb; padding: 12px 12px 38px 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+    .moldura-larga { background: #ffffff; border: 12px solid #ffffff; padding: 4px 4px 32px 4px; box-shadow: 0 6px 12px rgba(0,0,0,0.06); }
     .moldura-quadrada { background: #ffffff; padding: 8px 8px 24px 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
-    .moldura-kraft { background: #e7cbb6; border: 1px solid #c2a691; padding: 10px 10px 32px 10px; color: #4a3319; }
-    .moldura-vintage { background: #f2ebd4; border: 1px solid #dcd4b8; padding: 10px 10px 28px 10px; color: #4a3e21; }
-    .moldura-sepia { background: #e9dfcb; border: 3px double #b5a991; padding: 8px 8px 32px 8px; color: #3d3425; }
-    .moldura-noir { background: #171717; border: 1px solid #000000; padding: 10px 10px 28px 10px; color: #ffffff; }
-    .moldura-instantanea { background: #fffffb; padding: 10px 10px 40px 10px; border: 1px solid #e2e2da; }
+    .moldura-kraft { background: #e7cbb6; border: 1px solid #c2a691; padding: 12px 12px 36px 12px; color: #4a3319; }
+    .moldura-vintage { background: #f2ebd4; border: 1px solid #dcd4b8; padding: 12px 12px 32px 12px; color: #4a3e21; }
+    .moldura-sepia { background: #e9dfcb; border: 3px double #b5a991; padding: 10px 10px 36px 10px; color: #3d3425; }
+    .moldura-noir { background: #171717; border: 1px solid #000000; padding: 12px 12px 32px 12px; color: #ffffff; }
+    .moldura-80s { background: #f43f5e; border: 3px solid #06b6d4; padding: 10px 10px 36px 10px; color: #fde047; }
+    .moldura-fita-crepe { background: #ffffff; padding: 12px 12px 36px 12px; border: 1px solid #f3f4f6; }
+    .moldura-carimbo { background: #ffffff; border: 2px dashed #dc2626; padding: 10px 10px 36px 10px; }
+    .moldura-recortada { background: #ffffff; border: 1px solid #cbd5e1; padding: 12px 12px 36px 12px; outline: 2px dashed #ffffff; outline-offset: -6px; }
+    .moldura-filme { background: #000000; padding: 20px 10px 38px 10px; border-left: 6px dashed #fff; border-right: 6px dashed #fff; color: #fff; }
+    .moldura-dupla { background: #ffffff; border: 1px solid #cbd5e1; padding: 6px 6px 26px 6px; box-shadow: 0 0 0 4px #ffffff, 0 0 0 5px #cbd5e1; }
+    .moldura-arredondada { background: #ffffff; border-radius: 12px; padding: 12px 12px 32px 12px; overflow: hidden; }
+    .moldura-rasgada { background: #ffffff; padding: 12px 12px 36px 12px; border-bottom: 2px dashed #cbd5e1; }
+    .moldura-neon { background: #000000; border: 2px solid #f43f5e; padding: 10px 10px 36px 10px; box-shadow: 0 0 8px #f43f5e; color: #06b6d4; }
+    .moldura-pastel { background: #fdf2f8; border: 1px solid #fbcfe8; padding: 12px 12px 32px 12px; color: #db2777; }
+    .moldura-camara-escura { background: #1c1917; padding: 16px 16px 38px 16px; color: #e7e5e4; }
+    .moldura-dourada { background: #ffffff; border: 3px solid #eab308; padding: 10px 10px 36px 10px; color: #eab308; }
+    .moldura-instantanea { background: #fffffb; padding: 14px 14px 48px 14px; border: 1px solid #e2e2da; }
+    .moldura-polaroid-real { background: #ffffff; border: 1px solid #e5e7eb; padding: 12px 12px 52px 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+    .moldura-minimal { background: #fafafa; padding: 6px 6px 30px 6px; border: 1px solid #f0f0f0; }
+    .moldura-acquerello { background: linear-gradient(145deg, #fdf6e3 0%, #f5efdc 100%); border: 2px solid #d4c5a0; padding: 14px 14px 40px 14px; color: #5c4b2e; box-shadow: 0 3px 8px rgba(0,0,0,0.04); }
+    .moldura-bordada { background: #ffffff; padding: 10px 10px 36px 10px; border: 3px solid transparent; background-image: linear-gradient(#ffffff,#ffffff), linear-gradient(45deg, #c9a96e 50%, transparent 50%); background-origin: border-box; background-clip: padding-box, border-box; }
+    .moldura-grunge { background: #f5f5f0; padding: 14px 14px 38px 14px; border: 1px solid #d5d0c0; color: #4a4535; filter: url(#grunge-filter); }
+    .moldura-holografica { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 10px 10px 38px 10px; color: #ffffff; box-shadow: 0 4px 15px rgba(102,126,234,0.3); }
 
-    @keyframes presentPop {
-      0% { transform: scale(0.8) translateY(20px); opacity: 0; }
-      100% { transform: scale(1) translateY(0); opacity: 1; }
-    }
-    .animate-present-pop { animation: presentPop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-    
-    .adesivos-scroll::-webkit-scrollbar { width: 4px; }
-    .adesivos-scroll::-webkit-scrollbar-thumb { background-color: #d6d3d1; border-radius: 4px; }
+    /* ANIMAÇÕES */
+    .fade-in { animation: fadeIn 0.3s ease-in; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .pulse-glow { animation: pulseGlow 2s ease-in-out infinite; }
+    @keyframes pulseGlow { 0%,100% { box-shadow: 0 0 5px rgba(16,185,129,0.3); } 50% { box-shadow: 0 0 20px rgba(16,185,129,0.5); } }
+
+    /* SCROLLBAR CUSTOM */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f1f1; }
+    ::-webkit-scrollbar-thumb { background: #a8a29e; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #78716c; }
+
+    /* TOOLTIP */
+    .tooltip-rsp { position: relative; }
+    .tooltip-rsp::after { content: attr(data-tip); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #1c1917; color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 10px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+    .tooltip-rsp:hover::after { opacity: 1; }
   </style>
 </head>
-<body class="bg-stone-200 text-stone-800 font-sans h-screen w-full flex flex-col md:flex-row overflow-hidden select-none">
+<body class="bg-stone-200 text-stone-800 font-sans h-screen w-full flex overflow-hidden select-none">
 
-  <!-- HEADER MOBILE -->
-  <header class="md:hidden bg-stone-900 text-white p-3 flex justify-between items-center shrink-0 z-30 shadow-md w-full">
-    <span class="font-clean text-xs font-bold uppercase tracking-widest">RSP Studio</span>
-    <div class="flex gap-2">
-      <button onclick="installApp()" class="px-2 py-1.5 bg-emerald-600 hover:bg-emerald-500 rounded text-[10px] font-bold shadow-sm flex items-center">📲 Instalar</button>
-      <button onclick="toggleMobileMenu()" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-500 rounded text-xs font-bold transition-colors shadow-sm">⚙️ Editar</button>
-    </div>
-  </header>
-
-  <div id="mobile-overlay" onclick="toggleMobileMenu()" class="fixed inset-0 bg-black/60 z-40 hidden md:hidden transition-opacity"></div>
-
-  <!-- BARRA LATERAL CONTROLES -->
-  <aside id="sidebar-menu" class="absolute md:relative left-0 top-0 w-80 bg-white border-r border-stone-200 shadow-xl flex flex-col h-full overflow-y-auto p-4 space-y-4 shrink-0 z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300">
+  <!-- SIDEBAR PRINCIPAL -->
+  <aside class="w-80 bg-white border-r border-stone-200 shadow-xl flex flex-col h-full overflow-y-auto p-4 space-y-4 shrink-0 z-40">
     
-    <div class="border-b pb-2 border-stone-100 flex justify-between items-center relative">
-      <h2 class="font-clean text-xs font-bold text-stone-900 tracking-tight uppercase pr-8">RSP Calendar</h2>
-      <div class="flex gap-1 hidden md:flex">
-        <button onclick="installApp()" class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-mono rounded hover:bg-emerald-200 font-bold">📲 App</button>
-        <button onclick="toggleManualModal()" class="px-2 py-0.5 bg-blue-100 text-blue-800 text-[10px] font-mono rounded hover:bg-blue-200 font-bold">📖 Manual</button>
-      </div>
-      <button onclick="toggleMobileMenu()" class="md:hidden absolute -right-2 -top-2 text-stone-400 hover:text-stone-700 font-bold text-2xl px-2">&times;</button>
+    <!-- HEADER APP -->
+    <div class="border-b pb-3 border-stone-200">
+      <h2 class="font-playfair text-base font-bold text-stone-900 tracking-tight">RSP Calendar Album Studio</h2>
+      <p class="font-mono text-[9px] text-stone-500 mt-0.5">Calendário Polaroid → Álbum Personalizado</p>
     </div>
 
-    <!-- SELETOR DE PÁGINAS -->
-    <div>
-      <label class="font-mono text-[10px] text-stone-500 block mb-1">Selecione a Folha Ativa</label>
-      <div class="grid grid-cols-4 gap-1">
-        <button onclick="switchTab('cover'); if(window.innerWidth < 768) toggleMobileMenu();" class="py-1 rounded text-[11px] font-mono border bg-stone-50 hover:bg-stone-100">Capa</button>
-        <button onclick="switchTab(0); if(window.innerWidth < 768) toggleMobileMenu();" class="py-1 rounded text-[11px] font-mono border bg-stone-50 hover:bg-stone-100">Jan</button>
-        <button onclick="switchTab(1); if(window.innerWidth < 768) toggleMobileMenu();" class="py-1 rounded text-[11px] font-mono border bg-stone-50 hover:bg-stone-100">Fev</button>
-        <button onclick="switchTab(2); if(window.innerWidth < 768) toggleMobileMenu();" class="py-1 rounded text-[11px] font-mono border bg-stone-50 hover:bg-stone-100">Mar</button>
-        <button onclick="switchTab(3); if(window.innerWidth < 768) toggleMobileMenu();" class="py-1 rounded text-[11px] font-mono border bg-stone-50 hover:bg-stone-100">Abr</button>
-        <button onclick="switchTab(4); if(window.innerWidth < 768) toggleMobileMenu();" class="py-1 rounded text-[11px] font-mono border bg-stone-50 hover:bg-stone-100">Mai</button>
-        <button onclick="switchTab(5); if(window.innerWidth < 768) toggleMobileMenu();" class="py-1 rounded text-[11px] font-mono border bg-stone-50 hover:bg-stone-100">Jun</button>
-        <button onclick="switchTab(6); if(window.innerWidth < 768) toggleMobileMenu();" class="py-1 rounded text-[11px] font-mono border bg-stone-50 hover:bg-stone-100">Jul</button>
-        <button onclick="switchTab(7); if(window.innerWidth < 768) toggleMobileMenu();" class="py-1 rounded text-[11px] font-mono border bg-stone-50 hover:bg-stone-100">Ago</button>
-        <button onclick="switchTab(8); if(window.innerWidth < 768) toggleMobileMenu();" class="py-1 rounded text-[11px] font-mono border bg-stone-50 hover:bg-stone-100">Set</button>
-        <button onclick="switchTab(9); if(window.innerWidth < 768) toggleMobileMenu();" class="py-1 rounded text-[11px] font-mono border bg-stone-50 hover:bg-stone-100">Out</button>
-        <button onclick="switchTab(10); if(window.innerWidth < 768) toggleMobileMenu();" class="py-1 rounded text-[11px] font-mono border bg-stone-50 hover:bg-stone-100">Nov</button>
-        <button onclick="switchTab(11); if(window.innerWidth < 768) toggleMobileMenu();" class="py-1 rounded text-[11px] font-mono border bg-stone-50 hover:bg-stone-100">Dez</button>
-        <button id="btn-tab-backcover" onclick="switchTab('backcover'); if(window.innerWidth < 768) toggleMobileMenu();" class="py-1 rounded text-[11px] font-mono border bg-indigo-50 text-indigo-800 border-indigo-200 col-span-4">Contracapa</button>
-      </div>
+    <!-- NAVEGAÇÃO RÁPIDA -->
+    <div class="flex gap-1">
+      <button onclick="showSection('design')" class="flex-1 text-[10px] font-mono font-bold py-1.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-200 hover:bg-emerald-200 transition-all" id="nav-design">✏️ Design</button>
+      <button onclick="showSection('layout')" class="flex-1 text-[10px] font-mono font-bold py-1.5 rounded bg-stone-100 text-stone-600 border border-stone-200 hover:bg-stone-200 transition-all" id="nav-layout">📐 Layout</button>
+      <button onclick="showSection('ajuda')" class="flex-1 text-[10px] font-mono font-bold py-1.5 rounded bg-amber-100 text-amber-800 border border-amber-200 hover:bg-amber-200 transition-all" id="nav-ajuda">📖 Ajuda</button>
     </div>
 
-    <!-- CONFIGURAÇÕES -->
-    <div class="space-y-3 pt-2 border-t border-stone-200">
+    <!-- SEÇÃO DESIGN -->
+    <div id="section-design" class="space-y-3">
+      <!-- SELETOR DE PÁGINAS -->
       <div>
-        <label class="font-mono text-[10px] text-amber-800 font-bold block mb-1">📅 Ano do Calendário</label>
-        <select id="select-year" onchange="changeProjectYear(this.value)" class="w-full px-2 py-1.5 rounded border border-amber-400 bg-amber-50 text-xs font-mono font-bold outline-none">
-          <option value="2026">2026</option>
-          <option value="2027" selected>2027</option>
-          <option value="2028">2028</option>
-          <option value="2029">2029</option>
-        </select>
-      </div>
-
-      <div>
-        <label class="font-mono text-[10px] text-stone-500 block mb-1">Tamanho do Papel</label>
-        <select id="select-format" onchange="changeProjectFormat(this.value)" class="w-full px-2 py-1 rounded border border-stone-300 bg-white text-xs font-mono outline-none">
-          <option value="a4-portrait" selected>A4 Retrato (210x297mm)</option>
-          <option value="a4-landscape">A4 Paisagem (297x210mm)</option>
-          <option value="a5-portrait">A5 Retrato (148x210mm)</option>
-          <option value="a5-landscape">A5 Paisagem (210x148mm)</option>
-          <option value="quadrado-20">Quadrado Slim (200x200mm)</option>
-        </select>
-      </div>
-
-      <div>
-        <label class="font-mono text-[10px] text-amber-700 font-bold block mb-1">🌀 Estilo de Encadernação</label>
-        <select id="select-binding" onchange="changeBindingStyle(this.value)" class="w-full px-2 py-1 rounded border border-amber-400 bg-amber-50 text-xs font-mono font-bold outline-none">
-          <option value="espiral-esquerda">Espiral Lateral Esquerda (Caderno)</option>
-          <option value="espiral-topo">Espiral Superior (Topo)</option>
-          <option value="piramide-topo">Pirâmide / Topo Triangulado</option>
-          <option value="parede" selected>Parede (Furo Central Topo)</option>
-          <option value="folhinha">Folhinha Clássica (Parede + Bloco)</option>
-          <option value="sem-acabamento">Sem Acabamento (Folha Limpa)</option>
-        </select>
-      </div>
-
-      <div>
-        <label class="font-mono text-[10px] text-amber-700 font-bold block mb-1">⚙️ Orientação da Foto / Moldura</label>
-        <select id="select-photo-orientation" onchange="changePhotoOrientation(this.value)" class="w-full px-2 py-1 rounded border border-amber-400 bg-amber-50 text-xs font-mono font-bold outline-none">
-          <option value="landscape" selected>Horizontal (Foto Paisagem)</option>
-          <option value="portrait">Vertical (Foto Retrato)</option>
-        </select>
-      </div>
-
-      <!-- PRESENTE DIGITAL & QR CODE -->
-      <div class="p-2 border border-blue-200 bg-blue-50/50 rounded space-y-2">
-        <span class="font-mono text-[10px] font-bold text-blue-900 block flex items-center justify-between">
-          <span>🎁 PRESENTE & QR CODE</span>
-        </span>
-        <div>
-          <label class="font-mono text-[9px] text-stone-600 block mb-0.5">Mensagem Surpresa da Animação</label>
-          <textarea id="input-gift-message" oninput="state.giftMessage = this.value" rows="2" class="w-full p-1 rounded border text-xs resize-none">Para a pessoa mais especial! Com muito amor.</textarea>
+        <label class="font-mono text-[10px] text-stone-500 block mb-1">Selecione a Folha Ativa</label>
+        <div class="grid grid-cols-4 gap-1">
+          <button onclick="switchTab('cover')" class="py-1 rounded text-[11px] font-mono border bg-stone-50 hover:bg-stone-100">Capa</button>
+          <button onclick="switchTab(0)" class="py-1 rounded text-[11px] font-mono border bg-stone-50 hover:bg-stone-100">Jan</button>
+          <button onclick="switchTab(1)" class="py-1 rounded text-[11px] font-mono border bg-stone-50 hover:bg-stone-100">Fev</button>
+          <button onclick="switchTab(2)" class="py-1 rounded text-[11px] font-mono border bg-stone-50 hover:bg-stone-100">Mar</button>
+          <button onclick="switchTab(3)" class="py-1 rounded text-[11px] font-mono border bg-stone-50 hover:bg-stone-100">Abr</button>
+          <button onclick="switchTab(4)" class="py-1 rounded text-[11px] font-mono border bg-stone-50 hover:bg-stone-100">Mai</button>
+          <button onclick="switchTab(5)" class="py-1 rounded text-[11px] font-mono border bg-stone-50 hover:bg-stone-100">Jun</button>
+          <button onclick="switchTab(6)" class="py-1 rounded text-[11px] font-mono border bg-stone-50 hover:bg-stone-100">Jul</button>
+          <button onclick="switchTab(7)" class="py-1 rounded text-[11px] font-mono border bg-stone-50 hover:bg-stone-100">Ago</button>
+          <button onclick="switchTab(8)" class="py-1 rounded text-[11px] font-mono border bg-stone-50 hover:bg-stone-100">Set</button>
+          <button onclick="switchTab(9)" class="py-1 rounded text-[11px] font-mono border bg-stone-50 hover:bg-stone-100">Out</button>
+          <button onclick="switchTab(10)" class="py-1 rounded text-[11px] font-mono border bg-stone-50 hover:bg-stone-100">Nov</button>
+          <button onclick="switchTab(11)" class="py-1 rounded text-[11px] font-mono border bg-stone-50 hover:bg-stone-100">Dez</button>
+          <button onclick="switchTab('base')" class="py-1 rounded text-[11px] font-mono border bg-amber-50 text-amber-800 border-amber-200">Base</button>
         </div>
-        <div>
-          <label class="font-mono text-[9px] text-stone-600 block mb-0.5">Criar QR Code (Cole Texto ou Link)</label>
-          <div class="flex gap-1">
-            <input type="text" id="qr-input" placeholder="Ex: URL da animação ou recado" class="w-full text-xs px-1.5 py-1 border rounded outline-none">
-            <button onclick="generateQRCode()" class="px-2 py-1 bg-blue-800 text-white text-[10px] font-bold rounded shadow-sm hover:bg-blue-700 transition">Gerar</button>
-          </div>
-          <div id="qr-preview-container" class="hidden mt-2 flex flex-col items-center gap-2 border border-dashed border-blue-300 p-2 rounded bg-white">
-            <img id="qr-preview-img" src="" class="w-24 h-24 object-contain" />
-            <div class="flex gap-1 w-full">
-              <button onclick="addQrToLayout()" class="w-1/2 py-1 bg-emerald-600 text-white text-[9px] font-bold rounded hover:bg-emerald-500 shadow-sm text-center">Add à Folha</button>
-              <button onclick="downloadQrCode()" class="w-1/2 py-1 bg-stone-600 text-white text-[9px] font-bold rounded hover:bg-stone-500 shadow-sm text-center">Salvar Imagem</button>
-            </div>
-          </div>
-        </div>
-        <button onclick="playGiftAnimation()" class="w-full mt-2 py-1.5 bg-blue-600 text-white text-[10px] font-bold rounded shadow-md hover:bg-blue-700 transition-colors uppercase tracking-wider">
-          ▶️ Ver Animação do Presente
-        </button>
       </div>
 
-      <!-- CORES E TEMAS -->
-      <div class="p-2 border border-amber-200 bg-amber-50/50 rounded space-y-2">
-        <span class="font-mono text-[10px] font-bold text-amber-900 block">🎨 CORES E TIPOGRAFIA DE TÍTULOS</span>
+      <!-- CONFIGURAÇÕES -->
+      <div class="space-y-2 pt-1 border-t border-stone-200">
         <div>
-          <label class="font-mono text-[9px] text-stone-600 block mb-0.5">Fonte dos Títulos</label>
-          <select id="select-month-font" onchange="changeMonthFont(this.value)" class="w-full px-2 py-1 rounded border border-stone-300 bg-white text-xs font-mono outline-none">
+          <label class="font-mono text-[10px] text-stone-500 block mb-1">📏 Tamanho do Projeto (Papel)</label>
+          <select id="select-format" onchange="changeProjectFormat(this.value)" class="w-full px-2 py-1 rounded border border-stone-300 bg-white text-xs font-mono outline-none">
+            <option value="a4-portrait">A4 Retrato (210x297mm)</option>
+            <option value="a4-landscape">A4 Paisagem (297x210mm)</option>
+            <option value="a5-portrait">A5 Retrato (148x210mm)</option>
+            <option value="a5-landscape">A5 Paisagem (210x148mm)</option>
+            <option value="quadrado-20">Quadrado (200x200mm)</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="font-mono text-[10px] text-amber-700 font-bold block mb-1">📐 Estilo de Encadernação</label>
+          <select id="select-product-mode" onchange="changeProductMode(this.value)" class="w-full px-2 py-1 rounded border border-amber-400 bg-amber-50 text-xs font-mono font-bold outline-none">
+            <option value="espiral-esquerda">📎 Espiral Lateral Esquerda (Caderno)</option>
+            <option value="espiral-topo">📎 Espiral Superior (Topo)</option>
+            <option value="piramide">🔺 Pirâmide / Topo Triangulado</option>
+            <option value="mesa">🏗️ Mesa (Base Suporte Triangulada)</option>
+            <option value="parede">🧷 Parede (Furo Central)</option>
+            <option value="sem-acabamento">⬜ Sem Acabamento</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="font-mono text-[10px] text-amber-700 font-bold block mb-1">📷 Orientação da Foto / Moldura</label>
+          <select id="select-photo-orientation" onchange="changePhotoOrientation(this.value)" class="w-full px-2 py-1 rounded border border-amber-400 bg-amber-50 text-xs font-mono font-bold outline-none">
+            <option value="landscape">Horizontal (Paisagem)</option>
+            <option value="portrait">Vertical (Retrato)</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="font-mono text-[10px] text-stone-500 block mb-1">✒️ Fonte Tipográfica Geral</label>
+          <select id="select-font" onchange="changeGlobalFont(this.value)" class="w-full px-2 py-1 rounded border border-stone-300 bg-white text-xs font-mono outline-none">
             <option value="font-typewriter">Máquina de Escrever</option>
             <option value="font-playfair">Playfair Serif</option>
             <option value="font-sport">Esportiva Moderna</option>
@@ -203,364 +251,383 @@
             <option value="font-clean">Clean / Montserrat</option>
           </select>
         </div>
-        <div class="grid grid-cols-2 gap-2">
+
+        <!-- CUSTOMIZAÇÃO DO MÊS -->
+        <div class="p-2 border border-amber-200 bg-amber-50/50 rounded space-y-2">
+          <span class="font-mono text-[10px] font-bold text-amber-900 block">🎨 DESIGN DO NOME DO MÊS</span>
           <div>
-            <label class="font-mono text-[9px] text-stone-600 block mb-0.5">Cor do Mês</label>
-            <input type="color" id="input-month-color" value="#ffffff" onchange="changeMonthColor(this.value)" class="w-full h-6 border rounded cursor-pointer p-0 bg-transparent">
+            <label class="font-mono text-[9px] text-stone-600 block mb-0.5">Fonte do Mês</label>
+            <select id="select-month-font" onchange="changeMonthFont(this.value)" class="w-full px-2 py-1 rounded border border-stone-300 bg-white text-xs font-mono outline-none">
+              <option value="font-typewriter">Máquina de Escrever</option>
+              <option value="font-playfair">Playfair Serif</option>
+              <option value="font-sport">Esportiva Moderna</option>
+              <option value="font-pop">Pop / Bangers</option>
+              <option value="font-cinema">Cinematográfica</option>
+              <option value="font-clean">Clean / Montserrat</option>
+            </select>
           </div>
           <div>
-            <label class="font-mono text-[9px] text-stone-600 block mb-0.5">Cor Contracapa</label>
-            <input type="color" id="input-backcover-color" value="#ffffff" onchange="changeBackcoverColor(this.value)" class="w-full h-6 border rounded cursor-pointer p-0 bg-transparent">
+            <label class="font-mono text-[9px] text-stone-600 block mb-0.5">Cor do Nome do Mês</label>
+            <div class="flex gap-2 items-center">
+              <input type="color" id="input-month-color" value="#1c1917" onchange="changeMonthColor(this.value)" class="w-8 h-6 border rounded cursor-pointer p-0 bg-transparent">
+              <span id="txt-month-color-hex" class="font-mono text-[10px] text-stone-600">#1c1917</span>
+            </div>
           </div>
         </div>
-        <div class="grid grid-cols-2 gap-2 pt-1 border-t border-amber-200/60">
-          <div>
-            <label class="font-mono text-[9px] text-stone-600 block mb-0.5">Cor Título Capa</label>
-            <input type="color" id="input-cover-title-color" value="#ffffff" onchange="changeCoverTitleColor(this.value)" class="w-full h-6 border rounded cursor-pointer p-0 bg-transparent">
+
+        <!-- MOLDURAS -->
+        <div>
+          <label class="font-mono text-[10px] text-stone-500 block mb-1">🖼️ Estilo de Moldura</label>
+          <select id="select-frame" onchange="changeFrameStyle(this.value)" class="w-full px-2 py-1 rounded border border-stone-300 bg-white text-xs font-mono outline-none">
+            <option value="moldura-classica">Clássica Polaroid</option>
+            <option value="moldura-polaroid-real">Polaroid Real (Grande)</option>
+            <option value="moldura-larga">Larga Branca</option>
+            <option value="moldura-quadrada">Quadrada</option>
+            <option value="moldura-kraft">Kraft</option>
+            <option value="moldura-vintage">Vintage</option>
+            <option value="moldura-sepia">Sépia</option>
+            <option value="moldura-noir">Noir P&B</option>
+            <option value="moldura-80s">Anos 80</option>
+            <option value="moldura-fita-crepe">Fita Crepe</option>
+            <option value="moldura-carimbo">Carimbo</option>
+            <option value="moldura-recortada">Recortada</option>
+            <option value="moldura-filme">Filme Fotográfico</option>
+            <option value="moldura-dupla">Dupla</option>
+            <option value="moldura-arredondada">Arredondada</option>
+            <option value="moldura-rasgada">Rasgada</option>
+            <option value="moldura-neon">Neon</option>
+            <option value="moldura-pastel">Pastel</option>
+            <option value="moldura-camara-escura">Câmara Escura</option>
+            <option value="moldura-dourada">Dourada</option>
+            <option value="moldura-instantanea">Instantânea</option>
+            <option value="moldura-minimal">Minimalista</option>
+            <option value="moldura-acquerello">Acquerello</option>
+            <option value="moldura-bordada">Bordada Dourada</option>
+            <option value="moldura-holografica">Holográfica</option>
+          </select>
+        </div>
+
+        <!-- PALETA DE CORES -->
+        <div>
+          <label class="font-mono text-[10px] text-stone-500 block mb-1">🎨 Paleta de Cores (Tema)</label>
+          <select id="select-theme" onchange="applyTheme(this.value)" class="w-full px-2 py-1 rounded border border-stone-300 bg-white text-xs font-mono outline-none">
+            <optgroup label="Estilos Universais">
+              <option value="minimal">Bege Clássico (Papel)</option>
+              <option value="kraft">Kraft Natural</option>
+              <option value="linen">Linho Suave</option>
+              <option value="dark-cinema">Cinema / Modo Escuro</option>
+              <option value="love-romantic">Romântico / Corações</option>
+              <option value="jardim">Jardim / Natureza</option>
+              <option value="oceano">Oceano / Mar</option>
+              <option value="sunset">Pôr do Sol</option>
+              <option value="lavanda">Lavanda</option>
+            </optgroup>
+            <optgroup label="Futebol Nacional">
+              <option value="sp-sao-paulo">São Paulo FC</option>
+              <option value="sp-corinthians">Corinthians</option>
+              <option value="sp-palmeiras">Palmeiras</option>
+              <option value="sp-santos">Santos</option>
+              <option value="rj-flamengo">Flamengo</option>
+              <option value="rj-vasco">Vasco da Gama</option>
+              <option value="rj-fluminense">Fluminense</option>
+              <option value="rj-botafogo">Botafogo</option>
+              <option value="mg-atletico">Atlético-MG</option>
+              <option value="mg-cruzeiro">Cruzeiro</option>
+              <option value="pr-athletico">Athletico-PR</option>
+              <option value="pr-coritiba">Coritiba</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <!-- ADESIVOS -->
+        <div class="p-2 border border-stone-200 rounded bg-stone-50">
+          <label class="font-mono text-[10px] font-bold text-stone-700 block mb-1">📋 ADESIVOS DO COLECIONADOR</label>
+          <div class="grid grid-cols-8 gap-1 text-center text-base py-1">
+            <button onclick="addSticker('❤️')" class="p-1 border rounded bg-white hover:bg-stone-100">❤️</button>
+            <button onclick="addSticker('💘')" class="p-1 border rounded bg-white hover:bg-stone-100">💘</button>
+            <button onclick="addSticker('✨')" class="p-1 border rounded bg-white hover:bg-stone-100">✨</button>
+            <button onclick="addSticker('🎬')" class="p-1 border rounded bg-white hover:bg-stone-100">🎬</button>
+            <button onclick="addSticker('🍿')" class="p-1 border rounded bg-white hover:bg-stone-100">🍿</button>
+            <button onclick="addSticker('⚽')" class="p-1 border rounded bg-white hover:bg-stone-100">⚽</button>
+            <button onclick="addSticker('🏆')" class="p-1 border rounded bg-white hover:bg-stone-100">🏆</button>
+            <button onclick="addSticker('⭐')" class="p-1 border rounded bg-white hover:bg-stone-100">⭐</button>
+            <button onclick="addSticker('🌸')" class="p-1 border rounded bg-white hover:bg-stone-100">🌸</button>
+            <button onclick="addSticker('🎂')" class="p-1 border rounded bg-white hover:bg-stone-100">🎂</button>
+            <button onclick="addSticker('🎉')" class="p-1 border rounded bg-white hover:bg-stone-100">🎉</button>
+            <button onclick="addSticker('🌊')" class="p-1 border rounded bg-white hover:bg-stone-100">🌊</button>
+            <button onclick="addSticker('🍀')" class="p-1 border rounded bg-white hover:bg-stone-100">🍀</button>
+            <button onclick="addSticker('🎸')" class="p-1 border rounded bg-white hover:bg-stone-100">🎸</button>
+            <button onclick="addSticker('📸')" class="p-1 border rounded bg-white hover:bg-stone-100">📸</button>
+            <button onclick="addSticker('💍')" class="p-1 border rounded bg-white hover:bg-stone-100">💍</button>
           </div>
-          <div>
-            <label class="font-mono text-[9px] text-stone-600 block mb-0.5">Cor Subtítulo Capa</label>
-            <input type="color" id="input-cover-subtitle-color" value="#ffffff" onchange="changeCoverSubtitleColor(this.value)" class="w-full h-6 border rounded cursor-pointer p-0 bg-transparent">
+          <div class="mt-2 pt-2 border-t border-stone-200 text-[10px]">
+            <span class="font-bold block text-stone-600 mb-0.5">Subir Logo/Escudo Customizado:</span>
+            <input type="file" accept="image/*" onchange="uploadCustomSticker(this)" class="w-full text-[10px]">
           </div>
         </div>
+
+        <!-- FORMULÁRIO EDIÇÃO -->
+        <div id="editor-panel" class="pt-1"></div>
       </div>
 
-      <div>
-        <label class="font-mono text-[10px] text-stone-500 block mb-1">Estilo de Moldura da Foto</label>
-        <select id="select-frame" onchange="changeFrameStyle(this.value)" class="w-full px-2 py-1 rounded border border-stone-300 bg-white text-xs font-mono outline-none">
-          <option value="moldura-classica">Clássica</option>
-          <option value="moldura-larga">Larga</option>
-          <option value="moldura-quadrada">Quadrada</option>
-          <option value="moldura-kraft">Kraft</option>
-          <option value="moldura-vintage">Vintage</option>
-          <option value="moldura-sepia">Sépia</option>
-          <option value="moldura-noir">Noir P&B</option>
-          <option value="moldura-instantanea">Instantânea</option>
-        </select>
+      <!-- BOTÃO EXPORTAR -->
+      <div class="pt-2 border-t border-stone-100 mt-auto">
+        <button onclick="safeSecureExport()" class="w-full bg-emerald-700 hover:bg-emerald-600 text-white font-bold py-2.5 px-4 rounded text-xs transition-all shadow-md tracking-wider pulse-glow">
+          💾 COMPILAR E GERAR PDF FINAL
+        </button>
       </div>
+    </div>
 
-      <div>
-        <label class="font-mono text-[10px] text-stone-500 block mb-1">Papéis de Parede & Temas</label>
-        <select id="select-theme" onchange="applyTheme(this.value)" class="w-full px-2 py-1 rounded border border-stone-300 bg-white text-xs font-mono outline-none">
-          <optgroup label="Sua Galeria">
-            <option value="custom-image">📸 Fundo Personalizado (Sua Imagem)</option>
-          </optgroup>
-          <optgroup label="Infantil & Bebês">
-            <option value="tema-mesversario">Mesversário de Bebê (Mamadeiras)</option>
-          </optgroup>
-          <optgroup label="Estilo de Vida">
-            <option value="tema-pets">Animais / Pets (Patinhas e Cães)</option>
-            <option value="tema-religiao">Religião e Fé (Pombas e Estrelas)</option>
-            <option value="tema-series">Séries / Filmes (Modo Escuro)</option>
-          </optgroup>
-          <optgroup label="Eventos & Celebrações">
-            <option value="evento-formatura">Formatura (Preto e Dourado)</option>
-            <option value="evento-bodas">Bodas e Brindes (Taças e Corações)</option>
-            <option value="evento-aniversario">Aniversário (Balões e Festas)</option>
-            <option value="evento-casamento">Casamento (Alianças Rose Gold)</option>
-          </optgroup>
-          <optgroup label="Datas Sazonais">
-            <option value="sazonal-maes">Dia das Mães (Rosas e Flores)</option>
-            <option value="sazonal-pais">Dia dos Pais (Gravatas)</option>
-            <option value="sazonal-namorados">Dia dos Namorados (Corações)</option>
-            <option value="sazonal-natal">Natal (Neve e Árvores)</option>
-            <option value="sazonal-anonovo">Ano Novo (Fogos de Artifício)</option>
-          </optgroup>
-          <optgroup label="Estilos Universais Clássicos">
-            <option value="minimal">Bege Clássico Liso (Papel)</option>
-            <option value="dark-cinema">Fundo Escuro Liso</option>
-          </optgroup>
-          <optgroup label="Futebol Nacional (Listras/Cores)">
-            <option value="sp-sao-paulo" selected>São Paulo FC</option>
-            <option value="sp-corinthians">Corinthians</option>
-            <option value="sp-palmeiras">Palmeiras</option>
-            <option value="sp-santos">Santos</option>
-            <option value="rj-flamengo">Flamengo</option>
-            <option value="rj-vasco">Vasco da Gama</option>
-            <option value="rj-fluminense">Fluminense</option>
-            <option value="rj-botafogo">Botafogo</option>
-            <option value="mg-atletico">Atlético-MG</option>
-            <option value="mg-cruzeiro">Cruzeiro</option>
-            <option value="pr-athletico">Athletico-PR</option>
-            <option value="pr-coritiba">Coritiba</option>
-          </optgroup>
-        </select>
+    <!-- SEÇÃO LAYOUT -->
+    <div id="section-layout" class="space-y-3 hidden">
+      <div class="p-3 bg-stone-50 rounded border border-stone-200">
+        <h3 class="font-mono text-xs font-bold text-stone-800 mb-2">📐 CONFIGURAÇÕES DE LAYOUT</h3>
+        <p class="text-[10px] text-stone-500 font-mono mb-2">Configure o formato, acabamento e orientação do seu projeto.</p>
         
-        <div id="custom-bg-container" class="hidden mt-2 pt-2 border-t border-stone-200 text-[10px]">
-          <span class="font-bold block text-stone-600 mb-0.5">Subir Imagem de Fundo (Papel de Parede):</span>
-          <input type="file" accept="image/*" onchange="uploadCustomBackground(this)" class="w-full text-[10px]">
-        </div>
-      </div>
-
-      <!-- ADESIVOS RÁPIDOS -->
-      <div class="p-2 border border-stone-200 rounded bg-stone-50">
-        <label class="font-mono text-[10px] font-bold text-stone-700 block mb-1">📋 BIBLIOTECA DE ADESIVOS</label>
-        <div class="h-32 overflow-y-auto adesivos-scroll bg-white border border-stone-200 rounded p-1 space-y-2">
+        <div class="space-y-3">
           <div>
-            <div class="text-[8px] text-stone-400 font-bold uppercase text-left ml-1 mb-1">Animais & Pets</div>
-            <div class="grid grid-cols-6 gap-1 text-center text-lg">
-              <button onclick="addSticker('🐱')" class="hover:bg-stone-100 rounded pb-1">🐱</button>
-              <button onclick="addSticker('🐶')" class="hover:bg-stone-100 rounded pb-1">🐶</button>
-              <button onclick="addSticker('🐾')" class="hover:bg-stone-100 rounded pb-1">🐾</button>
-              <button onclick="addSticker('🦴')" class="hover:bg-stone-100 rounded pb-1">🦴</button>
-              <button onclick="addSticker('🐰')" class="hover:bg-stone-100 rounded pb-1">🐰</button>
-              <button onclick="addSticker('🐠')" class="hover:bg-stone-100 rounded pb-1">🐠</button>
-            </div>
+            <label class="font-mono text-[10px] text-stone-500 block mb-1">📏 Tamanho do Papel</label>
+            <select onchange="changeProjectFormat(this.value); document.getElementById('select-format').value = this.value;" class="w-full px-2 py-1.5 rounded border border-stone-300 bg-white text-xs font-mono outline-none">
+              <option value="a4-portrait">A4 Retrato (210x297mm) - Mais popular</option>
+              <option value="a4-landscape">A4 Paisagem (297x210mm)</option>
+              <option value="a5-portrait">A5 Retrato (148x210mm) - Compacto</option>
+              <option value="a5-landscape">A5 Paisagem (210x148mm)</option>
+              <option value="quadrado-20">Quadrado (200x200mm)</option>
+            </select>
           </div>
-          <div class="border-t border-stone-100 pt-1">
-            <div class="text-[8px] text-stone-400 font-bold uppercase text-left ml-1 mb-1">Bebês & Mesversário</div>
-            <div class="grid grid-cols-6 gap-1 text-center text-lg">
-              <button onclick="addSticker('👶')" class="hover:bg-stone-100 rounded pb-1">👶</button>
-              <button onclick="addSticker('🍼')" class="hover:bg-stone-100 rounded pb-1">🍼</button>
-              <button onclick="addSticker('🧸')" class="hover:bg-stone-100 rounded pb-1">🧸</button>
-              <button onclick="addSticker('👣')" class="hover:bg-stone-100 rounded pb-1">👣</button>
-              <button onclick="addSticker('🦆')" class="hover:bg-stone-100 rounded pb-1">🦆</button>
-              <button onclick="addSticker('🎀')" class="hover:bg-stone-100 rounded pb-1">🎀</button>
-            </div>
+
+          <div>
+            <label class="font-mono text-[10px] text-amber-700 font-bold block mb-1">📎 Tipo de Encadernação</label>
+            <select onchange="changeProductMode(this.value); document.getElementById('select-product-mode').value = this.value;" class="w-full px-2 py-1.5 rounded border border-amber-400 bg-amber-50 text-xs font-mono font-bold outline-none">
+              <option value="espiral-esquerda">📎 Espiral Lateral Esquerda</option>
+              <option value="espiral-topo">📎 Espiral Superior</option>
+              <option value="piramide">🔺 Pirâmide / Topo</option>
+              <option value="mesa">🏗️ Mesa (Suporte V-Fold)</option>
+              <option value="parede">🧷 Parede (Furo Central)</option>
+              <option value="sem-acabamento">⬜ Sem Acabamento</option>
+            </select>
+            <p class="text-[9px] text-stone-400 mt-1">
+              <span id="layout-desc">Espiral na margem esquerda para cadernos e álbuns.</span>
+            </p>
           </div>
-          <div class="border-t border-stone-100 pt-1">
-            <div class="text-[8px] text-stone-400 font-bold uppercase text-left ml-1 mb-1">Amor & Bodas</div>
-            <div class="grid grid-cols-6 gap-1 text-center text-lg">
-              <button onclick="addSticker('❤️')" class="hover:bg-stone-100 rounded pb-1">❤️</button>
-              <button onclick="addSticker('💍')" class="hover:bg-stone-100 rounded pb-1">💍</button>
-              <button onclick="addSticker('💒')" class="hover:bg-stone-100 rounded pb-1">💒</button>
-              <button onclick="addSticker('💖')" class="hover:bg-stone-100 rounded pb-1">💖</button>
-              <button onclick="addSticker('🌹')" class="hover:bg-stone-100 rounded pb-1">🌹</button>
-              <button onclick="addSticker('🥂')" class="hover:bg-stone-100 rounded pb-1">🥂</button>
-            </div>
+
+          <div>
+            <label class="font-mono text-[10px] text-stone-500 block mb-1">📷 Orientação da Foto</label>
+            <select onchange="changePhotoOrientation(this.value); document.getElementById('select-photo-orientation').value = this.value;" class="w-full px-2 py-1.5 rounded border border-stone-300 bg-white text-xs font-mono outline-none">
+              <option value="landscape">🖼️ Horizontal (Paisagem)</option>
+              <option value="portrait">📱 Vertical (Retrato)</option>
+            </select>
           </div>
-          <div class="border-t border-stone-100 pt-1">
-            <div class="text-[8px] text-stone-400 font-bold uppercase text-left ml-1 mb-1">Eventos & Sazonal</div>
-            <div class="grid grid-cols-6 gap-1 text-center text-lg">
-              <button onclick="addSticker('🎂')" class="hover:bg-stone-100 rounded pb-1">🎂</button>
-              <button onclick="addSticker('🎈')" class="hover:bg-stone-100 rounded pb-1">🎈</button>
-              <button onclick="addSticker('🎉')" class="hover:bg-stone-100 rounded pb-1">🎉</button>
-              <button onclick="addSticker('🎓')" class="hover:bg-stone-100 rounded pb-1">🎓</button>
-              <button onclick="addSticker('🎄')" class="hover:bg-stone-100 rounded pb-1">🎄</button>
-              <button onclick="addSticker('🎅')" class="hover:bg-stone-100 rounded pb-1">🎅</button>
-            </div>
+
+          <div>
+            <label class="font-mono text-[10px] text-stone-500 block mb-1">✒️ Fonte Tipográfica</label>
+            <select onchange="changeGlobalFont(this.value); document.getElementById('select-font').value = this.value;" class="w-full px-2 py-1.5 rounded border border-stone-300 bg-white text-xs font-mono outline-none">
+              <option value="font-typewriter">Máquina de Escrever</option>
+              <option value="font-playfair">Playfair Serif</option>
+              <option value="font-sport">Esportiva Moderna</option>
+              <option value="font-pop">Pop / Bangers</option>
+              <option value="font-cinema">Cinematográfica</option>
+              <option value="font-clean">Clean / Montserrat</option>
+            </select>
           </div>
-        </div>
-        <div class="mt-2 pt-2 border-t border-stone-200 text-[10px]">
-          <span class="font-bold block text-stone-600 mb-0.5">Subir Logo/Escudo Customizado:</span>
-          <input type="file" accept="image/*" onchange="uploadCustomSticker(this)" class="w-full text-[10px]">
+
+          <div>
+            <label class="font-mono text-[10px] text-stone-500 block mb-1">🎨 Tema / Paleta de Cores</label>
+            <select onchange="applyTheme(this.value); document.getElementById('select-theme').value = this.value;" class="w-full px-2 py-1.5 rounded border border-stone-300 bg-white text-xs font-mono outline-none">
+              <optgroup label="Estilos Universais">
+                <option value="minimal">Bege Clássico (Papel)</option>
+                <option value="kraft">Kraft Natural</option>
+                <option value="linen">Linho Suave</option>
+                <option value="dark-cinema">Cinema / Modo Escuro</option>
+                <option value="love-romantic">Romântico / Corações</option>
+                <option value="jardim">Jardim / Natureza</option>
+                <option value="oceano">Oceano / Mar</option>
+                <option value="sunset">Pôr do Sol</option>
+                <option value="lavanda">Lavanda</option>
+              </optgroup>
+              <optgroup label="Futebol Nacional">
+                <option value="sp-sao-paulo">São Paulo FC</option>
+                <option value="sp-corinthians">Corinthians</option>
+                <option value="sp-palmeiras">Palmeiras</option>
+                <option value="sp-santos">Santos</option>
+                <option value="rj-flamengo">Flamengo</option>
+                <option value="rj-vasco">Vasco da Gama</option>
+                <option value="rj-fluminense">Fluminense</option>
+                <option value="rj-botafogo">Botafogo</option>
+                <option value="mg-atletico">Atlético-MG</option>
+                <option value="mg-cruzeiro">Cruzeiro</option>
+                <option value="pr-athletico">Athletico-PR</option>
+                <option value="pr-coritiba">Coritiba</option>
+              </optgroup>
+            </select>
+          </div>
         </div>
       </div>
-
-      <!-- EDITOR ATIVO -->
-      <div id="editor-panel" class="pt-1"></div>
-
     </div>
 
-    <!-- BOTÕES DE COMPILAÇÃO E EXPORTAÇÃO DUPLA -->
-    <div class="pt-2 border-t border-stone-100 mt-auto grid grid-cols-2 gap-2">
-      <button onclick="exportDigitalApp()" class="w-full bg-blue-700 hover:bg-blue-600 text-white font-bold py-2 rounded text-[10px] transition-all shadow-md tracking-wider flex flex-col items-center justify-center">
-        <span class="text-sm mb-0.5">📱</span>
-        <span>DIGITAL (WEB)</span>
-      </button>
-      <button onclick="safeSecureExport()" class="w-full bg-emerald-700 hover:bg-emerald-600 text-white font-bold py-2 rounded text-[10px] transition-all shadow-md tracking-wider flex flex-col items-center justify-center">
-        <span class="text-sm mb-0.5">🖨️</span>
-        <span>FÍSICO (PDF)</span>
-      </button>
+    <!-- SEÇÃO AJUDA -->
+    <div id="section-ajuda" class="space-y-3 hidden">
+      <div class="p-3 bg-amber-50 rounded border border-amber-200">
+        <h3 class="font-mono text-xs font-bold text-amber-900 mb-2">📖 MANUAL COMPLETO</h3>
+        <div class="space-y-3 text-[10px] font-mono text-stone-700 leading-relaxed">
+          
+          <div class="bg-white p-2 rounded border border-amber-100">
+            <strong class="text-amber-800 block mb-1">O QUE É O RSP CALENDAR ALBUM STUDIO?</strong>
+            É um aplicativo revolucionário que permite criar um calendário de 12 meses com molduras estilo Polaroid. Cada mês tem sua foto e história. Quando o ano acaba, o calendário se transforma em um álbum completo e personalizado que preserva suas memórias.
+          </div>
+
+          <div class="bg-white p-2 rounded border border-amber-100">
+            <strong class="text-amber-800 block mb-1">COMO USAR - PASSO A PASSO:</strong>
+            <p class="mb-1">1. <strong>Clique na aba do mês</strong> que deseja editar (Jan, Fev, Mar... Dez)</p>
+            <p class="mb-1">2. <strong>Escolha o formato</strong> de papel (A4 Retrato é o mais comum para gráficas)</p>
+            <p class="mb-1">3. <strong>Selecione o tipo de encadernação</strong> (espiral lateral, topo, pirâmide, mesa, parede)</p>
+            <p class="mb-1">4. <strong>Faça upload da foto</strong> do mês clicando no campo de arquivo</p>
+            <p class="mb-1">5. <strong>Edite a legenda e a história</strong> do mês no painel de edição</p>
+            <p class="mb-1">6. <strong>Escolha a moldura</strong> que mais combina com a foto</p>
+            <p class="mb-1">7. <strong>Personalize cores e fontes</strong> conforme seu gosto</p>
+            <p class="mb-1">8. <strong>Adicione adesivos</strong> clicando nos emojis ou subindo logo customizado</p>
+            <p class="mb-1">9. <strong>Para remover adesivo</strong>, dê duplo clique na área de visualização</p>
+            <p>10. <strong>Clique em COMPILAR PDF</strong> para gerar o arquivo final de impressão</p>
+          </div>
+
+          <div class="bg-white p-2 rounded border border-amber-100">
+            <strong class="text-amber-800 block mb-1">TIPOS DE ENCADERNAÇÃO:</strong>
+            <p class="mb-1"><strong>📎 Espiral Lateral Esquerda:</strong> Ideal para cadernos e álbuns. Os ilhós ficam na margem esquerda, permitindo abrir o álbum como um livro.</p>
+            <p class="mb-1"><strong>📎 Espiral Superior:</strong> Os ilhós ficam no topo da página. Ideal para calendários de parede pendurados.</p>
+            <p class="mb-1"><strong>🔺 Pirâmide / Topo:</strong> Acabamento premium com furos no topo para encaixe em suporte de mesa piramidal. Design exclusivo.</p>
+            <p class="mb-1"><strong>🏗️ Mesa (V-Fold):</strong> Suporte triangulado de mesa. Dobre nas linhas de vinco para criar a base de apoio.</p>
+            <p><strong>🧷 Parede:</strong> Furo central no topo para pendurar na parede com prego ou gancho.</p>
+          </div>
+
+          <div class="bg-white p-2 rounded border border-amber-100">
+            <strong class="text-amber-800 block mb-1">DICAS PARA IMPRESSÃO PROFISSIONAL:</strong>
+            <p class="mb-1">• Use papel fotográfico ou couchê de 250g/m² para melhor resultado</p>
+            <p class="mb-1">• Para capa, considere papel mais grosso (300g/m²)</p>
+            <p class="mb-1">• A margem de espiral precisa de 15-20mm de espaço</p>
+            <p class="mb-1">• Envie o PDF em escala de cinza (CMYK) para gráficas profissionais</p>
+            <p class="mb-1">• Lamine a capa para proteção (laminação fosca ou brilhante)</p>
+            <p>• O gabarito de base ajuda a gráfica a entender a dobra do suporte de mesa</p>
+          </div>
+
+          <div class="bg-white p-2 rounded border border-amber-100">
+            <strong class="text-amber-800 block mb-1">COMO VENDER SEU CALENDÁRIO:</strong>
+            <p class="mb-1">• Crie o calendário como presente personalizado (casamentos, aniversários, bebês)</p>
+            <p class="mb-1">• Ofereça como produto em feiras de artesanato e lojas de presentes</p>
+            <p class="mb-1">• Use temas de times de futebol para vender para torcedores</p>
+            <p class="mb-1">• Crie calendários temáticos (natureza, viagens, família, pets)</p>
+            <p class="mb-1">• Preço sugerido: R$ 35 a R$ 80 dependendo do acabamento</p>
+            <p>• Ofereça versão digital + impressa para maior valor percebido</p>
+          </div>
+
+          <div class="bg-white p-2 rounded border border-amber-100">
+            <strong class="text-amber-800 block mb-1">ATalhos e Funcionalidades:</strong>
+            <p class="mb-1">• Duplo clique na área de visualização: Remove adesivo atual</p>
+            <p class="mb-1">• Upload de imagem: Aceita JPG, PNG, WebP</p>
+            <p class="mb-1">• O PDF gerado contém: Capa + 12 meses + Gabarito de base</p>
+            <p>• Salve seu projeto periodicamente (o navegador mantém os dados em memória)</p>
+          </div>
+
+          <div class="bg-white p-2 rounded border border-amber-100">
+            <strong class="text-amber-800 block mb-1">MOLDURAS DISPONÍVEIS:</strong>
+            <p>Clássica Polaroid, Polaroid Real, Larga Branca, Quadrada, Kraft, Vintage, Sépia, Noir P&B, Anos 80, Fita Crepe, Carimbo, Recortada, Filme Fotográfico, Dupla, Arredondada, Rasgada, Neon, Pastel, Câmara Escura, Dourada, Instantânea, Minimalista, Acquerello, Bordada Dourada, Holográfica</p>
+          </div>
+
+          <div class="bg-white p-2 rounded border border-amber-100">
+            <strong class="text-amber-800 block mb-1">REQUISITOS TÉCNICOS:</strong>
+            <p class="mb-1">• Navegador: Chrome, Firefox, Edge, Safari (versões recentes)</p>
+            <p class="mb-1">• Funciona em PC e Android (tablets e celulares)</p>
+            <p class="mb-1">• Conexão com internet necessária apenas para carregar inicialmente</p>
+            <p>• Após carregamento, funciona offline para edição</p>
+          </div>
+        </div>
+      </div>
     </div>
+
   </aside>
 
-  <!-- ÁREA DE VISUALIZAÇÃO DO CANVAS -->
-  <main id="main-area" class="flex-grow flex flex-col items-start md:items-center justify-start p-2 md:p-8 overflow-y-auto overflow-x-hidden relative bg-stone-200 h-full w-full">
-    <div id="canvas-wrapper" class="origin-top flex justify-center w-full transition-transform duration-200">
-      <div id="render-canvas" class="relative shadow-2xl border border-stone-300 box-border select-none overflow-hidden shrink-0 mx-auto"></div>
-    </div>
+  <!-- ÁREA DE VISUALIZAÇÃO -->
+  <main class="flex-grow flex flex-col items-center justify-start p-6 overflow-auto relative bg-stone-200" ondblclick="removeSticker()">
+    <div id="render-canvas" class="relative paper-texture shadow-2xl border border-stone-300 box-border select-none overflow-hidden shrink-0 transition-all duration-150"></div>
+    
+
   </main>
 
-  <!-- OVERLAY DO PRESENTE DIGITAL -->
-  <div id="gift-overlay" class="fixed inset-0 bg-stone-900/95 z-[99999] hidden flex-col items-center justify-center transition-opacity duration-1000 opacity-0">
-     <div id="gift-box" class="cursor-pointer text-[150px] animate-bounce hover:scale-110 transition-transform duration-300" onclick="openGift()">
-        🎁
-        <div class="text-white text-base font-mono text-center mt-4 animate-pulse">Clique para abrir</div>
-     </div>
-     
-     <div id="gift-content" class="hidden flex-col items-center transition-all duration-1000 opacity-0 translate-y-10">
-        <div class="moldura-instantanea bg-white rounded shadow-2xl rotate-[-3deg] hover:rotate-0 transition-transform duration-500 max-w-[90%] md:max-w-sm text-center border border-stone-200 flex flex-col items-center">
-           <div class="w-64 h-64 md:w-[280px] md:h-[280px] border border-stone-200/50 mb-4 overflow-hidden relative bg-stone-100">
-             <img id="gift-photo" src="" class="w-full h-full object-cover" />
-           </div>
-           <p id="gift-message-text" class="text-stone-800 text-xl md:text-2xl font-bold px-4 leading-snug pb-2"></p>
-        </div>
-        <button onclick="closeGift()" class="mt-8 px-6 py-2 bg-white text-stone-900 font-bold font-mono rounded-full shadow-lg hover:bg-stone-200 transition-colors">
-          ✨ Abrir Calendário ✨
-        </button>
-     </div>
-  </div>
-
-  <!-- MODAL MANUAL DE USO -->
-  <div id="manual-modal" class="fixed inset-0 bg-black/70 z-[60] hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl space-y-4 font-sans border-2 border-blue-400">
-      <div class="sticky top-0 bg-white border-b p-4 flex justify-between items-center z-10">
-        <h3 class="font-bold text-lg text-blue-900 flex items-center gap-2">📖 Manual de Uso - RSP Studio</h3>
-        <button onclick="toggleManualModal()" class="text-stone-400 hover:text-red-500 font-bold text-3xl leading-none">&times;</button>
-      </div>
-      <div class="p-6 space-y-6 text-sm text-stone-700 leading-relaxed">
-        <div>
-          <h4 class="font-bold text-stone-900 border-b pb-1 mb-2">1. Como Editar as Páginas</h4>
-          <p>O painel esquerdo possui os botões de <strong>Capa</strong>, <strong>Jan a Dez</strong>, e <strong>Contracapa</strong>. Clique neles para modificar os textos e carregar as fotos correspondentes.</p>
-        </div>
-        <div>
-          <h4 class="font-bold text-stone-900 border-b pb-1 mb-2">2. Usando o Fundo Personalizado</h4>
-          <p>Em "Papéis de Parede (Tema)", selecione <strong>📸 Fundo Personalizado (Sua Imagem)</strong>. Um botão surgirá abaixo para subir uma foto da sua galeria. Sua imagem vai preencher toda a folha.</p>
-        </div>
-        <div>
-          <h4 class="font-bold text-stone-900 border-b pb-1 mb-2">3. Presente Digital & QR Code</h4>
-          <p>Você pode gerar um QR Code colando um link no gerador. Cole esse QR Code na capa física para que o seu cliente escaneie e abra a <strong>Animação do Presente</strong> (exportada no botão DIGITAL).</p>
-        </div>
-        <div>
-          <h4 class="font-bold text-stone-900 border-b pb-1 mb-2">4. Exportação Física vs Digital</h4>
-          <ul class="list-disc pl-5 space-y-2">
-            <li><strong class="text-emerald-700">🖨️ FÍSICO (PDF):</strong> Gera um arquivo PDF de altíssima resolução, contendo as marcas de corte e furações corretas para a gráfica.</li>
-            <li><strong class="text-blue-700">📱 DIGITAL (WEB):</strong> Exporta um arquivo <strong>.html</strong> interativo. Hospede-o na internet, copie o link e use no QR Code.</li>
-          </ul>
-        </div>
-      </div>
-      <div class="p-4 border-t bg-stone-50 rounded-b-xl">
-        <button onclick="toggleManualModal()" class="w-full bg-blue-800 text-white font-bold py-3 rounded hover:bg-blue-700 transition shadow">ENTENDI, VAMOS CRIAR!</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL DE GABARITO DA BASE -->
-  <div id="gabarito-modal" class="fixed inset-0 bg-black/60 z-[60] hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-xl max-w-lg w-full p-6 shadow-2xl space-y-4 font-sans border border-amber-300">
-      <div class="flex justify-between items-center border-b pb-2">
-        <h3 class="font-mono text-sm font-bold text-amber-900">📐 GABARITO TÉCNICO DA BASE</h3>
-        <button onclick="toggleGabaritoModal()" class="text-stone-400 hover:text-stone-700 font-bold text-lg">&times;</button>
-      </div>
-      <div class="space-y-3 text-xs text-stone-600 leading-relaxed font-mono">
-        <p class="p-2 bg-amber-50 rounded border border-amber-200">Este gabarito é um guia técnico de montagem e <strong>não é impresso no PDF final</strong> do cliente.</p>
-        <div class="border p-3 rounded space-y-2">
-          <div class="linha-corte-horizontal"></div>
-          <span class="text-red-600 font-bold block text-[10px]">▲ LINHA DE CORTE SUPERIOR</span>
-          <div class="py-2 text-center bg-stone-100 border border-dashed rounded">PAINEL FRONTAL DA BASE</div>
-          <div class="linha-corte-horizontal"></div>
-          <span class="text-amber-700 font-bold block text-[10px]">▲ VINCO 1: CRISTA SUPERIOR</span>
-          <div class="py-2 text-center bg-stone-100 border border-dashed rounded">PAINEL TRASEIRO DA BASE</div>
-          <div class="linha-corte-horizontal"></div>
-          <span class="text-amber-700 font-bold block text-[10px]">▲ VINCO 2: BASE DE APOIO</span>
-        </div>
-      </div>
-      <button onclick="toggleGabaritoModal()" class="w-full bg-stone-800 text-white font-bold py-2 rounded text-xs">FECHAR GABARITO</button>
-    </div>
-  </div>
-
   <script>
-    // ==========================================
-    // INSTALADOR PWA
-    // ==========================================
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-    });
-
-    function installApp() {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choiceResult) => {
-          deferredPrompt = null;
-        });
-      } else {
-        alert("Para instalar como App Nativo no Android:\n\n1. Clique nos três pontinhos (⋮) no navegador.\n2. Selecione 'Adicionar à tela inicial' ou 'Instalar aplicativo'.");
-      }
-    }
-
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        const swCode = `
-          self.addEventListener('install', (e) => self.skipWaiting());
-          self.addEventListener('activate', (e) => self.clients.claim());
-          self.addEventListener('fetch', (e) => {});
-        `;
-        const blob = new Blob([swCode], {type: 'application/javascript'});
-        const swUrl = URL.createObjectURL(blob);
-        navigator.serviceWorker.register(swUrl).catch(()=>{});
-      });
-    }
-
-    // ==========================================
-    // CONFIGURAÇÕES E ESTADOS GLOBAIS
-    // ==========================================
-    const THEMES = {
-      'tema-mesversario': { bgPage: "background-color: #fdf4ff; background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Ctext x=%2210%22 y=%2240%22 font-size=%2225%22 opacity=%220.2%22%3E🍼%3C/text%3E%3Ctext x=%2260%22 y=%2290%22 font-size=%2225%22 opacity=%220.2%22%3E🧸%3C/text%3E%3C/svg%3E'); background-size: 100px 100px; background-repeat: repeat;", cardBg: 'background-color: #ffffff; border: 2px dashed #f472b6; color: #db2777;', calendarHeader: 'color: #ffffff; background-color: #f472b6;', dayBg: 'background-color: #ffffff; color: #db2777;', defaultMonthColor: '#db2777', defaultBackcoverColor: '#db2777', defaultCoverTitleColor: '#db2777', defaultCoverSubtitleColor: '#f472b6' },
-      'tema-pets': { bgPage: "background-color: #fff7ed; background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Ctext x=%2210%22 y=%2240%22 font-size=%2225%22 opacity=%220.15%22%3E🐾%3C/text%3E%3Ctext x=%2260%22 y=%2290%22 font-size=%2225%22 opacity=%220.15%22%3E🐶%3C/text%3E%3C/svg%3E'); background-size: 100px 100px; background-repeat: repeat;", cardBg: 'background-color: #ffffff; border: 2px solid #ea580c; color: #c2410c;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #9a3412;', defaultMonthColor: '#ea580c', defaultBackcoverColor: '#ea580c', defaultCoverTitleColor: '#c2410c', defaultCoverSubtitleColor: '#ea580c' },
-      'sazonal-natal': { bgPage: "background-color: #f0fdf4; background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Ctext x=%2210%22 y=%2240%22 font-size=%2225%22 opacity=%220.15%22%3E❄️%3C/text%3E%3Ctext x=%2260%22 y=%2290%22 font-size=%2220%22 opacity=%220.15%22%3E🎄%3C/text%3E%3C/svg%3E'); background-size: 100px 100px; background-repeat: repeat;", cardBg: 'background-color: #ffffff; border: 2px solid #166534; color: #166534;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #b91c1c;', defaultMonthColor: '#166534', defaultBackcoverColor: '#166534', defaultCoverTitleColor: '#b91c1c', defaultCoverSubtitleColor: '#166534' },
-      'sazonal-anonovo': { bgPage: "background-color: #fafaf9; background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Ctext x=%2220%22 y=%2240%22 font-size=%2225%22 opacity=%220.12%22%3E🎆%3C/text%3E%3Ctext x=%2270%22 y=%2290%22 font-size=%2220%22 opacity=%220.12%22%3E🥂%3C/text%3E%3C/svg%3E'); background-size: 100px 100px; background-repeat: repeat;", cardBg: 'background-color: #ffffff; border: 2px solid #d6d3d1; color: #a8a29e;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #78716c;', defaultMonthColor: '#a8a29e', defaultBackcoverColor: '#a8a29e', defaultCoverTitleColor: '#78716c', defaultCoverSubtitleColor: '#a8a29e' },
-      'evento-aniversario': { bgPage: "background-color: #fdf4ff; background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Ctext x=%2215%22 y=%2235%22 font-size=%2225%22 opacity=%220.15%22%3E🎉%3C/text%3E%3Ctext x=%2265%22 y=%2285%22 font-size=%2225%22 opacity=%220.15%22%3E🎈%3C/text%3E%3C/svg%3E'); background-size: 100px 100px; background-repeat: repeat;", cardBg: 'background-color: #ffffff; border: 2px dashed #c026d3; color: #a21caf;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #86198f;', defaultMonthColor: '#c026d3', defaultBackcoverColor: '#c026d3', defaultCoverTitleColor: '#a21caf', defaultCoverSubtitleColor: '#c026d3' },
-      'evento-casamento': { bgPage: "background-color: #faf5ff; background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Ctext x=%2220%22 y=%2240%22 font-size=%2225%22 opacity=%220.1%22%3E💍%3C/text%3E%3Ctext x=%2260%22 y=%2290%22 font-size=%2220%22 opacity=%220.1%22%3E🕊️%3C/text%3E%3C/svg%3E'); background-size: 100px 100px; background-repeat: repeat;", cardBg: 'background-color: #ffffff; border: 1px solid #c026d3; color: #a21caf;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #86198f;', defaultMonthColor: '#a21caf', defaultBackcoverColor: '#a21caf', defaultCoverTitleColor: '#86198f', defaultCoverSubtitleColor: '#a21caf' },
-      'evento-formatura': { bgPage: "background-color: #171717; background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Ctext x=%2220%22 y=%2240%22 font-size=%2220%22 opacity=%220.15%22%3E🎓%3C/text%3E%3Ctext x=%2260%22 y=%2280%22 font-size=%2220%22 opacity=%220.15%22%3E📜%3C/text%3E%3C/svg%3E'); background-size: 100px 100px; background-repeat: repeat;", cardBg: 'background-color: #262626; border: 1px solid #eab308; color: #eab308;', calendarHeader: 'color: #171717; background-color: #eab308;', dayBg: 'background-color: #171717; color: #eab308; border-color: #404040;', defaultMonthColor: '#eab308', defaultBackcoverColor: '#eab308', defaultCoverTitleColor: '#eab308', defaultCoverSubtitleColor: '#fef08a' },
-      'evento-bodas': { bgPage: "background-color: #fffbeb; background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Ctext x=%2220%22 y=%2240%22 font-size=%2225%22 opacity=%220.12%22%3E🥂%3C/text%3E%3Ctext x=%2270%22 y=%2290%22 font-size=%2220%22 opacity=%220.12%22%3E💖%3C/text%3E%3C/svg%3E'); background-size: 100px 100px; background-repeat: repeat;", cardBg: 'background-color: #ffffff; border: 1px solid #d97706; color: #b45309;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #92400e;', defaultMonthColor: '#d97706', defaultBackcoverColor: '#d97706', defaultCoverTitleColor: '#b45309', defaultCoverSubtitleColor: '#d97706' },
-      'tema-series': { bgPage: "background-color: #000000; background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Ctext x=%2220%22 y=%2240%22 font-size=%2225%22 opacity=%220.15%22%3E🍿%3C/text%3E%3Ctext x=%2270%22 y=%2290%22 font-size=%2225%22 opacity=%220.15%22%3E🎬%3C/text%3E%3C/svg%3E'); background-size: 100px 100px; background-repeat: repeat;", cardBg: 'background-color: #171717; border: 2px solid #dc2626; color: #ffffff;', calendarHeader: 'color: #ffffff; background-color: #dc2626;', dayBg: 'background-color: #171717; color: #ffffff; border-color: #404040;', defaultMonthColor: '#dc2626', defaultBackcoverColor: '#dc2626', defaultCoverTitleColor: '#dc2626', defaultCoverSubtitleColor: '#ffffff' },
-      'tema-religiao': { bgPage: "background-color: #f0fdfa; background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Ctext x=%2220%22 y=%2240%22 font-size=%2220%22 opacity=%220.1%22%3E🕊️%3C/text%3E%3Ctext x=%2260%22 y=%2270%22 font-size=%2220%22 opacity=%220.1%22%3E✨%3C/text%3E%3C/svg%3E'); background-size: 100px 100px; background-repeat: repeat;", cardBg: 'background-color: #ffffff; border: 1px solid #0d9488; color: #0f766e;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #115e59;', defaultMonthColor: '#0d9488', defaultBackcoverColor: '#0d9488', defaultCoverTitleColor: '#0f766e', defaultCoverSubtitleColor: '#0d9488' },
-      'sazonal-maes': { bgPage: "background-color: #fdf2f8; background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Ctext x=%2215%22 y=%2235%22 font-size=%2220%22 opacity=%220.15%22%3E🌹%3C/text%3E%3Ctext x=%2260%22 y=%2280%22 font-size=%2220%22 opacity=%220.15%22%3E🌸%3C/text%3E%3C/svg%3E'); background-size: 100px 100px; background-repeat: repeat;", cardBg: 'background-color: #ffffff; border: 1px solid #f9a8d4; color: #db2777;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #9d174d;', defaultMonthColor: '#db2777', defaultBackcoverColor: '#db2777', defaultCoverTitleColor: '#db2777', defaultCoverSubtitleColor: '#be185d' },
-      'sazonal-pais': { bgPage: "background-color: #f0f9ff; background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Ctext x=%2220%22 y=%2240%22 font-size=%2225%22 opacity=%220.08%22%3E👔%3C/text%3E%3Ctext x=%2270%22 y=%2290%22 font-size=%2220%22 opacity=%220.08%22%3E🛠️%3C/text%3E%3C/svg%3E'); background-size: 100px 100px; background-repeat: repeat;", cardBg: 'background-color: #ffffff; border: 2px solid #1e3a8a; color: #1e3a8a;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #1e3a8a;', defaultMonthColor: '#1e3a8a', defaultBackcoverColor: '#1e3a8a', defaultCoverTitleColor: '#1e3a8a', defaultCoverSubtitleColor: '#1e40af' },
-      'sazonal-namorados': { bgPage: "background-color: #fff1f2; background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Ctext x=%2215%22 y=%2235%22 font-size=%2225%22 opacity=%220.15%22%3E❤️%3C/text%3E%3Ctext x=%2255%22 y=%2270%22 font-size=%2220%22 opacity=%220.15%22%3E💖%3C/text%3E%3C/svg%3E'); background-size: 100px 100px; background-repeat: repeat;", cardBg: 'background-color: #ffffff; border: 2px solid #e11d48; color: #be123c;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #9f1239;', defaultMonthColor: '#e11d48', defaultBackcoverColor: '#e11d48', defaultCoverTitleColor: '#e11d48', defaultCoverSubtitleColor: '#be123c' },
-      
-      'minimal': { bgPage: 'background-color: #f5efdc; background-image: radial-gradient(rgba(0,0,0,0.02) 1px, transparent 0); background-size: 4px 4px;', cardBg: 'background-color: #ffffff; color: #1c1917;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #44403c;', defaultMonthColor: '#1c1917', defaultBackcoverColor: '#1c1917', defaultCoverTitleColor: '#1c1917', defaultCoverSubtitleColor: '#1c1917' },
-      'dark-cinema': { bgPage: 'background-color: #1a1a1a; background-image: linear-gradient(rgba(255,255,255,0.01) 1px, transparent 1px);', cardBg: 'background-color: #111111; border: 1px solid #333333; color: #ffffff;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #262626; color: #f5f5f4; border-color: #404040;', defaultMonthColor: '#ffffff', defaultBackcoverColor: '#ffffff', defaultCoverTitleColor: '#ffffff', defaultCoverSubtitleColor: '#ffffff' },
-      'love-romantic': { bgPage: 'background-color: #ffe4e6; background-image: radial-gradient(#fda4af 1px, transparent 0); background-size: 12px 12px;', cardBg: 'background-color: #ffffff; color: #9f1239;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #4c0519;', defaultMonthColor: '#9f1239', defaultBackcoverColor: '#9f1239', defaultCoverTitleColor: '#9f1239', defaultCoverSubtitleColor: '#9f1239' },
-      'sp-sao-paulo': { bgPage: 'background-color: #ffffff; background-image: linear-gradient(90deg, #dc2626 33%, #171717 33%, #171717 66%, #ffffff 66%); background-size: 100% 8px;', cardBg: 'background-color: #ffffff; border: 2px solid #dc2626; color: #000000;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #000000;', defaultMonthColor: '#ffffff', defaultBackcoverColor: '#ffffff', defaultCoverTitleColor: '#ffffff', defaultCoverSubtitleColor: '#ffffff' },
-      'sp-corinthians': { bgPage: 'background-color: #262626; background-image: linear-gradient(180deg, #000000 0%, #171717 100%);', cardBg: 'background-color: #ffffff; color: #000000;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #000000;', defaultMonthColor: '#ffffff', defaultBackcoverColor: '#ffffff', defaultCoverTitleColor: '#ffffff', defaultCoverSubtitleColor: '#ffffff' },
-      'sp-palmeiras': { bgPage: 'background-color: #14532d; background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 0); background-size: 6px 6px;', cardBg: 'background-color: #ffffff; border: 1px solid #166534; color: #14532d;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #f0fdf4; color: #166534;', defaultMonthColor: '#ffffff', defaultBackcoverColor: '#ffffff', defaultCoverTitleColor: '#ffffff', defaultCoverSubtitleColor: '#ffffff' },
-      'sp-santos': { bgPage: 'background-color: #f5f5f5; background-image: linear-gradient(90deg, #000000 1px, transparent 1px); background-size: 20px 20px;', cardBg: 'background-color: #ffffff; border: 2px solid #000000; color: #000000;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #000000;', defaultMonthColor: '#000000', defaultBackcoverColor: '#000000', defaultCoverTitleColor: '#000000', defaultCoverSubtitleColor: '#000000' },
-      'rj-flamengo': { bgPage: 'background-color: #b91c1c; background-image: linear-gradient(180deg, #000000 50%, transparent 50%); background-size: 100% 40px;', cardBg: 'background-color: #ffffff; border: 3px solid #b91c1c; color: #000000;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #000000;', defaultMonthColor: '#ffffff', defaultBackcoverColor: '#ffffff', defaultCoverTitleColor: '#ffffff', defaultCoverSubtitleColor: '#ffffff' },
-      'rj-vasco': { bgPage: 'background-color: #171717; background-image: linear-gradient(45deg, #ffffff 25%, transparent 25%); background-size: 30px 30px;', cardBg: 'background-color: #ffffff; border: 2px solid #000000; color: #000000;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #000000;', defaultMonthColor: '#ffffff', defaultBackcoverColor: '#ffffff', defaultCoverTitleColor: '#ffffff', defaultCoverSubtitleColor: '#ffffff' },
-      'rj-fluminense': { bgPage: 'background-color: #701a28; background-image: linear-gradient(90deg, #15803d 0%, #15803d 45%, #ffffff 45%, #ffffff 55%, #701a28 55%); background-size: 40px 100%;', cardBg: 'background-color: #ffffff; border: 2px solid #15803d; color: #701a28;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #701a28;', defaultMonthColor: '#ffffff', defaultBackcoverColor: '#ffffff', defaultCoverTitleColor: '#ffffff', defaultCoverSubtitleColor: '#ffffff' },
-      'rj-botafogo': { bgPage: 'background-color: #ffffff; background-image: linear-gradient(90deg, #000000 50%, transparent 50%); background-size: 30px 100%;', cardBg: 'background-color: #ffffff; border: 3px solid #000000; color: #000000;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #000000;', defaultMonthColor: '#000000', defaultBackcoverColor: '#000000', defaultCoverTitleColor: '#000000', defaultCoverSubtitleColor: '#000000' },
-      'mg-atletico': { bgPage: 'background-color: #171717; background-image: linear-gradient(90deg, #ffffff 50%, transparent 50%); background-size: 40px 100%;', cardBg: 'background-color: #ffffff; border: 2px solid #000000; color: #000000;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #000000;', defaultMonthColor: '#ffffff', defaultBackcoverColor: '#ffffff', defaultCoverTitleColor: '#ffffff', defaultCoverSubtitleColor: '#ffffff' },
-      'mg-cruzeiro': { bgPage: 'background-color: #1d4ed8; background-image: radial-gradient(rgba(255,255,255,0.1) 1px, transparent 0); background-size: 10px 10px;', cardBg: 'background-color: #ffffff; border: 2px solid #1d4ed8; color: #1d4ed8;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #1d4ed8;', defaultMonthColor: '#ffffff', defaultBackcoverColor: '#ffffff', defaultCoverTitleColor: '#ffffff', defaultCoverSubtitleColor: '#ffffff' },
-      'pr-athletico': { bgPage: 'background-color: #991b1b; background-image: linear-gradient(-45deg, #000000 25%, transparent 25%); background-size: 40px 40px;', cardBg: 'background-color: #ffffff; border: 2px solid #000000; color: #000000;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #000000;', defaultMonthColor: '#ffffff', defaultBackcoverColor: '#ffffff', defaultCoverTitleColor: '#ffffff', defaultCoverSubtitleColor: '#ffffff' },
-      'pr-coritiba': { bgPage: 'background-color: #ffffff; background-image: linear-gradient(180deg, #166534 20px, transparent 20px);', cardBg: 'background-color: #ffffff; border: 3px solid #166534; color: #166534;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #166534;', defaultMonthColor: '#ffffff', defaultBackcoverColor: '#ffffff', defaultCoverTitleColor: '#ffffff', defaultCoverSubtitleColor: '#ffffff' }
-    };
-
-    const FORMATS = {
-      'a4-portrait': { w: 735, h: 1040, albumH: 540, gridH: 340, pdfFormat: 'a4', pdfOrientation: 'portrait' },
-      'a4-landscape': { w: 1040, h: 735, albumH: 280, gridH: 310, pdfFormat: 'a4', pdfOrientation: 'landscape' },
-      'a5-portrait': { w: 520, h: 740, albumH: 340, gridH: 260, pdfFormat: 'a5', pdfOrientation: 'portrait' },
-      'a5-landscape': { w: 740, h: 520, albumH: 200, gridH: 200, pdfFormat: 'a5', pdfOrientation: 'landscape' },
-      'quadrado-20': { w: 680, h: 680, albumH: 340, gridH: 250, pdfFormat: [200, 200], pdfOrientation: 'portrait' }
-    };
-
-    var state = {
+// ========== ESTADO GLOBAL ==========
+    const state = {
       format: 'a4-portrait',
-      bindingStyle: 'parede',
+      productMode: 'espiral-esquerda',
       activeTab: 'cover',
       titleText: "Nossas Memórias",
       subtitleText: "Volume I",
       footerText: "RSP calendar album studio",
       yearText: "2027",
       globalFont: "font-typewriter",
-      globalTheme: "sp-sao-paulo",
-      customBackground: null,
+      globalTheme: "minimal",
       monthFont: "font-typewriter",
-      monthCustomColor: "#ffffff",
-      backcoverCustomColor: "#ffffff",
-      coverTitleCustomColor: "#ffffff",
-      coverSubtitleCustomColor: "#ffffff",
-      giftMessage: "Para a pessoa mais especial! Com muito amor.",
+      monthCustomColor: null,
       cover: { photo: null, frameStyle: 'moldura-classica', activeSticker: null, layoutMode: 'landscape' },
       months: [
-        { name: "Janeiro", photo: null, caption: "Janeiro Encantado", journalText: "Uma história linda registrada no decorrer de Janeiro...", frameStyle: 'moldura-classica', activeSticker: null, layoutMode: 'portrait' },
-        { name: "Fevereiro", photo: null, caption: "Momentos de Fevereiro", journalText: "Uma história linda registrada no decorrer de Fevereiro...", frameStyle: 'moldura-classica', activeSticker: null, layoutMode: 'portrait' },
-        { name: "Março", photo: null, caption: "Caminhos de Março", journalText: "Uma história linda registrada no decorrer de Março...", frameStyle: 'moldura-classica', activeSticker: null, layoutMode: 'portrait' },
-        { name: "Abril", photo: null, caption: "Lembranças de Abril", journalText: "Uma história linda registrada no decorrer de Abril...", frameStyle: 'moldura-classica', activeSticker: null, layoutMode: 'portrait' },
-        { name: "Maio", photo: null, caption: "Nossa História em Maio", journalText: "Nossa caminhada linda registrada no decorrer de Maio...", frameStyle: 'moldura-classica', activeSticker: null, layoutMode: 'portrait' },
-        { name: "Junho", photo: null, caption: "Registros de Junho", journalText: "Uma história linda registrada no decorrer de Junho...", frameStyle: 'moldura-classica', activeSticker: null, layoutMode: 'portrait' },
-        { name: "Julho", photo: null, caption: "Julho Inesquecível", journalText: "Uma história linda registrada no decorrer de Julho...", frameStyle: 'moldura-classica', activeSticker: null, layoutMode: 'portrait' },
-        { name: "Agosto", photo: null, caption: "Dias de Agosto", journalText: "Uma história linda registrada no decorrer de Agosto...", frameStyle: 'moldura-classica', activeSticker: null, layoutMode: 'portrait' },
-        { name: "Setembro", photo: null, caption: "Estações de Setembro", journalText: "Uma história linda registrada no decorrer de Setembro...", frameStyle: 'moldura-classica', activeSticker: null, layoutMode: 'portrait' },
-        { name: "Outubro", photo: null, caption: "Doce Outubro", journalText: "Uma história linda registrada no decorrer de Outubro...", frameStyle: 'moldura-classica', activeSticker: null, layoutMode: 'portrait' },
-        { name: "Novembro", photo: null, caption: "Novembro Azul", journalText: "Uma história linda registrada no decorrer de Novembro...", frameStyle: 'moldura-classica', activeSticker: null, layoutMode: 'portrait' },
-        { name: "Dezembro", photo: null, caption: "Fim de Ano Feliz", journalText: "Uma história linda registrada no decorrer de Dezembro...", frameStyle: 'moldura-classica', activeSticker: null, layoutMode: 'portrait' }
+        { name: "Janeiro", photo: null, caption: "Janeiro Encantado", journalText: "Uma história linda registrada no decorrer de Janeiro...", frameStyle: 'moldura-classica', activeSticker: null, layoutMode: 'landscape' },
+        { name: "Fevereiro", photo: null, caption: "Momentos de Fevereiro", journalText: "Uma história linda registrada no decorrer de Fevereiro...", frameStyle: 'moldura-classica', activeSticker: null, layoutMode: 'landscape' },
+        { name: "Março", photo: null, caption: "Caminhos de Março", journalText: "Uma história linda registrada no decorrer de Março...", frameStyle: 'moldura-classica', activeSticker: null, layoutMode: 'landscape' },
+        { name: "Abril", photo: null, caption: "Lembranças de Abril", journalText: "Uma história linda registrada no decorrer de Abril...", frameStyle: 'moldura-classica', activeSticker: null, layoutMode: 'landscape' },
+        { name: "Maio", photo: null, caption: "Nossa História em Maio", journalText: "Nossa caminhada linda registrada no decorrer de Maio...", frameStyle: 'moldura-classica', activeSticker: null, layoutMode: 'landscape' },
+        { name: "Junho", photo: null, caption: "Registros de Junho", journalText: "Uma história linda registrada no decorrer de Junho...", frameStyle: 'moldura-classica', activeSticker: null, layoutMode: 'landscape' },
+        { name: "Julho", photo: null, caption: "Julho Inesquecível", journalText: "Uma história linda registrada no decorrer de Julho...", frameStyle: 'moldura-classica', activeSticker: null, layoutMode: 'landscape' },
+        { name: "Agosto", photo: null, caption: "Dias de Agosto", journalText: "Uma história linda registrada no decorrer de Agosto...", frameStyle: 'moldura-classica', activeSticker: null, layoutMode: 'landscape' },
+        { name: "Setembro", photo: null, caption: "Estações de Setembro", journalText: "Uma história linda registrada no decorrer de Setembro...", frameStyle: 'moldura-classica', activeSticker: null, layoutMode: 'landscape' },
+        { name: "Outubro", photo: null, caption: "Doce Outubro", journalText: "Uma história linda registrada no decorrer de Outubro...", frameStyle: 'moldura-classica', activeSticker: null, layoutMode: 'landscape' },
+        { name: "Novembro", photo: null, caption: "Novembro Azul", journalText: "Uma história linda registrada no decorrer de Novembro...", frameStyle: 'moldura-classica', activeSticker: null, layoutMode: 'landscape' },
+        { name: "Dezembro", photo: null, caption: "Fim de Ano Feliz", journalText: "Uma história linda registrada no decorrer de Dezembro...", frameStyle: 'moldura-classica', activeSticker: null, layoutMode: 'landscape' }
       ]
     };
 
+    // ========== TEMAS ==========
+    const THEMES = {
+      'minimal': { bgPage: 'background-color: #f5efdc; background-image: radial-gradient(rgba(0,0,0,0.02) 1px, transparent 0); background-size: 4px 4px;', cardBg: 'background-color: #ffffff; color: #1c1917;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #44403c;', defaultMonthColor: '#1c1917' },
+      'kraft': { bgPage: 'background-color: #e8d5b5; background-image: radial-gradient(rgba(0,0,0,0.04) 1px, transparent 0); background-size: 3px 3px;', cardBg: 'background-color: #fdf6e3; color: #5c4b2e; border: 1px solid #d4c5a0;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #fdf6e3; color: #5c4b2e; border-color: #d4c5a0;', defaultMonthColor: '#5c4b2e' },
+      'linen': { bgPage: 'background-color: #faf8f5; background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.01) 2px, rgba(0,0,0,0.01) 4px);', cardBg: 'background-color: #ffffff; color: #44403c;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #44403c;', defaultMonthColor: '#44403c' },
+      'dark-cinema': { bgPage: 'background-color: #1a1a1a; background-image: linear-gradient(rgba(255,255,255,0.01) 1px, transparent 1px);', cardBg: 'background-color: #111111; border: 1px solid #333333; color: #ffffff;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #262626; color: #f5f5f4; border-color: #404040;', defaultMonthColor: '#ffffff' },
+      'love-romantic': { bgPage: 'background-color: #ffe4e6; background-image: radial-gradient(#fda4af 1px, transparent 0); background-size: 12px 12px;', cardBg: 'background-color: #ffffff; color: #9f1239;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #4c0519;', defaultMonthColor: '#9f1239' },
+      'jardim': { bgPage: 'background-color: #f0fdf4; background-image: radial-gradient(#bbf7d0 1px, transparent 0); background-size: 10px 10px;', cardBg: 'background-color: #ffffff; color: #166534;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #f0fdf4; color: #166534;', defaultMonthColor: '#166534' },
+      'oceano': { bgPage: 'background-color: #f0f9ff; background-image: radial-gradient(#bae6fd 1px, transparent 0); background-size: 8px 8px;', cardBg: 'background-color: #ffffff; color: #0c4a6e;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #f0f9ff; color: #0c4a6e;', defaultMonthColor: '#0c4a6e' },
+      'sunset': { bgPage: 'background-color: #fef3c7; background-image: linear-gradient(180deg, #fef3c7 0%, #fed7aa 50%, #fbcfe8 100%);', cardBg: 'background-color: #ffffff; color: #92400e;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #fffbeb; color: #92400e;', defaultMonthColor: '#92400e' },
+      'lavanda': { bgPage: 'background-color: #f5f3ff; background-image: radial-gradient(#ddd6fe 1px, transparent 0); background-size: 10px 10px;', cardBg: 'background-color: #ffffff; color: #5b21b6;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #f5f3ff; color: #5b21b6;', defaultMonthColor: '#5b21b6' },
+      'sp-sao-paulo': { bgPage: 'background-color: #ffffff; background-image: linear-gradient(90deg, #dc2626 33%, #171717 33%, #171717 66%, #ffffff 66%); background-size: 100% 8px;', cardBg: 'background-color: #ffffff; border: 2px solid #dc2626; color: #000000;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #000000;', defaultMonthColor: '#ffffff' },
+      'sp-corinthians': { bgPage: 'background-color: #262626; background-image: linear-gradient(180deg, #000000 0%, #171717 100%);', cardBg: 'background-color: #ffffff; color: #000000;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #000000;', defaultMonthColor: '#ffffff' },
+      'sp-palmeiras': { bgPage: 'background-color: #14532d; background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 0); background-size: 6px 6px;', cardBg: 'background-color: #ffffff; border: 1px solid #166534; color: #14532d;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #f0fdf4; color: #166534;', defaultMonthColor: '#ffffff' },
+      'sp-santos': { bgPage: 'background-color: #f5f5f5; background-image: linear-gradient(90deg, #000000 1px, transparent 1px); background-size: 20px 20px;', cardBg: 'background-color: #ffffff; border: 2px solid #000000; color: #000000;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #000000;', defaultMonthColor: '#000000' },
+      'rj-flamengo': { bgPage: 'background-color: #b91c1c; background-image: linear-gradient(180deg, #000000 50%, transparent 50%); background-size: 100% 40px;', cardBg: 'background-color: #ffffff; border: 3px solid #b91c1c; color: #000000;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #000000;', defaultMonthColor: '#ffffff' },
+      'rj-vasco': { bgPage: 'background-color: #171717; background-image: linear-gradient(45deg, #ffffff 25%, transparent 25%); background-size: 30px 30px;', cardBg: 'background-color: #ffffff; border: 2px solid #000000; color: #000000;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #000000;', defaultMonthColor: '#ffffff' },
+      'rj-fluminense': { bgPage: 'background-color: #701a28; background-image: linear-gradient(90deg, #15803d 0%, #15803d 45%, #ffffff 45%, #ffffff 55%, #701a28 55%); background-size: 40px 100%;', cardBg: 'background-color: #ffffff; border: 2px solid #15803d; color: #701a28;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #701a28;', defaultMonthColor: '#ffffff' },
+      'rj-botafogo': { bgPage: 'background-color: #ffffff; background-image: linear-gradient(90deg, #000000 50%, transparent 50%); background-size: 30px 100%;', cardBg: 'background-color: #ffffff; border: 3px solid #000000; color: #000000;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #000000;', defaultMonthColor: '#000000' },
+      'mg-atletico': { bgPage: 'background-color: #171717; background-image: linear-gradient(90deg, #ffffff 50%, transparent 50%); background-size: 40px 100%;', cardBg: 'background-color: #ffffff; border: 2px solid #000000; color: #000000;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #000000;', defaultMonthColor: '#ffffff' },
+      'mg-cruzeiro': { bgPage: 'background-color: #1d4ed8; background-image: radial-gradient(rgba(255,255,255,0.1) 1px, transparent 0); background-size: 10px 10px;', cardBg: 'background-color: #ffffff; border: 2px solid #1d4ed8; color: #1d4ed8;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #1d4ed8;', defaultMonthColor: '#ffffff' },
+      'pr-athletico': { bgPage: 'background-color: #991b1b; background-image: linear-gradient(-45deg, #000000 25%, transparent 25%); background-size: 40px 40px;', cardBg: 'background-color: #ffffff; border: 2px solid #000000; color: #000000;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #000000;', defaultMonthColor: '#ffffff' },
+      'pr-coritiba': { bgPage: 'background-color: #ffffff; background-image: linear-gradient(180deg, #166534 20px, transparent 20px);', cardBg: 'background-color: #ffffff; border: 3px solid #166534; color: #166534;', calendarHeader: 'color: #ffffff;', dayBg: 'background-color: #ffffff; color: #166534;', defaultMonthColor: '#ffffff' }
+    };
+
+    // ========== FORMATOS ==========
+    const FORMATS = {
+      'a4-portrait': { w: 735, h: 1040, albumH: 320, gridH: 280, pdfFormat: 'a4', pdfOrientation: 'portrait' },
+      'a4-landscape': { w: 1040, h: 735, albumH: 300, gridH: 250, pdfFormat: 'a4', pdfOrientation: 'landscape' },
+      'a5-portrait': { w: 520, h: 740, albumH: 230, gridH: 200, pdfFormat: 'a5', pdfOrientation: 'portrait' },
+      'a5-landscape': { w: 740, h: 520, albumH: 200, gridH: 170, pdfFormat: 'a5', pdfOrientation: 'landscape' },
+      'quadrado-20': { w: 680, h: 680, albumH: 280, gridH: 260, pdfFormat: [200, 200], pdfOrientation: 'portrait' }
+    };
+
+    // ========== DESCRIÇÕES DE LAYOUT ==========
+    const LAYOUT_DESCRIPTIONS = {
+      'espiral-esquerda': 'Espiral na margem esquerda para cadernos e álbuns. Permite abrir como livro.',
+      'espiral-topo': 'Espiral na parte superior. Ideal para calendários de parede pendurados.',
+      'piramide': 'Furos no topo para encaixe em suporte piramidal de mesa. Acabamento premium exclusivo.',
+      'mesa': 'Suporte triangulado V-Fold. Dobre nas linhas de vinco para criar base de apoio.',
+      'parede': 'Furo central no topo para pendurar na parede com prego ou gancho.',
+      'sem-acabamento': 'Folhas avulsas sem encadernação. Para encadernação posterior em gráfica.'
+    };
+
+    // ========== FUNÇÕES AUXILIARES ==========
     function getMonthGridArray(year, monthIndex) {
       const firstDay = new Date(year, monthIndex, 1).getDay();
       const totalDays = new Date(year, monthIndex + 1, 0).getDate();
@@ -571,147 +638,86 @@
       return cells;
     }
 
-    function updateBackcoverButtonText() {
-      const btn = document.getElementById('btn-tab-backcover');
-      if (btn) {
-        const nextYear = (parseInt(state.yearText) || 2027) + 1;
-        btn.innerText = `Contracapa (${nextYear})`;
-      }
-    }
-
-    function adjustCanvasScale() {
-      const mainEl = document.getElementById('main-area');
-      const wrapper = document.getElementById('canvas-wrapper');
-      const canvasEl = document.getElementById('render-canvas');
-      if(!mainEl || !wrapper || !canvasEl) return;
-      
-      const fConfig = FORMATS[state.format];
-      let availableWidth = mainEl.clientWidth - 32;
-      let scale = 1;
-
-      // Se for Web App Digital (Tela Cheia), escala verticalmente também
-      if (window.isDigitalViewer) {
-          availableWidth = window.innerWidth;
-          const availableHeight = window.innerHeight - 80;
-          const scaleW = availableWidth / fConfig.w;
-          const scaleH = availableHeight / fConfig.h;
-          scale = Math.min(scaleW, scaleH) * 0.95;
-      } else if (availableWidth < fConfig.w) {
-          scale = availableWidth / fConfig.w;
-      }
-      
-      wrapper.style.transform = `scale(${scale})`;
-      wrapper.style.height = `${fConfig.h * scale}px`;
-    }
-
-    window.addEventListener('resize', adjustCanvasScale);
-
+    // ========== INICIALIZAÇÃO ==========
     window.addEventListener('DOMContentLoaded', () => {
-      if(!window.isDigitalViewer) {
-        updateBackcoverButtonText();
-        renderActivePanelControls();
-        renderCanvas();
-      }
+      renderActivePanelControls();
+      renderCanvas();
+      updateInfobar();
     });
 
-    function toggleMobileMenu() {
-      const sidebar = document.getElementById('sidebar-menu');
-      const overlay = document.getElementById('mobile-overlay');
-      if(!sidebar || !overlay) return;
-      sidebar.classList.toggle('-translate-x-full');
-      overlay.classList.toggle('hidden');
+    // ========== NAVEGAÇÃO ENTRE SEÇÕES ==========
+    function showSection(section) {
+      document.getElementById('section-design').classList.add('hidden');
+      document.getElementById('section-layout').classList.add('hidden');
+      document.getElementById('section-ajuda').classList.add('hidden');
+      document.getElementById('nav-design').classList.remove('bg-emerald-100','text-emerald-800','border-emerald-200');
+      document.getElementById('nav-design').classList.add('bg-stone-100','text-stone-600','border-stone-200');
+      document.getElementById('nav-layout').classList.remove('bg-emerald-100','text-emerald-800','border-emerald-200');
+      document.getElementById('nav-layout').classList.add('bg-stone-100','text-stone-600','border-stone-200');
+      document.getElementById('nav-ajuda').classList.remove('bg-amber-100','text-amber-800','border-amber-200');
+      document.getElementById('nav-ajuda').classList.add('bg-stone-100','text-stone-600','border-stone-200');
+      
+      document.getElementById('section-' + section).classList.remove('hidden');
+      if (section === 'design') {
+        document.getElementById('nav-design').classList.remove('bg-stone-100','text-stone-600','border-stone-200');
+        document.getElementById('nav-design').classList.add('bg-emerald-100','text-emerald-800','border-emerald-200');
+      } else if (section === 'layout') {
+        document.getElementById('nav-layout').classList.remove('bg-stone-100','text-stone-600','border-stone-200');
+        document.getElementById('nav-layout').classList.add('bg-emerald-100','text-emerald-800','border-emerald-200');
+      } else if (section === 'ajuda') {
+        document.getElementById('nav-ajuda').classList.remove('bg-stone-100','text-stone-600','border-stone-200');
+        document.getElementById('nav-ajuda').classList.add('bg-amber-100','text-amber-800','border-amber-200');
+      }
     }
 
-    function toggleGabaritoModal() {
-      const modal = document.getElementById('gabarito-modal');
-      if(modal) modal.classList.toggle('hidden');
-    }
-    
-    function toggleManualModal() {
-      const modal = document.getElementById('manual-modal');
-      if(modal) modal.classList.toggle('hidden');
-    }
-
+    // ========== FUNÇÕES DE ALTERAÇÃO ==========
     function switchTab(target) {
-      if (target !== 'cover' && target !== 'backcover') {
+      if (target !== 'cover' && target !== 'base') {
         state.activeTab = parseInt(target);
-        if(!window.isDigitalViewer){
-          document.getElementById('select-frame').value = state.months[state.activeTab].frameStyle;
-          document.getElementById('select-photo-orientation').value = state.months[state.activeTab].layoutMode;
-        }
+        document.getElementById('select-frame').value = state.months[state.activeTab].frameStyle;
+        document.getElementById('select-photo-orientation').value = state.months[state.activeTab].layoutMode;
       } else {
         state.activeTab = target;
-        if (target === 'cover' && !window.isDigitalViewer) {
+        if (target === 'cover') {
           document.getElementById('select-frame').value = state.cover.frameStyle;
           document.getElementById('select-photo-orientation').value = state.cover.layoutMode;
         }
       }
-      if(!window.isDigitalViewer) renderActivePanelControls();
+      renderActivePanelControls();
       renderCanvas();
+      updateInfobar();
     }
 
-    function changeProjectYear(val) { 
-      state.yearText = val; 
-      updateBackcoverButtonText();
-      renderCanvas(); 
-    }
-    function changeProjectFormat(val) { state.format = val; renderCanvas(); }
-    function changeBindingStyle(val) { state.bindingStyle = val; renderCanvas(); }
-    
+    function changeProjectFormat(val) { state.format = val; renderCanvas(); updateInfobar(); }
+    function changeProductMode(val) { state.productMode = val; renderCanvas(); updateInfobar(); updateLayoutDesc(); }
     function applyTheme(val) { 
-      state.globalTheme = val;
-      const bgContainer = document.getElementById('custom-bg-container');
-      
-      if (val === 'custom-image') {
-        if(bgContainer) bgContainer.classList.remove('hidden');
-      } else {
-        if(bgContainer) bgContainer.classList.add('hidden');
-        state.monthCustomColor = THEMES[val].defaultMonthColor;
-        state.backcoverCustomColor = THEMES[val].defaultBackcoverColor;
-        state.coverTitleCustomColor = THEMES[val].defaultCoverTitleColor;
-        state.coverSubtitleCustomColor = THEMES[val].defaultCoverSubtitleColor;
-        
-        document.getElementById('input-month-color').value = state.monthCustomColor;
-        document.getElementById('input-backcover-color').value = state.backcoverCustomColor;
-        document.getElementById('input-cover-title-color').value = state.coverTitleCustomColor;
-        document.getElementById('input-cover-subtitle-color').value = state.coverSubtitleCustomColor;
-      }
+      state.globalTheme = val; 
+      state.monthCustomColor = THEMES[val].defaultMonthColor;
+      document.getElementById('input-month-color').value = state.monthCustomColor;
+      document.getElementById('txt-month-color-hex').innerText = state.monthCustomColor;
       renderCanvas(); 
     }
-
-    function uploadCustomBackground(input) {
-      if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          state.customBackground = e.target.result;
-          renderCanvas();
-        };
-        reader.readAsDataURL(input.files[0]);
-      }
-    }
-    
     function changeGlobalFont(val) { state.globalFont = val; renderCanvas(); }
     function changeMonthFont(val) { state.monthFont = val; renderCanvas(); }
-    function changeMonthColor(val) { state.monthCustomColor = val; renderCanvas(); }
-    function changeBackcoverColor(val) { state.backcoverCustomColor = val; renderCanvas(); }
-    function changeCoverTitleColor(val) { state.coverTitleCustomColor = val; renderCanvas(); }
-    function changeCoverSubtitleColor(val) { state.coverSubtitleCustomColor = val; renderCanvas(); }
-    
+    function changeMonthColor(val) { 
+      state.monthCustomColor = val; 
+      document.getElementById('txt-month-color-hex').innerText = val;
+      renderCanvas(); 
+    }
     function changeFrameStyle(val) {
       if (state.activeTab === 'cover') state.cover.frameStyle = val;
-      else if (state.activeTab !== 'backcover') state.months[state.activeTab].frameStyle = val;
-      renderCanvas();
+      else if (state.activeTab !== 'base') state.months[state.activeTab].frameStyle = val;
+      renderCanvas(); updateInfobar();
     }
-
     function changePhotoOrientation(val) {
       if (state.activeTab === 'cover') state.cover.layoutMode = val;
-      else if (state.activeTab !== 'backcover') state.months[state.activeTab].layoutMode = val;
-      renderCanvas();
+      else if (state.activeTab !== 'base') state.months[state.activeTab].layoutMode = val;
+      renderCanvas(); updateInfobar();
     }
 
     function addSticker(stickerStr) {
       if (state.activeTab === 'cover') state.cover.activeSticker = { type: 'emoji', value: stickerStr };
-      else if (state.activeTab !== 'backcover') state.months[state.activeTab].activeSticker = { type: 'emoji', value: stickerStr };
+      else if (state.activeTab !== 'base') state.months[state.activeTab].activeSticker = { type: 'emoji', value: stickerStr };
       renderCanvas();
     }
 
@@ -720,7 +726,7 @@
         const reader = new FileReader();
         reader.onload = (e) => {
           if (state.activeTab === 'cover') state.cover.activeSticker = { type: 'image', value: e.target.result };
-          else if (state.activeTab !== 'backcover') state.months[state.activeTab].activeSticker = { type: 'image', value: e.target.result };
+          else if (state.activeTab !== 'base') state.months[state.activeTab].activeSticker = { type: 'image', value: e.target.result };
           renderCanvas();
         };
         reader.readAsDataURL(input.files[0]);
@@ -729,7 +735,7 @@
 
     function removeSticker() {
       if (state.activeTab === 'cover') state.cover.activeSticker = null;
-      else if (state.activeTab !== 'backcover') state.months[state.activeTab].activeSticker = null;
+      else if (state.activeTab !== 'base') state.months[state.activeTab].activeSticker = null;
       renderCanvas();
     }
 
@@ -738,108 +744,39 @@
         const reader = new FileReader();
         reader.onload = (e) => {
           if (state.activeTab === 'cover') state.cover.photo = e.target.result;
-          else if (state.activeTab !== 'backcover') state.months[state.activeTab].photo = e.target.result;
+          else state.months[state.activeTab].photo = e.target.result;
           renderCanvas();
         };
         reader.readAsDataURL(input.files[0]);
       }
     }
 
-    let currentQrUrl = "";
-    function generateQRCode() {
-      const val = document.getElementById('qr-input').value;
-      if (!val) { alert("Digite um texto ou link válido!"); return; }
+    function updateInfobar() {
+      const fNames = { 'a4-portrait': 'A4 Retrato', 'a4-landscape': 'A4 Paisagem', 'a5-portrait': 'A5 Retrato', 'a5-landscape': 'A5 Paisagem', 'quadrado-20': 'Quadrado 20cm' };
+      const tabNames = { 'cover': 'Capa', 'base': 'Base/Gabarito' };
+      const frameNames = { 'moldura-classica': 'Clássica', 'moldura-polaroid-real': 'Polaroid Real', 'moldura-larga': 'Larga', 'moldura-quadrada': 'Quadrada', 'moldura-kraft': 'Kraft', 'moldura-vintage': 'Vintage', 'moldura-sepia': 'Sépia', 'moldura-noir': 'Noir', 'moldura-80s': 'Anos 80', 'moldura-fita-crepe': 'Fita Crepe', 'moldura-carimbo': 'Carimbo', 'moldura-recortada': 'Recortada', 'moldura-filme': 'Filme', 'moldura-dupla': 'Dupla', 'moldura-arredondada': 'Arredondada', 'moldura-rasgada': 'Rasgada', 'moldura-neon': 'Neon', 'moldura-pastel': 'Pastel', 'moldura-camara-escura': 'Câmara Escura', 'moldura-dourada': 'Dourada', 'moldura-instantanea': 'Instantânea', 'moldura-minimal': 'Minimal', 'moldura-acquerello': 'Acquerello', 'moldura-bordada': 'Bordada', 'moldura-holografica': 'Holográfica' };
       
-      currentQrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${encodeURIComponent(val)}`;
-      document.getElementById('qr-preview-img').src = currentQrUrl;
-      document.getElementById('qr-preview-container').classList.remove('hidden');
-    }
-
-    function addQrToLayout() {
-      if(!currentQrUrl) return;
-      if (state.activeTab === 'cover') {
-        state.cover.activeSticker = { type: 'image', value: currentQrUrl };
-      } else if (state.activeTab !== 'backcover' && state.activeTab !== 'base') {
-        state.months[state.activeTab].activeSticker = { type: 'image', value: currentQrUrl };
-      }
-      renderCanvas();
-      if(window.innerWidth < 768) toggleMobileMenu();
-    }
-
-    async function downloadQrCode() {
-      if(!currentQrUrl) return;
-      try {
-        const response = await fetch(currentQrUrl);
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.style.display = 'none';
-        a.href = url;
-        a.download = 'QR_Code_Presente.png';
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(url);
-      } catch(e) {
-        const a = document.createElement('a');
-        a.href = currentQrUrl;
-        a.download = 'QR_Code_Presente.png';
-        a.target = '_blank';
-        a.click();
-      }
-    }
-
-    function playGiftAnimation() {
-      const overlay = document.getElementById('gift-overlay');
-      const box = document.getElementById('gift-box');
-      const content = document.getElementById('gift-content');
-      const photo = document.getElementById('gift-photo');
-      const msg = document.getElementById('gift-message-text');
-
-      photo.src = state.cover.photo || 'https://via.placeholder.com/300x300?text=Sua+Foto+Aqui';
-      msg.innerText = state.giftMessage || "Para a pessoa mais especial! Com muito amor.";
-      msg.className = `text-stone-800 text-xl md:text-2xl font-bold px-4 leading-snug pb-2 mt-2 ${state.globalFont}`;
-
-      overlay.classList.remove('hidden');
-      box.classList.remove('hidden');
-      content.classList.add('hidden', 'opacity-0', 'translate-y-10');
+      let tabName = state.activeTab === 'cover' ? 'Capa' : (state.activeTab === 'base' ? 'Base' : state.months[state.activeTab].name);
+      let frameName = state.activeTab === 'cover' ? frameNames[state.cover.frameStyle] : (state.activeTab !== 'base' ? frameNames[state.months[state.activeTab].frameStyle] : '');
+      let formatName = fNames[state.format] || state.format;
+      let modeName = LAYOUT_DESCRIPTIONS[state.productMode] ? state.productMode.replace('espiral-esquerda','Espiral Esq.').replace('espiral-topo','Espiral Topo').replace('piramide','Pirâmide').replace('mesa','Mesa').replace('parede','Parede').replace('sem-acabamento','Avulso') : '';
       
-      setTimeout(() => {
-        overlay.classList.remove('opacity-0');
-        overlay.classList.add('opacity-100');
-      }, 50);
-      
-      if(window.innerWidth < 768 && !window.isDigitalViewer) toggleMobileMenu();
+
     }
 
-    function openGift() {
-      const box = document.getElementById('gift-box');
-      const content = document.getElementById('gift-content');
-      
-      box.classList.add('hidden');
-      content.classList.remove('hidden');
-      void content.offsetWidth;
-      content.classList.remove('opacity-0', 'translate-y-10');
-      content.classList.add('opacity-100', 'translate-y-0', 'animate-present-pop');
+    function updateLayoutDesc() {
+      document.getElementById('layout-desc').textContent = LAYOUT_DESCRIPTIONS[state.productMode] || '';
     }
 
-    function closeGift() {
-      const overlay = document.getElementById('gift-overlay');
-      overlay.classList.remove('opacity-100');
-      overlay.classList.add('opacity-0');
-      setTimeout(() => {
-        overlay.classList.add('hidden');
-      }, 1000);
-    }
-
+    // ========== PAINEL DE EDIÇÃO ==========
     function renderActivePanelControls() {
       const panel = document.getElementById('editor-panel');
       if (!panel) return;
-
-      if (state.activeTab === 'backcover') {
-        const nextYear = (parseInt(state.yearText) || 2027) + 1;
+      
+      if (state.activeTab === 'base') {
         panel.innerHTML = `
-          <h3 class="font-mono text-xs text-indigo-700 font-bold mb-1">Contracapa (${nextYear})</h3>
-          <p class="text-[10px] text-stone-500 font-mono">Visão geral do ano de ${nextYear} para fechar o calendário com chave de ouro.</p>`;
+          <h3 class="font-mono text-xs text-amber-700 font-bold mb-1">Gabarito de Montagem da Base</h3>
+          <p class="text-[10px] text-stone-500 font-mono">Gabarito proporcional para corte e vinco da base dura/suporte pirâmide com dobra V-Fold.</p>`;
         return;
       }
 
@@ -854,6 +791,10 @@
             <div>
               <label class="text-stone-500 block">Subtítulo / Volume</label>
               <input type="text" value="${state.subtitleText}" oninput="state.subtitleText = this.value; renderCanvas();" class="w-full px-2 py-1 rounded border text-xs">
+            </div>
+            <div>
+              <label class="text-stone-500 block">Ano</label>
+              <input type="text" value="${state.yearText}" oninput="state.yearText = this.value; renderCanvas();" class="w-full px-2 py-1 rounded border text-xs">
             </div>
             <div>
               <label class="text-stone-500 block">Frase do Rodapé</label>
@@ -885,317 +826,276 @@
       }
     }
 
+    // ========== RENDERIZAÇÃO DO CANVAS ==========
     function generatePageHtml(tab, fConfig) {
-      let theme = {};
-      
-      if (state.globalTheme === 'custom-image') {
-        const bgImg = state.customBackground ? `url('${state.customBackground}')` : 'none';
-        theme = {
-          bgPage: `background-color: #ffffff; background-image: ${bgImg}; background-size: cover; background-position: center;`,
-          cardBg: 'background-color: rgba(255,255,255,0.85); color: #1c1917;',
-          calendarHeader: 'color: #1c1917;',
-          dayBg: 'background-color: rgba(255,255,255,0.8); color: #1c1917;',
-          defaultMonthColor: '#1c1917',
-          defaultBackcoverColor: '#1c1917',
-          defaultCoverTitleColor: '#1c1917',
-          defaultCoverSubtitleColor: '#1c1917'
-        };
-      } else {
-        theme = THEMES[state.globalTheme];
-      }
-      
+      const theme = THEMES[state.globalTheme];
       const isSheetLandscape = fConfig.pdfOrientation === 'landscape';
       let currentMonthColor = state.monthCustomColor ? state.monthCustomColor : theme.defaultMonthColor;
 
-      let leftMarginPadding = 'padding-left: 20px; padding-right: 20px;';
-      let topPaddingStyle = 'padding-top: 15px;';
-      let leftSpiralHtml = "";
-      let topSpiralHtml = "";
-      let wallHangerHtml = "";
-
-      if (state.bindingStyle === 'espiral-esquerda') {
-        leftMarginPadding = 'padding-left: 65px; padding-right: 20px;';
+      // ========== MARGENS DE ENCADERNAÇÃO ==========
+      let bindingHtml = "";
+      const mode = state.productMode;
+      
+      if (mode === 'espiral-esquerda') {
         let holes = "";
         for (let i = 0; i < 22; i++) { holes += `<div class="ilhos-metal"></div>`; }
-        leftSpiralHtml = `<div class="preview-ilhos-esquerda">${holes}</div>`;
-      } else if (state.bindingStyle === 'espiral-topo' || state.bindingStyle === 'piramide-topo') {
-        topPaddingStyle = 'padding-top: 50px;';
+        bindingHtml = `<div class="preview-ilhos-esquerda">${holes}</div>`;
+      } else if (mode === 'espiral-topo') {
         let holes = "";
-        for (let i = 0; i < 16; i++) { holes += `<div class="ilhos-metal"></div>`; }
-        topSpiralHtml = `<div class="preview-ilhos-topo">${holes}</div>`;
-      } else if (state.bindingStyle === 'parede') {
-        topPaddingStyle = 'padding-top: 40px;';
-        wallHangerHtml = `
-          <div class="absolute top-3 left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none z-20">
-            <div class="w-5 h-5 rounded-full border-4 border-amber-600 bg-stone-300 shadow-inner"></div>
-          </div>`;
-      } else if (state.bindingStyle === 'folhinha') {
-        topPaddingStyle = 'padding-top: 40px;';
-        wallHangerHtml = `
-          <div class="absolute top-3 left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none z-20">
-            <div class="w-5 h-5 rounded-full border-4 border-amber-600 bg-stone-300 shadow-inner"></div>
-          </div>`;
+        for (let i = 0; i < 28; i++) { holes += `<div class="ilhos-topo-metal"></div>`; }
+        bindingHtml = `<div class="preview-ilhos-topo">${holes}</div>`;
+      } else if (mode === 'piramide') {
+        let furos = "";
+        for (let i = 0; i < 22; i++) { furos += `<div class="piramide-furo"></div>`; }
+        bindingHtml = `<div class="preview-piramide-topo">${furos}</div>`;
+      } else if (mode === 'parede') {
+        bindingHtml = `<div class="absolute top-4 left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none z-50">
+          <div class="w-5 h-5 rounded-full border-4 border-amber-600 bg-stone-300 shadow-inner"></div>
+        </div>`;
       }
 
-      if (tab === 'backcover') {
-        const selectedYear = parseInt(state.yearText) || 2027;
-        const nextYear = selectedYear + 1;
-        const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
-
-        let yearGridHtml = "";
-        for (let mIdx = 0; mIdx < 12; mIdx++) {
-          const cells = getMonthGridArray(nextYear, mIdx);
-          let miniDaysHtml = "";
-          for (let c = 0; c < cells.length; c++) {
-            const val = cells[c];
-            miniDaysHtml += `<div class="text-[7px] text-center font-mono ${val ? 'text-stone-800' : 'text-transparent'}">${val || '0'}</div>`;
-          }
-
-          yearGridHtml += `
-            <div class="p-1.5 rounded shadow-xs flex flex-col justify-between" style="background-color: rgba(255,255,255,0.95); border: 1px solid rgba(0,0,0,0.1);">
-              <span class="font-bold text-[9px] block border-b pb-0.5 mb-1 ${state.globalFont} text-center text-stone-900">${monthNames[mIdx]}</span>
-              <div class="grid grid-cols-7 gap-0.5 leading-none">
-                <span class="text-[6px] text-center font-bold text-red-600">D</span>
-                <span class="text-[6px] text-center font-bold text-stone-500">S</span>
-                <span class="text-[6px] text-center font-bold text-stone-500">T</span>
-                <span class="text-[6px] text-center font-bold text-stone-500">Q</span>
-                <span class="text-[6px] text-center font-bold text-stone-500">Q</span>
-                <span class="text-[6px] text-center font-bold text-stone-500">S</span>
-                <span class="text-[6px] text-center font-bold text-stone-500">S</span>
-                ${miniDaysHtml}
-              </div>
-            </div>`;
-        }
-
+      // ABA BASE
+      if (tab === 'base') {
         return `
-          ${leftSpiralHtml}
-          ${topSpiralHtml}
-          ${wallHangerHtml}
-          <div class="h-full flex flex-col justify-between pb-4 box-border" style="width: 100%; height: 100%; ${leftMarginPadding} ${topPaddingStyle}">
-            <div class="text-center pt-1">
-              <span class="text-[9px] font-mono tracking-widest uppercase opacity-80" style="color: ${state.backcoverCustomColor}; text-shadow: 0px 1px 2px rgba(255,255,255,0.5);">PLANEJAMENTO FUTURO</span>
-              <h1 class="text-3xl font-black ${state.globalFont} tracking-tight" style="color: ${state.backcoverCustomColor}; text-shadow: 0px 1px 3px rgba(255,255,255,0.5);">${state.titleText} ${nextYear}</h1>
+          ${bindingHtml}
+          <div class="h-full w-full flex flex-col justify-between p-6 box-border text-center" style="width: 100%; height: 100%; padding-left: ${mode === 'espiral-esquerda' ? '90px' : (mode === 'espiral-topo' ? '20px' : (mode === 'piramide' ? '20px' : '20px'))}; padding-top: ${mode === 'espiral-topo' || mode === 'piramide' ? '50px' : (mode === 'parede' ? '40px' : '20px')};">
+            <div>
+              <span class="bg-amber-800 text-white font-mono text-[9px] px-2 py-0.5 rounded shadow">GABARITO TÉCNICO REAL</span>
+              <h2 class="font-bold text-xl mt-1 ${state.globalFont}">Suporte ${mode === 'piramide' ? 'Piramidal' : 'Triangulado'} de Mesa (V-Fold)</h2>
+              <p class="text-[10px] text-stone-500 font-mono">Formato do Projeto: ${state.format.toUpperCase()}</p>
             </div>
-            <div class="grid grid-cols-4 gap-2 my-auto box-border" style="width: 100%;">
-              ${yearGridHtml}
+            
+            <div class="w-full flex flex-col justify-around flex-grow my-2 font-mono text-[10px] space-y-2">
+              <div class="w-full border-b border-dashed border-stone-400 pb-1">
+                <span class="text-stone-500 text-[8px] font-bold block">░░░ ZONA DE ENCADERNAÇÃO / GARRA SUPERIOR (WIRE-O) ░░░</span>
+              </div>
+              <div class="w-full">
+                <div class="linha-vinco-laranja mb-1"></div>
+                <span class="text-amber-700 font-bold text-[9px]">▲ VINCO 1: DOBLAGEM CRISTA SUPERIOR (FACE FRONTAL)</span>
+              </div>
+              <div class="p-3 bg-white/80 border border-amber-300 rounded text-left leading-relaxed shadow-xs max-w-lg mx-auto">
+                <span class="font-bold block text-stone-800 mb-0.5 border-b pb-0.5 text-center uppercase text-[9px]">Instruções de Montagem da Base</span>
+                1. Dobre nas 3 linhas pontilhadas laranjas para erguer a estrutura em "A".<br>
+                2. A trava de fundo (V-Fold) encaixa dobrando para dentro, estabilizando a mesa.<br>
+                3. Faça a furação da garra no topo combinando com as folhas impressas do miolo.<br>
+                4. Para modo Pirâmide: recorte a aba superior em formato triangular para encaixe perfeito.
+              </div>
+              <div class="w-full">
+                <div class="linha-vinco-laranja mb-1"></div>
+                <span class="text-amber-700 font-bold text-[9px]">▲ VINCO 2: BASE DE APOIO INFERIOR (DOBRA PARA DENTRO)</span>
+              </div>
+              <div class="w-full">
+                <div class="linha-vinco-laranja mb-1"></div>
+                <span class="text-amber-700 font-bold text-[9px]">▲ VINCO 3: DOBLAGEM DA FACE TRASEIRA</span>
+              </div>
             </div>
-            <div class="p-2 bg-white/90 border border-stone-300 rounded text-stone-700 text-[10px] italic font-mono text-center">
-              Anotações & Metas para ${nextYear}: ____________________________________________________
-            </div>
-            <div class="text-[9px] font-clean font-bold opacity-70 text-center border-t border-stone-300/40 pt-1 uppercase tracking-wider" style="color: ${state.backcoverCustomColor};">
-              ${state.footerText}
-            </div>
+            <div class="font-mono text-[8px] opacity-60 border-t border-stone-300 pt-1 uppercase">RSP calendar album studio</div>
           </div>`;
       }
 
+      // Calcule padding interno baseado no modo (ANTES das dimensões)
+      let paddingLeft = 20;
+      let paddingTop = 20;
+      if (mode === 'espiral-esquerda') paddingLeft = 90;
+      else if (mode === 'espiral-topo') paddingTop = 52;
+      else if (mode === 'piramide') paddingTop = 54;
+      else if (mode === 'parede') paddingTop = 80;
+
+      // ========== DIMENSÕES DA MOLDURA ==========
+      let isPhotoLandscape = (tab === 'cover' ? state.cover.layoutMode : state.months[tab].layoutMode) === 'landscape';
+      // Calcular área disponível dentro do canvas (descontando TODOS os paddings incluindo bottom:10px)
+      const usableW = fConfig.w - paddingLeft - 20; // 20px padding right
+      const usableH = fConfig.h - paddingTop - 10; // 10px padding bottom do container
+      
+      let albumSectionH = 0;
+      let imageHtml = "";
+      let stickerHtml = "";
+      let gridFixedH = 0;
+      let cutLineH = 0;
+      let gapH = 0;
+      let paddingBottom = 10;
+      let daysOfWeek = [];
+      let m = null;
       if (tab === 'cover') {
-        let isPhotoLandscape = state.cover.layoutMode === 'landscape';
-        let imageHtml = `<div style="position: absolute; inset: 0; background-color: rgba(245,245,244,0.5); border: 1px dashed #d6d3d1; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #a8a29e;">Sem Foto da Capa</div>`;
+        // A CAPA não tem calendário - usar TODA a área disponível para a moldura
+        const coverTitleH = 85; // espaço para título+subtítulo+ano
+        const coverFooterH = 25; // espaço para rodapé
+        const coverAvailableH = usableH - coverTitleH - coverFooterH;
+        const coverUsableW = usableW;
+        
+        // LÓGICA DEFINITIVA - Moldura sempre proporcional e dentro dos limites
+        const photoAspectC = isPhotoLandscape ? 1.5 : 0.75;
+        // Opção A: largura máxima, altura proporcional
+        const tryH_a = Math.floor(coverUsableW / photoAspectC);
+        // Opção B: altura máxima, largura proporcional
+        const tryW_b = Math.floor(coverAvailableH * photoAspectC);
+        // Escolher a que melhor preenche sem exceder
+        if (tryH_a <= coverAvailableH) {
+          boxW = coverUsableW;
+          boxH = tryH_a;
+        } else {
+          boxH = coverAvailableH;
+          boxW = tryW_b;
+        }
+        // Segurança
+        if (boxW > coverUsableW) { boxW = coverUsableW; boxH = Math.floor(boxW / photoAspectC); }
+        if (boxH > coverAvailableH) { boxH = coverAvailableH; boxW = Math.floor(boxH * photoAspectC); }
+        imageHtml = `<div class="w-full h-full bg-stone-100/50 border border-dashed border-stone-300 flex items-center justify-center text-[11px] text-stone-400">Sem Foto da Capa</div>`;
         if (state.cover.photo) {
-          // BACKGROUND-SIZE: CONTAIN -> Garante que a foto NUNCA seja cortada nas bordas
-          imageHtml = `<div style="position: absolute; inset: 0; background-image: url('${state.cover.photo}'); background-size: contain; background-position: center; background-repeat: no-repeat; background-color: rgba(0,0,0,0.03);"></div>`;
+          imageHtml = `<div style="width: 100%; height: 100%; overflow: hidden; background-image: url('${state.cover.photo}'); background-size: cover; background-position: center; background-repeat: no-repeat;"></div>`;
         }
 
-        let stickerHtml = "";
+        stickerHtml = "";
         if (state.cover.activeSticker) {
           if (state.cover.activeSticker.type === 'emoji') {
-            stickerHtml = `<div style="position: absolute; right: 15px; bottom: 35px; font-size: 38px; z-index: 50;">${state.cover.activeSticker.value}</div>`;
+            stickerHtml = `<div style="position: absolute; right: 20px; bottom: 45px; font-size: 40px; z-index: 50;">${state.cover.activeSticker.value}</div>`;
           } else {
-            stickerHtml = `<div style="position: absolute; right: 15px; bottom: 35px; width: 50px; height: 50px; z-index: 50;"><img src="${state.cover.activeSticker.value}" style="width:100%; height:100%; object-fit:contain;" /></div>`;
+            stickerHtml = `<div style="position: absolute; right: 20px; bottom: 45px; width: 60px; height: 60px; z-index: 50;"><img src="${state.cover.activeSticker.value}" style="width:100%; height:100%; object-fit:contain;" /></div>`;
           }
         }
 
         return `
-          ${leftSpiralHtml}
-          ${topSpiralHtml}
-          ${wallHangerHtml}
-          <div class="h-full flex flex-col justify-between text-center pb-4 box-border" style="width: 100%; height: 100%; ${leftMarginPadding} ${topPaddingStyle}">
+          ${bindingHtml}
+          <div class="h-full flex flex-col justify-between text-center box-border" style="width: 100%; height: 100%; padding-left: ${paddingLeft}px; padding-top: ${paddingTop}px; padding-right: 15px; padding-bottom: 5px;">
             <div>
-              <h1 class="text-4xl font-black tracking-tight ${state.globalFont}" style="color: ${state.coverTitleCustomColor}; text-shadow: 0px 2px 4px rgba(255,255,255,0.6);">${state.titleText}</h1>
-              <h3 class="text-sm tracking-widest opacity-90 mt-1 uppercase ${state.globalFont}" style="color: ${state.coverSubtitleCustomColor}; text-shadow: 0px 1px 2px rgba(255,255,255,0.6);">${state.subtitleText}</h3>
+              <h1 class="text-4xl font-black tracking-tight ${state.globalFont}">${state.titleText}</h1>
+              <h3 class="text-sm tracking-widest opacity-60 mt-1 uppercase ${state.globalFont}">${state.subtitleText}</h3>
               <div class="inline-block bg-stone-900 text-white font-mono font-bold text-xs px-4 py-0.5 rounded mt-2 shadow">${state.yearText}</div>
             </div>
             <div style="width: 100%; display: flex; align-items: center; justify-content: center; flex-grow: 1; padding: 10px 0;">
-              <div class="${state.cover.frameStyle}" style="width: ${isPhotoLandscape ? '460px' : '320px'}; height: ${isPhotoLandscape ? '300px' : '420px'}; max-width: 96%; max-height: 96%; position: relative; box-sizing: border-box; display: flex; flex-direction: column; overflow: hidden; margin: 0 auto;">
+              <div class="${state.cover.frameStyle}" style="width: ${boxW}px; height: ${boxH}px; position: relative; box-sizing: border-box; display: flex; flex-direction: column; overflow: hidden;">
                  ${stickerHtml}
-                 <div style="width: 100%; flex-grow: 1; overflow: hidden; border: 1px solid rgba(120,120,120,0.15); position: relative;">
+                 <div style="width: 100%; flex: 1 1 auto; min-height: ${Math.floor(boxH * 0.5)}px; overflow: hidden; border: 1px solid rgba(120,120,120,0.15);">
                     ${imageHtml}
                  </div>
-                 <div class="${state.globalFont}" style="text-align: center; font-size: 11px; font-weight: bold; margin-top: auto; padding-top:4px;">
+                 <div class="${state.globalFont}" style="text-align: center; font-size: 12px; font-weight: bold; margin-top: auto; padding-top:4px; flex-shrink: 0;">
                     ${state.yearText}
                  </div>
               </div>
             </div>
-            <div class="text-[10px] font-mono opacity-80 border-t border-stone-300/40 pt-2 tracking-wider uppercase" style="color: ${state.coverSubtitleCustomColor}; text-shadow: 0px 1px 2px rgba(255,255,255,0.5);">${state.footerText}</div>
+            <div class="text-[10px] font-mono opacity-60 border-t border-stone-300/40 pt-2 tracking-wider uppercase">${state.footerText}</div>
           </div>`;
-      }
-
-      if (state.bindingStyle === 'folhinha') {
-        const m = state.months[tab];
-        const daysOfWeek = ["D", "S", "T", "Q", "Q", "S", "S"];
-        const cells = getMonthGridArray(parseInt(state.yearText) || 2027, tab);
-
-        let imageHtml = `<div style="position: absolute; inset: 0; background-color: rgba(245,245,244,0.5); border: 1px dashed #d6d3d1; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #a8a29e;">Sem Foto</div>`;
-        if (m.photo) {
-          // BACKGROUND-SIZE: CONTAIN -> Garante que a foto NUNCA seja cortada
-          imageHtml = `<div style="position: absolute; inset: 0; background-image: url('${m.photo}'); background-size: contain; background-position: center; background-repeat: no-repeat; background-color: rgba(0,0,0,0.03);"></div>`;
-        }
-
-        let stickerHtml = "";
-        if (m.activeSticker) {
-          if (m.activeSticker.type === 'emoji') {
-            stickerHtml = `<div style="position: absolute; right: 10px; bottom: 25px; font-size: 30px; z-index: 50;">${m.activeSticker.value}</div>`;
+      } else {
+        // MESES: calendário tem altura fixa, moldura usa o restante
+        cutLineH = 14;
+        gapH = 14;
+        gridFixedH = fConfig.gridH;
+        paddingBottom = 10;
+        // albumSectionH = tudo que sobra após calendário, linha de corte, gaps e padding
+        const annotationSpace = 110;
+        albumSectionH = fConfig.h - paddingTop - paddingBottom - cutLineH - gapH - gridFixedH;
+        
+        if (isSheetLandscape) {
+          // LÓGICA OTIMIZADA para paisagem: moldura maior e anotações compactas
+          const photoAspectML = isPhotoLandscape ? 1.5 : 0.75;
+          const annotLS = 90;
+          const maxFrameWL = Math.floor(usableW * 0.65);
+          const maxFrameHL = albumSectionH - annotLS;
+          const tryH1 = Math.floor(maxFrameWL / photoAspectML);
+          const tryW2 = Math.floor(maxFrameHL * photoAspectML);
+          if (tryH1 <= maxFrameHL) {
+            boxW = maxFrameWL;
+            boxH = tryH1;
           } else {
-            stickerHtml = `<div style="position: absolute; right: 10px; bottom: 25px; width: 40px; height: 40px; z-index: 50;"><img src="${m.activeSticker.value}" style="width:100%; height:100%; object-fit:contain;" /></div>`;
+            boxH = maxFrameHL;
+            boxW = tryW2;
           }
-        }
-
-        let tableRowsHtml = "";
-        tableRowsHtml += `<tr style="height: 35px; background-color: rgba(41,37,36,0.95);">`;
-        daysOfWeek.forEach(d => {
-          tableRowsHtml += `<td class="${state.globalFont}" style="width: 14.28%; text-align: center; vertical-align: middle; font-size: 11px; font-weight: bold; color: #ffffff;">${d}</td>`;
-        });
-        tableRowsHtml += `</tr>`;
-
-        for (let r = 0; r < (cells.length / 7); r++) {
-          tableRowsHtml += `<tr style="height: 35px;">`;
-          for (let c = 0; c < 7; c++) {
-            const dayValue = cells[r * 7 + c];
-            if (dayValue === null) {
-              tableRowsHtml += `<td style="width: 14.28%; border: 1px solid rgba(120,120,120,0.2); background-color: rgba(255,255,255,0.45);"></td>`;
-            } else {
-              tableRowsHtml += `<td style="width: 14.28%; border: 1px solid rgba(120,120,120,0.2); ${theme.dayBg} text-align: center; vertical-align: middle; font-family: monospace; font-size: 12px; font-weight: bold;">${dayValue}</td>`;
-            }
+          // Segurança
+          if (boxW > maxFrameWL) { boxW = maxFrameWL; boxH = Math.floor(boxW / photoAspectML); }
+          if (boxH > maxFrameHL) { boxH = maxFrameHL; boxW = Math.floor(boxH * photoAspectML); }
+          // Mínimo: 24% da menor dimensão do canvas
+          const minDimL = Math.min(fConfig.w, fConfig.h) * 0.24;
+          if (boxW < minDimL) { boxW = minDimL; boxH = Math.floor(boxW / photoAspectML); if (boxH > maxFrameHL) { boxH = maxFrameHL; boxW = Math.floor(boxH * photoAspectML); } }
+          if (boxH < minDimL) { boxH = minDimL; boxW = Math.floor(boxH * photoAspectML); if (boxW > maxFrameWL) { boxW = maxFrameWL; boxH = Math.floor(boxW / photoAspectML); } }
+        } else {
+          // LÓGICA DEFINITIVA para retrato
+          const photoAspectMP = isPhotoLandscape ? 1.5 : 0.75;
+          const maxFrameWP = usableW;
+          const maxFrameHP = albumSectionH - annotationSpace;
+          const tryH1P = Math.floor(maxFrameWP / photoAspectMP);
+          const tryW2P = Math.floor(maxFrameHP * photoAspectMP);
+          if (tryH1P <= maxFrameHP) {
+            boxW = maxFrameWP;
+            boxH = tryH1P;
+          } else {
+            boxH = maxFrameHP;
+            boxW = tryW2P;
           }
-          tableRowsHtml += `</tr>`;
+          // Segurança
+          if (boxW > maxFrameWP) { boxW = maxFrameWP; boxH = Math.floor(boxW / photoAspectMP); }
+          if (boxH > maxFrameHP) { boxH = maxFrameHP; boxW = Math.floor(boxH * photoAspectMP); }
+          // Mínimo: 24% da menor dimensão do canvas
+          const minDimP = Math.min(fConfig.w, fConfig.h) * 0.24;
+          if (boxW < minDimP) { boxW = minDimP; boxH = Math.floor(boxW / photoAspectMP); if (boxH > maxFrameHP) { boxH = maxFrameHP; boxW = Math.floor(boxH * photoAspectMP); } }
+          if (boxH < minDimP) { boxH = minDimP; boxW = Math.floor(boxH * photoAspectMP); if (boxW > maxFrameWP) { boxW = maxFrameWP; boxH = Math.floor(boxW / photoAspectMP); } }
         }
-
-        let isPhotoLandscape = m.layoutMode === 'landscape';
-
-        return `
-          ${wallHangerHtml}
-          <div class="w-full h-full flex flex-col box-border overflow-hidden pb-4" style="width: 100%; height: 100%; ${leftMarginPadding} ${topPaddingStyle}">
-            
-            <div style="flex-grow: 1; min-height: 0; display: flex; align-items: center; justify-content: center; padding-bottom: 15px;">
-              <div class="${m.frameStyle}" style="width: ${isPhotoLandscape ? '85%' : '65%'}; height: 100%; max-width: 100%; max-height: 100%; position: relative; box-sizing: border-box; display: flex; flex-direction: column; overflow: hidden;">
-                ${stickerHtml}
-                <div style="width: 100%; flex-grow: 1; overflow: hidden; border: 1px solid rgba(120,120,120,0.15); position: relative;">
-                  ${imageHtml}
-                </div>
-                <div class="${state.globalFont}" style="text-align: center; font-size: 11px; font-weight: bold; margin-top: auto; padding-top:4px;">
-                  ${m.caption || "..."}
-                </div>
-              </div>
-            </div>
-            
-            <div style="flex-shrink: 0; display: flex; flex-direction: column;">
-              <div style="border-bottom: 2px solid rgba(120,120,120,0.2); padding-bottom: 4px; margin-bottom: 8px; text-align: center; background-color: rgba(255,255,255,0.7); border-radius: 4px;">
-                <span class="text-3xl font-black ${state.monthFont} tracking-tight" style="color: ${currentMonthColor};">${m.name}</span>
-              </div>
-              <div style="flex-grow: 1;">
-                <table style="width: 100%; table-layout: fixed; border-collapse: separate; border-spacing: 0;">
-                  ${tableRowsHtml}
-                </table>
-              </div>
-            </div>
-
-            <div style="flex-shrink: 0; margin-top: 10px;">
-              <div class="p-3 rounded text-[11px] italic leading-relaxed ${state.globalFont}" style="${theme.cardBg} width: 100%; height: 90px; overflow: hidden; box-sizing: border-box; word-break: break-word; border: 2px dashed rgba(120,120,120,0.4);">
-                <strong style="opacity: 0.8; font-style: normal; text-transform: uppercase; font-size: 9px; display: block; margin-bottom: 4px;">Anotações do Mês:</strong>
-                ${m.journalText}
-              </div>
-            </div>
-
-            <div class="h-[12px] mt-3 text-[8px] font-clean font-bold opacity-50 text-center border-t border-stone-200/30 flex items-center justify-center uppercase tracking-wider">
-              ${state.footerText} - ${state.yearText}
-            </div>
-          </div>
-        `;
       }
-
-      const m = state.months[tab];
-      const daysOfWeek = ["D", "S", "T", "Q", "Q", "S", "S"];
+      // ========== MESES ==========
+      m = state.months[tab];
+      daysOfWeek = ["D", "S", "T", "Q", "Q", "S", "S"];
       const cells = getMonthGridArray(parseInt(state.yearText) || 2027, tab);
 
-      let imageHtml = `<div style="position: absolute; inset: 0; background-color: rgba(245,245,244,0.5); border: 1px dashed #d6d3d1; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #a8a29e;">Sem Foto</div>`;
+      imageHtml = `<div class="w-full h-full bg-stone-100/50 border border-dashed border-stone-300 flex items-center justify-center text-[10px] text-stone-400">Sem Foto</div>`;
       if (m.photo) {
-        // BACKGROUND-SIZE: CONTAIN -> Garante que a foto NUNCA seja cortada nas bordas
-        imageHtml = `<div style="position: absolute; inset: 0; background-image: url('${m.photo}'); background-size: contain; background-position: center; background-repeat: no-repeat; background-color: rgba(0,0,0,0.03);"></div>`;
+        imageHtml = `<div style="width: 100%; height: 100%; overflow: hidden; background-image: url('${m.photo}'); background-size: cover; background-position: center; background-repeat: no-repeat;"></div>`;
       }
 
-      let stickerHtml = "";
+      stickerHtml = "";
       if (m.activeSticker) {
         if (m.activeSticker.type === 'emoji') {
-          stickerHtml = `<div style="position: absolute; right: 10px; bottom: 25px; font-size: 30px; z-index: 50;">${m.activeSticker.value}</div>`;
+          stickerHtml = `<div style="position: absolute; right: 15px; bottom: 35px; font-size: 38px; z-index: 50;">${m.activeSticker.value}</div>`;
         } else {
-          stickerHtml = `<div style="position: absolute; right: 10px; bottom: 25px; width: 40px; height: 40px; z-index: 50;"><img src="${m.activeSticker.value}" style="width:100%; height:100%; object-fit:contain;" /></div>`;
+          stickerHtml = `<div style="position: absolute; right: 15px; bottom: 35px; width: 55px; height: 55px; z-index: 50;"><img src="${m.activeSticker.value}" style="width:100%; height:100%; object-fit:contain;" /></div>`;
         }
       }
 
-      let isPhotoLandscape = m.layoutMode === 'landscape';
-      let albumInnerContentHtml = "";
+      let topCellHtml = `
+        <div class="flex items-center justify-center w-full" style="max-height: 100%; overflow: hidden;">
+          <div class="${m.frameStyle}" style="width: ${boxW}px; height: ${boxH}px; position: relative; box-sizing: border-box; display: flex; flex-direction: column; overflow: hidden;">
+             ${stickerHtml}
+             <div style="width: 100%; flex: 1 1 auto; min-height: ${Math.floor(boxH * 0.5)}px; overflow: hidden; border: 1px solid rgba(120,120,120,0.15);">
+                ${imageHtml}
+             </div>
+             <div class="${state.globalFont}" style="text-align: center; font-size: 10px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: auto; padding-top:2px; flex-shrink: 0;">
+                ${m.caption || "..."}
+             </div>
+          </div>
+        </div>`;
 
+      let bottomCellHtml = `
+        <div class="w-full flex flex-col justify-center">
+          <div class="border-b-2 border-stone-400/20 pb-1 mb-2 text-left">
+            <span class="text-2xl font-black ${state.monthFont} tracking-tight" style="color: ${currentMonthColor};">${m.name}</span>
+          </div>
+          <div class="p-3 rounded text-[11px] italic leading-relaxed ${state.globalFont}" style="${theme.cardBg} width: 100%; min-height: 80px; max-height: 95px; overflow: hidden; box-sizing: border-box; word-break: break-word; border: 1px solid rgba(0,0,0,0.05);">
+            ${m.journalText}
+          </div>
+        </div>`;
+
+      let albumInnerContentHtml = "";
       if (isSheetLandscape) {
         albumInnerContentHtml = `
-          <table style="width: 100%; height: 100%; table-layout: fixed; border-collapse: collapse;">
-            <tr>
-              <td style="width: 48%; vertical-align: middle; text-align: center; padding-right: 12px; height: 100%;">
-                <div class="inline-block ${m.frameStyle}" style="width: ${isPhotoLandscape ? '380px' : '250px'}; height: ${isPhotoLandscape ? '240px' : '280px'}; max-width: 96%; max-height: 96%; box-sizing: border-box; position: relative; display: flex; flex-direction: column; overflow: hidden; margin: 0 auto;">
-                  ${stickerHtml}
-                  <div style="width: 100%; flex-grow: 1; overflow: hidden; border: 1px solid rgba(120,120,120,0.15); position: relative;">
-                    ${imageHtml}
-                  </div>
-                  <div class="${state.globalFont}" style="text-align: center; font-size: 10px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: auto; padding-top:2px;">
-                    ${m.caption || "..."}
-                  </div>
-                </div>
-              </td>
-              
-              <td style="width: 52%; vertical-align: middle; padding-left: 4px;">
-                <div style="width: 100%; display: flex; flex-direction: column; justify-content: center;">
-                  <div style="border-bottom: 2px solid rgba(120,120,120,0.2); padding-bottom: 4px; margin-bottom: 6px; text-align: left; background-color: rgba(255,255,255,0.5); border-radius: 4px; padding-left: 4px;">
-                    <span class="text-2xl font-black ${state.monthFont} tracking-tight" style="color: ${currentMonthColor};">${m.name}</span>
-                  </div>
-                  <div class="p-3 rounded text-[11px] italic leading-relaxed ${state.globalFont}" style="${theme.cardBg} width: 100%; height: 110px; overflow: hidden; box-sizing: border-box; word-break: break-word; border: 1px solid rgba(0,0,0,0.06);">
-                    ${m.journalText}
-                  </div>
-                </div>
-              </td>
-            </tr>
-          </table>`;
+          <div class="w-full h-full flex flex-row items-center justify-between gap-4 px-2">
+            <div class="w-[45%] h-full flex items-center justify-center">${topCellHtml}</div>
+            <div class="w-[55%] h-full flex flex-col justify-center">${bottomCellHtml}</div>
+          </div>`;
       } else {
-        albumInnerContentHtml = `
-          <div style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
-            <div style="height: 70%; width: 100%; display: flex; align-items: center; justify-content: center;">
-              <div class="${m.frameStyle}" style="width: ${isPhotoLandscape ? '440px' : '290px'}; height: ${isPhotoLandscape ? '290px' : '380px'}; max-width: 96%; max-height: 96%; position: relative; box-sizing: border-box; display: flex; flex-direction: column; overflow: hidden; margin: 0 auto;">
-                 ${stickerHtml}
-                 <div style="width: 100%; flex-grow: 1; overflow: hidden; border: 1px solid rgba(120,120,120,0.15); position: relative;">
-                    ${imageHtml}
-                 </div>
-                 <div class="${state.globalFont}" style="text-align: center; font-size: 10px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: auto; padding-top:2px;">
-                    ${m.caption || "..."}
-                 </div>
-              </div>
-            </div>
-            <div style="height: 30%; width: 100%; display: flex; flex-direction: column; justify-content: center;">
-              <div style="border-bottom: 2px solid rgba(120,120,120,0.2); padding-bottom: 2px; margin-bottom: 4px; text-align: left; background-color: rgba(255,255,255,0.5); border-radius: 4px; padding-left: 4px;">
-                <span class="text-2xl font-black ${state.monthFont} tracking-tight" style="color: ${currentMonthColor};">${m.name}</span>
-              </div>
-              <div class="p-2.5 rounded text-[11px] italic leading-relaxed ${state.globalFont}" style="${theme.cardBg} width: 100%; height: 90px; overflow: hidden; box-sizing: border-box; word-break: break-word; border: 1px solid rgba(0,0,0,0.05);">
-                ${m.journalText}
-              </div>
-            </div>
+        const annotationFixedH = 110;
+      albumInnerContentHtml = `
+          <div class="w-full h-full flex flex-col" style="overflow: hidden;">
+            <div style="flex: 0 0 auto; width: 100%; display: flex; align-items: center; justify-content: center; min-height: 0; overflow: hidden;" id="topCellContainer">${topCellHtml}</div>
+            <div style="flex: 0 0 auto; width: 100%; min-height: 0; overflow: hidden;">${bottomCellHtml}</div>
           </div>`;
       }
 
       const totalWeeksRows = cells.length / 7;
-      const availableGridHeight = fConfig.gridH - 45;
+      const availableGridHeight = fConfig.gridH - 55;
       const rowPixelHeight = Math.floor(availableGridHeight / (totalWeeksRows + 1));
 
       let tableRowsHtml = "";
-      tableRowsHtml += `<tr style="height: ${rowPixelHeight}px; background-color: rgba(41,37,36,0.95);">`;
+      tableRowsHtml += `<tr style="height: ${rowPixelHeight}px; background-color: #292524;">`;
       daysOfWeek.forEach(d => {
-        tableRowsHtml += `<td class="${state.globalFont}" style="width: 14.28%; text-align: center; vertical-align: middle; font-size: 10px; font-weight: bold; color: #ffffff;">${d}</td>`;
+        tableRowsHtml += `<td class="${state.globalFont}" style="width: 14.28%; text-align: center; vertical-align: middle; font-size: 11px; font-weight: bold; color: #ffffff;">${d}</td>`;
       });
       tableRowsHtml += `</tr>`;
 
@@ -1206,7 +1106,7 @@
           if (dayValue === null) {
             tableRowsHtml += `<td style="width: 14.28%; border: 1px solid rgba(120,120,120,0.2); background-color: rgba(255,255,255,0.45);"></td>`;
           } else {
-            tableRowsHtml += `<td style="width: 14.28%; border: 1px solid rgba(120,120,120,0.2); ${theme.dayBg} text-align: center; vertical-align: middle; font-family: monospace; font-size: 11px; font-weight: bold;">
+            tableRowsHtml += `<td style="width: 14.28%; border: 1px solid rgba(120,120,120,0.2); ${theme.dayBg} text-align: center; vertical-align: middle; font-family: monospace; font-size: 12px; font-weight: bold;">
               ${dayValue}
             </td>`;
           }
@@ -1215,35 +1115,33 @@
       }
 
       return `
-        ${leftSpiralHtml}
-        ${topSpiralHtml}
-        ${wallHangerHtml}
-        <div class="w-full h-full flex flex-col box-border overflow-hidden pb-3 justify-between" style="width: 100%; height: 100%; ${leftMarginPadding} ${topPaddingStyle}">
-          <div class="w-full box-border overflow-hidden" style="height: ${fConfig.albumH}px; max-height: ${fConfig.albumH}px;">
+        ${bindingHtml}
+        <div class="w-full h-full flex flex-col box-border overflow-hidden" style="width: 100%; height: 100%; padding-left: ${paddingLeft}px; padding-top: ${paddingTop}px; padding-right: 10px; padding-bottom: 10px;">
+          <div class="w-full box-border overflow-hidden shrink-0" style="height: ${albumSectionH}px; max-height: ${albumSectionH}px; display: flex; align-items: center;">
             ${albumInnerContentHtml}
           </div>
           
-          <div class="h-[12px] w-full flex items-center relative select-none my-1 shrink-0">
+          <div class="h-[14px] w-full flex items-center relative select-none shrink-0 mt-1 mb-1">
             <div class="linha-corte-horizontal"></div>
             <div class="absolute left-1/2 -translate-x-1/2 bg-red-600 text-white font-mono font-black text-[6px] px-3 py-0.5 rounded-sm shadow tracking-widest whitespace-nowrap">
               ✂️ LINHA DE CORTE HORIZONTAL (REMOVER CALENDÁRIO NO FIM DO ANO)
             </div>
           </div>
 
-          <div class="w-full overflow-hidden pt-1" style="height: ${fConfig.gridH}px; max-height: ${fConfig.gridH}px; display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box;">
-            <div style="width: 100%; height: 22px; border-bottom: 1px solid rgba(120,120,120,0.2); padding-bottom: 2px; box-sizing: border-box; margin-bottom: 2px;" class="shrink-0">
-              <div class="font-clean" style="float: left; font-size: 9px; font-weight: bold; opacity: 0.9; color: #ffffff; background-color: #292524; padding: 0px 8px; border-radius: 2px; line-height: 22px; text-transform: uppercase;">RSP calendar album studio</div>
-              <div style="float: right; width: 60px; text-align: right; line-height: 22px;">
-                <span style="font-family: monospace; font-size: 10px; font-weight: bold; color: #ffffff; background-color: #292524; padding: 1px 6px; border-radius: 2px; display: inline-block; line-height: 12px;">${state.yearText}</span>
+          <div class="w-full overflow-hidden shrink-0" style="height: ${gridFixedH}px; max-height: ${gridFixedH}px; display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box;">
+            <div style="width: 100%; height: 24px; border-bottom: 1px solid rgba(120,120,120,0.2); padding-bottom: 2px; box-sizing: border-box; margin-bottom: 2px;" class="shrink-0">
+              <div class="font-clean" style="float: left; font-size: 10px; font-weight: bold; opacity: 0.9; color: #ffffff; background-color: #292524; padding: 0px 8px; border-radius: 2px; line-height: 24px; text-transform: uppercase;">RSP calendar album studio</div>
+              <div style="float: right; width: 60px; text-align: right; line-height: 24px;">
+                <span style="font-family: monospace; font-size: 11px; font-weight: bold; color: #ffffff; background-color: #292524; padding: 1px 6px; border-radius: 2px; display: inline-block; line-height: 14px;">${state.yearText}</span>
               </div>
               <div style="clear: both;"></div>
             </div>
             <div style="width: 100%; flex-grow: 1; overflow: hidden; box-sizing: border-box;">
-              <table style="width: 100%; table-layout: fixed; border-collapse: separate; border-spacing: 0; height: ${availableGridHeight}px; max-height: ${availableGridHeight}px;">
+              <table style="width: 100%; table-layout: fixed; border-collapse: separate; border-spacing: 0; height: ${availableGridHeight}px;">
                 ${tableRowsHtml}
               </table>
             </div>
-            <div class="h-[10px] text-[8px] font-clean font-bold opacity-70 text-left border-t border-stone-200/30 shrink-0 flex items-center uppercase tracking-wider" style="color: ${currentMonthColor}; text-shadow: 0px 1px 2px rgba(255,255,255,0.6);">
+            <div class="h-[12px] text-[8px] font-clean font-bold opacity-50 text-left border-t border-stone-200/30 shrink-0 flex items-center uppercase tracking-wider">
               RSP calendar album studio
             </div>
           </div>
@@ -1251,32 +1149,55 @@
     }
 
     function renderCanvas() {
-      if(window.isDigitalViewer) return;
       const container = document.getElementById("render-canvas");
       if (!container) return;
-      
       const fConfig = FORMATS[state.format];
-      let themeCss = "";
-      
-      if (state.globalTheme === 'custom-image') {
-        const bgImg = state.customBackground ? `url('${state.customBackground}')` : 'none';
-        themeCss = `background-color: #ffffff; background-image: ${bgImg}; background-size: cover; background-position: center;`;
-      } else {
-        themeCss = THEMES[state.globalTheme].bgPage;
-      }
-
-      container.style.cssText = `width: ${fConfig.w}px; height: ${fConfig.h}px; ${themeCss}`;
+      const theme = THEMES[state.globalTheme];
+      container.style.cssText = `width: ${fConfig.w}px; height: ${fConfig.h}px; ${theme.bgPage}`;
       container.innerHTML = generatePageHtml(state.activeTab, fConfig);
-      adjustCanvasScale();
+      fitCanvasToViewport(container, fConfig);
     }
 
-    // ==========================================
-    // EXPORTAÇÃO 1: FÍSICA (PDF DE ALTA DEFINIÇÃO)
-    // ==========================================
+    function fitCanvasToViewport(container, fConfig) {
+      const mainEl = container.closest('main');
+      if (!mainEl) return;
+      const availableW = mainEl.clientWidth - 48; // 6px padding de cada lado
+      const availableH = mainEl.clientHeight - 48;
+      const scaleX = availableW / fConfig.w;
+      const scaleY = availableH / fConfig.h;
+      let scale = Math.min(scaleX, scaleY, 1); // Nunca ampliar além de 1x
+      if (scale < 0.25) scale = 0.25; // Mínimo para não ficar invisível
+      container.style.transform = `scale(${scale})`;
+      container.style.transformOrigin = 'top center';
+      // Compensar o espaço extra gerado pelo scale
+      const scaleComp = Math.max(0, (fConfig.h - fConfig.h * scale));
+      container.style.marginBottom = `${-scaleComp}px`;
+    }
+
+    // Re-ajustar escala quando a janela for redimensionada
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        const container = document.getElementById('render-canvas');
+        if (container) fitCanvasToViewport(container, FORMATS[state.format]);
+      }, 150);
+    });
+
+    // Re-ajustar quando as abas laterais (sidebar) mudarem de largura
+    const observer = new ResizeObserver(() => {
+      const container = document.getElementById('render-canvas');
+      if (container) fitCanvasToViewport(container, FORMATS[state.format]);
+    });
+    document.addEventListener('DOMContentLoaded', () => {
+      const mainEl = document.querySelector('main');
+      if (mainEl) observer.observe(mainEl);
+    });
+
+    // ========== EXPORTAÇÃO PDF ==========
     async function safeSecureExport() {
       const { jsPDF } = window.jspdf;
       const fConfig = FORMATS[state.format];
-      const wrapper = document.getElementById('canvas-wrapper');
       
       let pdfFormatParam = fConfig.pdfFormat;
       let pdfOrientationParam = fConfig.pdfOrientation;
@@ -1285,96 +1206,44 @@
       const pW = pdf.internal.pageSize.getWidth();
       const pH = pdf.internal.pageSize.getHeight();
       const originalTab = state.activeTab;
-      
-      const pagesToPrint = ['cover', 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 'backcover'];
-      
-      alert("Iniciando Renderização Comercial PDF...");
-      
-      const originalTransform = wrapper.style.transform;
-      wrapper.style.transform = 'scale(1)';
+      const pagesToPrint = ['cover', 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 'base'];
       
       try {
+        const btn = event.target;
+        btn.textContent = '⏳ Compilando...';
+        btn.disabled = true;
+        
         for (let i = 0; i < pagesToPrint.length; i++) {
           switchTab(pagesToPrint[i]);
           await new Promise(res => setTimeout(res, 500));
           const canvasEl = document.getElementById('render-canvas');
-          const renderedCanvasObj = await html2canvas(canvasEl, { scale: 2.0, useCORS: true });
-          const imgDataUrl = renderedCanvasObj.toDataURL('image/jpeg', 0.95);
+          const renderedCanvasObj = await html2canvas(canvasEl, { scale: 2.0, useCORS: true, logging: false });
+          const imgDataUrl = renderedCanvasObj.toDataURL('image/jpeg', 0.92);
           if (i > 0) pdf.addPage(pdfFormatParam, pdfOrientationParam);
           pdf.addImage(imgDataUrl, 'JPEG', 0, 0, pW, pH);
         }
         switchTab(originalTab);
         pdf.save(`rsp-calendar-studio-${state.yearText}.pdf`);
-        alert("Sucesso! O arquivo PDF de Alta Definição foi baixado.");
+        
+        btn.textContent = '✅ PDF Gerado!';
+        btn.classList.remove('bg-emerald-700');
+        btn.classList.add('bg-blue-700');
+        setTimeout(() => {
+          btn.textContent = '💾 COMPILAR E GERAR PDF FINAL';
+          btn.classList.remove('bg-blue-700');
+          btn.classList.add('bg-emerald-700');
+          btn.disabled = false;
+        }, 2000);
       } catch (err) {
-        alert("Erro no processador gráfico: " + err.message);
+        alert("Erro na compilação: " + err.message);
         switchTab(originalTab);
-      } finally {
-        adjustCanvasScale();
+        const btn = event.target;
+        btn.textContent = '❌ Erro - Tente novamente';
+        setTimeout(() => {
+          btn.textContent = '💾 COMPILAR E GERAR PDF FINAL';
+          btn.disabled = false;
+        }, 3000);
       }
-    }
-
-    // ==========================================
-    // EXPORTAÇÃO 2: DIGITAL (WEB APP HTML INDEPENDENTE)
-    // ==========================================
-    function exportDigitalApp() {
-        // Usa o método de "DOM Clone" para impedir vazamento de código
-        const clonedDoc = document.documentElement.cloneNode(true);
-        const scriptEl = document.createElement('script');
-        
-        scriptEl.innerHTML = `
-            window.isDigitalViewer = true;
-            state = ${JSON.stringify(state).replace(/</g, '\\u003c')};
-            
-            window.addEventListener('load', () => {
-                const sidebar = document.getElementById('sidebar-menu');
-                if(sidebar) sidebar.style.display = 'none';
-                const header = document.querySelector('header');
-                if(header) header.style.display = 'none';
-                
-                const mainArea = document.getElementById('main-area');
-                if(mainArea) {
-                    mainArea.style.padding = '0';
-                    mainArea.style.justifyContent = 'center';
-                    mainArea.style.alignItems = 'center';
-                }
-                
-                const style = document.createElement('style');
-                style.innerHTML = '.linha-corte-horizontal { display: none !important; } body { overflow: hidden; background-color: #1c1917; }';
-                document.head.appendChild(style);
-
-                let currentIndex = 0;
-                const pages = ['cover', 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 'backcover'];
-                
-                const nav = document.createElement('div');
-                nav.className = 'fixed bottom-4 left-0 right-0 flex justify-center gap-4 z-[99999]';
-                nav.innerHTML = '<button onclick="navDigital(-1)" class="px-5 py-2 bg-stone-800 text-white rounded-full font-bold shadow-2xl border-2 border-stone-600">◀ Voltar</button><button onclick="navDigital(1)" class="px-5 py-2 bg-stone-800 text-white rounded-full font-bold shadow-2xl border-2 border-stone-600">Avançar ▶</button>';
-                document.body.appendChild(nav);
-                
-                window.navDigital = (dir) => {
-                    currentIndex += dir;
-                    if(currentIndex < 0) currentIndex = 0;
-                    if(currentIndex > pages.length - 1) currentIndex = pages.length - 1;
-                    
-                    state.activeTab = pages[currentIndex];
-                    renderCanvas();
-                };
-
-                navDigital(0);
-                setTimeout(playGiftAnimation, 500);
-            });
-        `;
-        
-        clonedDoc.querySelector('body').appendChild(scriptEl);
-        
-        let finalHtml = "<!DOCTYPE html>\\n" + clonedDoc.outerHTML;
-        let blob = new Blob([finalHtml], {type: 'text/html'});
-        let a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = `Album_Digital_RSP_${state.yearText}.html`;
-        a.click();
-        
-        alert("Versão Digital (HTML) gerada com sucesso!\\nHospede o arquivo online para usar o link no QR Code da impressão.");
     }
   </script>
 </body>
